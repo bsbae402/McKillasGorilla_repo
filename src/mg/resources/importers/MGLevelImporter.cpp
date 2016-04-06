@@ -241,6 +241,60 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			// ONTO THE NEXT SPAWNING POOL
 			spawningPool = spawningPool->NextSiblingElement();
 		}
+
+
+		//LOAD THE PLAYER
+		TiXmlElement *playerList = spawningPoolsList->NextSiblingElement();
+		TiXmlElement *player = playerList->FirstChildElement();
+
+		while (player != nullptr) {
+
+			// THEN GET THE SPRITE TYPE
+			const char* spriteType = player->Attribute(MG_SPRITE_TYPE_ATT.c_str());
+			string strSpriteType(spriteType);
+			wstring wSpriteType(strSpriteType.begin(), strSpriteType.end());
+			text->writeDebugOutput(L"Players's Sprite Type: " + wSpriteType);
+
+
+			int initX = xmlReader.extractIntAtt(player, MG_INIT_X_ATT);
+			int initY = xmlReader.extractIntAtt(player, MG_INIT_Y_ATT);
+			wstring debugText = L"Bot x, y: ";
+			wstringstream wss;
+			wss << initX; wss << L", "; wss << initY;
+			debugText += wss.str();
+			text->writeDebugOutput(debugText);
+
+			const char* initialBotState = xmlReader.extractCharAtt(player, MG_INIT_BOT_STATE_ATT);
+			string strInitialBotState(initialBotState);
+			wstring wInitialBotState(strInitialBotState.begin(), strInitialBotState.end());
+			text->writeDebugOutput(L"init bot state: " + wInitialBotState);
+
+			const char* initSpriteState = xmlReader.extractCharAtt(player, MG_INIT_SPRITE_STATE_ATT);
+			string strInitialSpriteState(initSpriteState);
+			wstring wInitialSpriteState(strInitialSpriteState.begin(), strInitialSpriteState.end());
+			text->writeDebugOutput(L"init sprite state: " + wInitialSpriteState);
+
+
+			// MAKE THE PLAYER
+			Bot *playerBot = new Bot();
+			AnimatedSpriteType *playerSpriteType = spriteManager->getSpriteType(wSpriteType);
+			playerBot->setSpriteType(playerSpriteType);
+			playerBot->setAlpha(255);
+
+			PhysicalProperties *pp = playerBot->getPhysicalProperties();
+			pp->setPosition(initX, initY);
+			pp->setVelocity(0, 0);
+			BotState botState = playerBot->getBotStateForString(initialBotState);
+			playerBot->setBotState(botState);
+			playerBot->setCurrentState(wInitialSpriteState);
+			playerBot->setRotationInRadians(PI / 2);
+
+
+			spriteManager->setPlayer(playerBot);
+
+			player = player->NextSiblingElement();
+		}
+
 	}
 	return true;
 }

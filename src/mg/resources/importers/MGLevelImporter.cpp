@@ -20,8 +20,6 @@
 #include "tinyxml\tinystr.h";
 #include "tinyxml\tinyxml.h";
 
-#include "mg\gsm\sprite\LevelObjectSprite.h"
-
 bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 {
 	// FOR PRINTING DEBUGGING TEXT
@@ -297,49 +295,6 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			player = player->NextSiblingElement();
 		}
 
-		//// ---- loading level objects ---- ////
-		TiXmlElement *levelObjectsList = playerList->NextSiblingElement();
-		TiXmlElement *levelObject = levelObjectsList->FirstChildElement();
-		while (levelObject != nullptr) {
-			//// 1. info collecting sequence
-			//// - levelObjectType
-			const char* levelObjectType = levelObject->Attribute(MG_LEVEL_OBJECT_TYPE_ATT.c_str());
-			string strLevelObjectType(levelObjectType);
-			wstring wStrLevelObjectType(strLevelObjectType.begin(), strLevelObjectType.end());
-
-			//// - spriteType
-			const char* spriteType = levelObject->Attribute(MG_SPRITE_TYPE_ATT.c_str());
-			string strSpriteType(spriteType);
-			wstring wSpriteType(strSpriteType.begin(), strSpriteType.end());
-
-			//// - levelObjectID
-			int levelObjectID = xmlReader.extractIntAtt(levelObject, MG_LEVEL_OBJECT_ID_ATT);
-
-			//// - object location
-			int initX = xmlReader.extractIntAtt(levelObject, MG_INIT_X_ATT);
-			int initY = xmlReader.extractIntAtt(levelObject, MG_INIT_Y_ATT);
-
-			//// 2. make object
-			//// - set sprite type
-			LevelObjectSprite *los = new LevelObjectSprite();
-			AnimatedSpriteType *losType = spriteManager->getSpriteType(wSpriteType);
-			los->setSpriteType(losType);
-			los->setAlpha(255);
-
-			//// - set physical property -> actually level objects normally don't have any velocity
-			PhysicalProperties *pp = los->getPhysicalProperties();
-			pp->setPosition(initX, initY);
-			pp->setVelocity(0, 0);
-
-			//// the initial sprite (animation) state for the level object is only "BEING"
-			wstring wStrBeingState(BEING_LEVEL_OBJECT_SPRITE_STATE_VALUE.begin(), BEING_LEVEL_OBJECT_SPRITE_STATE_VALUE.end());
-			los->setCurrentState(wStrBeingState);
-
-			spriteManager->addLevelObject(los);
-
-			levelObject = levelObject->NextSiblingElement();
-		}
-		//// ----	end	---- ////
 	}
 	return true;
 }

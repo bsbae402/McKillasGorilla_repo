@@ -195,9 +195,6 @@
     <ClCompile Include="src\mg\gsm\ai\behaviors\RandomSpawn.cpp">
       <Filter>src\mg\gsm\ai\behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="src\mg\gsm\sprite\LevelObjectSprite.cpp">
-      <Filter>src\mg\gsm\sprite</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\mg\game\Game.h">
@@ -382,9 +379,6 @@
     </ClInclude>
     <ClInclude Include="src\mg\gsm\state\GameStateMachine.h">
       <Filter>src\mg\gsm\state</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mg\gsm\sprite\LevelObjectSprite.h">
-      <Filter>src\mg\gsm\sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

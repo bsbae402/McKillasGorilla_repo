@@ -18,8 +18,6 @@
 #include "mg\gsm\sprite\AnimatedSprite.h"
 #include "mg\gsm\sprite\AnimatedSpriteType.h"
 
-#include "mg\gsm\sprite\LevelObjectSprite.h"
-
 class SpriteManager
 {
 private:
@@ -41,9 +39,6 @@ private:
 
 	// THESE ARE THIS LEVEL'S SPAWNING POOLS
 	vector<BotSpawningPool*> spawningPools;
-
-	//// ---- our new sprite category: level object (los == level object sprite) ---
-	list<LevelObjectSprite*> losList;
 
 public:
 	// NOTHING TO INIT OR DESTROY
@@ -78,9 +73,4 @@ public:
 	Bot*				removeBot(Bot *botToRemove);
 	void				unloadSprites();
 	void				update();
-
-	//// ---- methods for level object management ----
-	list<LevelObjectSprite*>::iterator	getLevelSpriteObjectsIterator() { return losList.begin(); }
-	list<LevelObjectSprite*>::iterator	getEndOfLevelSpriteObjectsIterator() { return losList.end(); }
-	void				addLevelObject(LevelObjectSprite *losToAdd);
 };

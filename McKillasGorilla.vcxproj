@@ -154,11 +154,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Common\</OutDir>
     <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
-    <IncludePath>C:\group_project\Rebelle_solution\Plugins\Box2D-master\Box2D-master\Box2D;C:\group_project\Rebelle_solution\Plugins\XMLFileImporter\src\;C:\group_project\Rebelle_solution\Plugins\tinyxml\src\;$(DXSDK_DIR)Include;C:\group_project\Rebelle_solution\McKillasGorilla\src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Plugins\XMLFileImporter\src\;$(SolutionDir)Plugins\tinyxml\src\;$(ProjectDir)src\;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\group_project\Rebelle_solution\Plugins\Box2D-master\Box2D-master\Box2D;C:\group_project\Rebelle_solution\Plugins\XMLFileImporter\src\;C:\group_project\Rebelle_solution\Plugins\tinyxml\src\;$(DXSDK_DIR)Include;C:\group_project\Rebelle_solution\McKillasGorilla\src\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

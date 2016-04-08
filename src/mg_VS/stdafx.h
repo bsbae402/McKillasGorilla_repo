@@ -49,6 +49,3 @@ using namespace std;
 // DirectX
 #include <d3d9.h>
 #include <d3dx9.h>
-
-//// Box2D =>=>=> hope this will solve the problem 
-#include "Box2D\Box2D.h"

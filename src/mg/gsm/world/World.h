@@ -55,10 +55,10 @@ public:
 	~World();
 	void	addLayer(WorldLayer *layerToAdd);
 	void	addWorldRenderItemsToRenderList();
-	int		getCollidableGridColumns();			//// no idea: I don't think we need to use this
-	int		getCollidableGridRows();			//// no idea: I don't think we need to use this
-	bool	overlapsCollidableTiles(int centerX, int centerY, int nodeWidth, int nodeHeight);	//// implement if needed
-	bool	isInsideCollidableTile(int centerX, int centerY);		//// this will be definitely useful
+	int		getCollidableGridColumns();
+	int		getCollidableGridRows();
+	bool	overlapsCollidableTiles(int centerX, int centerY, int nodeWidth, int nodeHeight);
+	bool	isInsideCollidableTile(int centerX, int centerY);
 	void	unloadWorld();
 	void	update();
 };

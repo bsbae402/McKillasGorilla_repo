@@ -107,9 +107,6 @@ protected:
 	int largestLayerWidth;
 	int largestLayerHeight;
 
-	bool firstCollidableLayerFound;
-	int firstCollidableLayerIndex;
-
 public:
 	TMXMapImporter() {}
 	~TMXMapImporter(){}

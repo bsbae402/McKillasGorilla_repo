@@ -29,9 +29,6 @@
 #include "mg\text\TextFileWriter.h"
 #include "mg\text\TextGenerator.h"
 
-#include "Box2D\Dynamics\b2World.h"
-#include "Box2D\Common\b2Math.h"
-
 bool Game::isSingletonInstantiated = false;
 Game* Game::singleton = 0;
 
@@ -47,10 +44,6 @@ Game* Game::getSingleton()
 
 void Game::startUp()
 {
-	//// ---- Box2d initialization ----
-	b2Vec2 gravity(0.0f, 0.0f);
-	world = new b2World(gravity);
-
 	// THESE TWO GUYS GET SETUP BY ENGINE CONFIG SETTINGS SO
 	// THEY HAVE TO ALREADY EXIST WHEN THOSE FILES GET LOADED
 	gsm = new GameStateManager();

@@ -29,6 +29,9 @@
 // PREPROCESSOR INCLUDE STATEMENTS
 #include "mg_VS\stdafx.h"
 #include "mg\gsm\state\GameState.h"
+#include "Box2D\Dynamics\b2World.h"
+#include "Box2D\Common\b2Math.h"
+#include "Box2D\Common\b2Settings.h"
 
 // FORWARD DECLARATIONS OF CLASSES USED BY GAME
 class GameClock;
@@ -71,6 +74,8 @@ private:
 	GameGraphics		*graphics;
 	GameInput			*input;
 	GameOS				*os;
+	
+	b2World				*world;
 
 public:
 	// SINGLETON DESIGN PATTERN STUFF

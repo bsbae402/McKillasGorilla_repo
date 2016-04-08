@@ -217,6 +217,8 @@ void TMXMapImporter::loadTiledLayerInfo(const TiXmlNode *node)
 	const TiXmlElement *element = node->ToElement();
 	TiledLayerInfo *tiledLayerInfo = new TiledLayerInfo();
 
+	/// int tiledLayerIndex
+
 	// NAME WIDTH AND HEIGHT ARE ALL REQUIRED
 	if (element->Attribute(NAME_ATT.c_str()) == NULL) return;
 	else tiledLayerInfo->name = xmlReader.extractCharAtt(element, NAME_ATT);
@@ -237,8 +239,14 @@ void TMXMapImporter::loadTiledLayerInfo(const TiXmlNode *node)
 		{
 			const TiXmlElement *propElement = propNode->ToElement();
 			string att = propElement->Attribute(NAME_ATT.c_str());
+			//// COLLIDABLE_ATT	= "collidable". 
+			//// The layers in the TMX file should have specified "collidable" attribute to set the layer class's collidable value.
 			if (strcmp(att.c_str(), COLLIDABLE_ATT.c_str()) == 0)
 			{
+				//// VALUE_ATT = "value"
+				//// collidable's type is bool. Look up the extractBoolAtt() function, and you will find
+				//// that it compares the "true" string to the value. 
+				//// Thus, put "true" string in the tmx file layer's collidable value if the layer is collidable
 				tiledLayerInfo->collidable = xmlReader.extractBoolAtt(propNode->ToElement(), VALUE_ATT);
 				collidableSpecified = true;
 			}
@@ -366,6 +374,8 @@ bool TMXMapImporter::buildWorldFromInfo()
 			else if (layer->type == LayerType::TILED)
 			{
 				TiledLayerInfo *tli = (TiledLayerInfo*)layer;
+				//// -- here we build a tiled layer. 
+				//// see loadTiledLayerInfo method to see how the TiledLayerInfo store the info.
 				buildTiledLayer(tli, idOffset);
 			}
 			else if (layer->type == LayerType::SPARSE)

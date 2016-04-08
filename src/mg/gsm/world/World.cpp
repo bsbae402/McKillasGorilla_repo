@@ -71,6 +71,11 @@ void World::addWorldRenderItemsToRenderList()
 	}
 }
 
+bool World::isInsideCollidableTile(int centerX, int centerY)
+{
+	return false;
+}
+
 /*
 	clear - This method removes all data from the World. It should
 	be called first when a level is unloaded or changed. If it

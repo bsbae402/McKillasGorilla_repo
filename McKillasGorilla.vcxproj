@@ -28,6 +28,7 @@
     <ClCompile Include="src\mg\gsm\physics\Physics.cpp" />
     <ClCompile Include="src\mg\gsm\sprite\AnimatedSprite.cpp" />
     <ClCompile Include="src\mg\gsm\sprite\AnimatedSpriteType.cpp" />
+    <ClCompile Include="src\mg\gsm\sprite\LevelObjectSprite.cpp" />
     <ClCompile Include="src\mg\gsm\sprite\SpriteManager.cpp" />
     <ClCompile Include="src\mg\gsm\state\GameStateManager.cpp" />
     <ClCompile Include="src\mg\gsm\world\SparseLayer.cpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="src\mg\gsm\physics\Physics.h" />
     <ClInclude Include="src\mg\gsm\sprite\AnimatedSprite.h" />
     <ClInclude Include="src\mg\gsm\sprite\AnimatedSpriteType.h" />
+    <ClInclude Include="src\mg\gsm\sprite\LevelObjectSprite.h" />
     <ClInclude Include="src\mg\gsm\sprite\SpriteManager.h" />
     <ClInclude Include="src\mg\gsm\state\GameState.h" />
     <ClInclude Include="src\mg\gsm\state\GameStateMachine.h" />

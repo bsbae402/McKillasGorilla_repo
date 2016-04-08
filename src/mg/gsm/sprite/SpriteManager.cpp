@@ -83,6 +83,17 @@ void SpriteManager::addSpriteItemsToRenderList()
 			addSpriteToRenderList(bot, renderList, viewport);
 			botIterator++;
 		}
+
+		//// ---- add level objects (money, ...) to the render list ----
+		list<LevelObjectSprite*>::iterator losIterator;
+		losIterator = losList.begin();
+		while (losIterator != losList.end())
+		{
+			LevelObjectSprite *los = (*losIterator);
+			addSpriteToRenderList(los, renderList, viewport);
+			losIterator++;
+		}
+		//// ---- end ----
 	}
 }
 
@@ -185,6 +196,8 @@ void SpriteManager::unloadSprites()
 		delete spToDelete;
 	}
 	spawningPools.clear();
+
+	//////**************** TBI: unload level objects *****************///////
 }
 
 Bot* SpriteManager::removeBot(Bot *botToRemove)
@@ -236,4 +249,9 @@ void SpriteManager::update()
 		// AND ONTO THE NEXT SPAWNING POOL
 		spawningPoolIterator++;
 	}
+}
+
+void SpriteManager::addLevelObject(LevelObjectSprite * losToAdd)
+{
+	losList.push_back(losToAdd);
 }

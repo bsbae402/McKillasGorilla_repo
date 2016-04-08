@@ -41,6 +41,11 @@ static const string MG_WALKING_VALUE = "WALKING";
 static const string MG_RECYCLE_VALUE = "recycle";
 static const string MG_RESPAWN_VALUE = "respawn";
 
+//// constants used for importing level objects
+static const string MG_LEVEL_OBJECT_TYPE_ATT = "object_type";
+static const string MG_MONEY_OBJECT_TYPE_VALUE = "money";
+static const string MG_LEVEL_OBJECT_ID_ATT = "object_id";
+
 class MGLevelImporter : public MGImporter
 {
 private:

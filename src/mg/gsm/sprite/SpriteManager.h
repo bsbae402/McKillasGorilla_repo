@@ -19,6 +19,7 @@
 #include "mg\gsm\sprite\AnimatedSpriteType.h"
 
 #include "mg\gsm\sprite\LevelObjectSprite.h"
+#include "mg\gsm\sprite\PlayerSprite.h"
 
 class SpriteManager
 {
@@ -33,7 +34,8 @@ private:
 	list<Bot*> bots;
 
 	// AND THIS IS THE PLAYER. AS-IS, WE ONLY ALLOW FOR ONE PLAYER AT A TIME
-	AnimatedSprite *player;
+	//// AnimatedSprite *player;
+	PlayerSprite *player;
 
 	// THE BotRecycler MAKES SURE WE DON'T HAVE TO CONSTRUCT BOTS WHENEVER
 	// WE NEED TO SPAWN THEM, INSTEAD IT WILL RECYCLE THEM FOR US
@@ -53,7 +55,7 @@ public:
 	// INLINED ACCESSOR METHODS
 	BotRecycler*			getBotRecycler()		{ return &botRecycler;		}
 	int						getNumberOfBots()		{ return bots.size();		}
-	AnimatedSprite*			getPlayer()				{ return player;			}
+	PlayerSprite*			getPlayer()				{ return player;			}
 	list<Bot*>::iterator	getBotsIterator()		{ return bots.begin();		}
 	list<Bot*>::iterator	getEndOfBotsIterator()	{ return bots.end();		}
 	vector<BotSpawningPool*>*  getSpawningPools()		{ return &spawningPools;		}
@@ -63,7 +65,7 @@ public:
 	{
 		spawningPools.push_back(poolToAdd);
 	}
-	void setPlayer(AnimatedSprite *initPlayer)
+	void setPlayer(PlayerSprite *initPlayer)
 	{
 		player = initPlayer;
 	}

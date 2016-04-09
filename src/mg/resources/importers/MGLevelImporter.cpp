@@ -21,6 +21,7 @@
 #include "tinyxml\tinyxml.h";
 
 #include "mg\gsm\sprite\LevelObjectSprite.h"
+#include "mg\gsm\sprite\PlayerSprite.h"
 
 bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 {
@@ -260,16 +261,13 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 
 			int initX = xmlReader.extractIntAtt(player, MG_INIT_X_ATT);
 			int initY = xmlReader.extractIntAtt(player, MG_INIT_Y_ATT);
-			wstring debugText = L"Bot x, y: ";
-			wstringstream wss;
-			wss << initX; wss << L", "; wss << initY;
-			debugText += wss.str();
-			text->writeDebugOutput(debugText);
+			//// I guess we don't ever check the debug file, so I'm skipping debug text process
 
-			const char* initialBotState = xmlReader.extractCharAtt(player, MG_INIT_BOT_STATE_ATT);
-			string strInitialBotState(initialBotState);
-			wstring wInitialBotState(strInitialBotState.begin(), strInitialBotState.end());
-			text->writeDebugOutput(L"init bot state: " + wInitialBotState);
+			//// get the value of init_player_state property
+			const char* initialPlayerState = xmlReader.extractCharAtt(player, MG_INIT_PLAYER_STATE_ATT);
+			string strInitialPlayerState(initialPlayerState);
+			wstring wInitialPlayerState(strInitialPlayerState.begin(), strInitialPlayerState.end());
+			text->writeDebugOutput(L"init bot state: " + wInitialPlayerState);
 
 			const char* initSpriteState = xmlReader.extractCharAtt(player, MG_INIT_SPRITE_STATE_ATT);
 			string strInitialSpriteState(initSpriteState);
@@ -278,21 +276,24 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 
 
 			// MAKE THE PLAYER
-			Bot *playerBot = new Bot();
+			PlayerSprite *playerSprite = new PlayerSprite();
 			AnimatedSpriteType *playerSpriteType = spriteManager->getSpriteType(wSpriteType);
-			playerBot->setSpriteType(playerSpriteType);
-			playerBot->setAlpha(255);
+			playerSprite->setSpriteType(playerSpriteType);
+			playerSprite->setAlpha(255);
 
-			PhysicalProperties *pp = playerBot->getPhysicalProperties();
+			PhysicalProperties *pp = playerSprite->getPhysicalProperties();
 			pp->setPosition(initX, initY);
 			pp->setVelocity(0, 0);
-			BotState botState = playerBot->getBotStateForString(initialBotState);
-			playerBot->setBotState(botState);
-			playerBot->setCurrentState(wInitialSpriteState);
-			playerBot->setRotationInRadians(PI / 2);
+			PlayerState playerState = playerSprite->getPlayerStateForString(initialPlayerState);
+			playerSprite->setPlayerState(playerState);	//// setting player sprite's state
+			playerSprite->setCurrentState(wInitialSpriteState);	//// setting animation_state
+			
+																
+			//// not quite sure if we need any Rotation for the player sprite
+			playerSprite->setRotationInRadians(PI / 2);
 
 
-			spriteManager->setPlayer(playerBot);
+			spriteManager->setPlayer(playerSprite);
 
 			player = player->NextSiblingElement();
 		}

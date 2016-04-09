@@ -46,6 +46,9 @@ static const string MG_LEVEL_OBJECT_TYPE_ATT = "object_type";
 static const string MG_MONEY_OBJECT_TYPE_VALUE = "money";
 static const string MG_LEVEL_OBJECT_ID_ATT = "object_id";
 
+//// constants used for importing player sprite
+static const string MG_INIT_PLAYER_STATE_ATT = "init_player_state";
+
 class MGLevelImporter : public MGImporter
 {
 private:

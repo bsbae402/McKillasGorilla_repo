@@ -198,6 +198,9 @@
     <ClCompile Include="src\mg\gsm\sprite\LevelObjectSprite.cpp">
       <Filter>src\mg\gsm\sprite</Filter>
     </ClCompile>
+    <ClCompile Include="src\mg\gsm\sprite\PlayerSprite.cpp">
+      <Filter>src\mg\gsm\sprite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\mg\game\Game.h">
@@ -384,6 +387,9 @@
       <Filter>src\mg\gsm\state</Filter>
     </ClInclude>
     <ClInclude Include="src\mg\gsm\sprite\LevelObjectSprite.h">
+      <Filter>src\mg\gsm\sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mg\gsm\sprite\PlayerSprite.h">
       <Filter>src\mg\gsm\sprite</Filter>
     </ClInclude>
   </ItemGroup>

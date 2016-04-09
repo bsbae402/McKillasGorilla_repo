@@ -17,6 +17,9 @@
 #include <vector>
 #include <list>
 
+#include "mg\input\GameInput.h"
+#include "mg\gsm\sprite\PlayerSprite.h"
+
 void Physics::startUp()
 {
 	activated = true;
@@ -37,6 +40,14 @@ void Physics::update()
 		World *world = gsm->getWorld();
 		float worldWidth = world->getWorldWidth();
 		float worldHeight = world->getWorldHeight();
+
+		//// player sprite physics
+		GameInput *gameInput = game->getInput(); //// input may should not be handled in physics. consider one more.
+		// if(gameInput->isKeyDown)
+
+		PlayerSprite *playerSprite = spriteManager->getPlayer();
+
+
 		list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
 		list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
 		while (botIterator != end)

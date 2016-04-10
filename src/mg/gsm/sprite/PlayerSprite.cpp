@@ -10,6 +10,7 @@ wstring PlayerSprite::getWstringForPlayerState(PlayerState state)
 	else return L"";
 }
 
+
 PlayerState PlayerSprite::getPlayerStateForString(string state)
 {
 	if (state.compare(MG_PLAYER_STATE_IDLE) == 0) return PlayerState::ENUM_PLAYER_IDLE;
@@ -19,3 +20,4 @@ PlayerState PlayerSprite::getPlayerStateForString(string state)
 	else if (state.compare(MG_PLAYER_STATE_SHOOTING) == 0) return PlayerState::ENUM_PLAYER_SHOOTING;
 	else return PlayerState::ENUM_PLAYER_NO_STATE;
 }
+

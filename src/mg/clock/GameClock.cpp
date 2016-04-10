@@ -180,8 +180,24 @@ void GameClock::timeGameLoop()
 
 	if (sleeplessLoopTime == 0)
 		actualLoopRate = timerResolution;
-	else
-		sleeplessLoopRate = timerResolution / sleeplessLoopTime;
+	else {
+		/////// ------ original code from Bugs -----
+		/*
+			sleeplessLoopRate = timerResolution / sleeplessLoopTime;
+		*/
+
+		//// in our program, timerResolution = 10^9.
+		//// WHEN DEBUGGING, the problem is that timerResolution and sleeplessLoopTime
+		//// are both int type.
+		//// So when sleeplessLoopTime > timerResolution,
+		//// 'slepplessLoopRate' will become 0
+		//// Thus, in that case, we just set the minimal possible loopRate -> "sleeplessLoopRate = 1"
+		if (sleeplessLoopTime > timerResolution)
+			sleeplessLoopRate = 1;
+		else
+			sleeplessLoopRate = timerResolution / sleeplessLoopTime;
+	}
+		
 
 	// IF THIS PAST FRAME RAN TOO FAST IT'S
 	// LIKELY THE NEXT FRAME WILL RUN FAST ALSO

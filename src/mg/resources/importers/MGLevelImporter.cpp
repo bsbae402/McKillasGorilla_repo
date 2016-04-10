@@ -251,13 +251,11 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 		TiXmlElement *player = playerList->FirstChildElement();
 
 		while (player != nullptr) {
-
 			// THEN GET THE SPRITE TYPE
 			const char* spriteType = player->Attribute(MG_SPRITE_TYPE_ATT.c_str());
 			string strSpriteType(spriteType);
 			wstring wSpriteType(strSpriteType.begin(), strSpriteType.end());
 			text->writeDebugOutput(L"Players's Sprite Type: " + wSpriteType);
-
 
 			int initX = xmlReader.extractIntAtt(player, MG_INIT_X_ATT);
 			int initY = xmlReader.extractIntAtt(player, MG_INIT_Y_ATT);
@@ -274,7 +272,6 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			wstring wInitialSpriteState(strInitialSpriteState.begin(), strInitialSpriteState.end());
 			text->writeDebugOutput(L"init sprite state: " + wInitialSpriteState);
 
-
 			// MAKE THE PLAYER
 			PlayerSprite *playerSprite = new PlayerSprite();
 			AnimatedSpriteType *playerSpriteType = spriteManager->getSpriteType(wSpriteType);
@@ -287,11 +284,12 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			PlayerState playerState = playerSprite->getPlayerStateForString(initialPlayerState);
 			playerSprite->setPlayerState(playerState);	//// setting player sprite's state
 			playerSprite->setCurrentState(wInitialSpriteState);	//// setting animation_state
-			
-																
-			//// not quite sure if we need any Rotation for the player sprite
-			playerSprite->setRotationInRadians(PI / 2);
 
+			//// no rotation for the player sprite
+			playerSprite->setRotationInRadians(0.0f);
+
+			//// set player direction : default is ENUM_PLAYER_DIRECTION_DOWN
+			playerSprite->setPlayerDirection(ENUM_PLAYER_DIRECTION_DOWN);
 
 			spriteManager->setPlayer(playerSprite);
 

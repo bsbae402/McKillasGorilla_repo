@@ -18,6 +18,8 @@
 #include "mg\gsm\sprite\SpriteManager.h"
 #include "mg\gsm\state\GameStateManager.h"
 
+#include "mg\input\GameInput.h"
+
 /*
 	addSpriteToRenderList - This method checks to see if the sprite
 	parameter is inside the viewport. If it is, a RenderItem is generated
@@ -213,10 +215,63 @@ Bot* SpriteManager::removeBot(Bot *botToRemove)
 */
 void SpriteManager::update()
 {
-	// UPDATE THE PLAYER SPRITE ANIMATION FRAME/STATE/ROTATION
-	if (player != nullptr)
-		player->updateSprite();
+	Game *game = Game::getSingleton();
 
+	// UPDATE THE PLAYER SPRITE ANIMATION FRAME/STATE/ROTATION
+	if (player != nullptr) {
+		//// input check : player sprite remembers the input 
+		//// so that we can track if the key is still down by GameInput class 
+		GameInput *gameInput = game->getInput();
+
+		int currentInputValue = player->getPlayerInputStorage();
+		
+		//// if input storage is empty
+		if( currentInputValue == MG_NO_PLAYER_INPUT )
+			player->updateSprite();
+
+		//// if there is stored player input value
+		else {
+			//// check if key is still pressed by calling GameInput
+			bool keyStillDown = gameInput->isKeyDown(currentInputValue);
+
+			//// if key is finally not pressed (key up)
+			if (!keyStillDown) {
+				player->setPlayerInputStorage(MG_NO_PLAYER_INPUT);	// empty the input storage
+
+
+				//// FOR NOW, if there is no key down, we force the player state to be idle.
+				//// this seems to be bad implementation for our Jumping state, but that will be later.
+				player->setPlayerState(ENUM_PLAYER_IDLE);	
+
+
+				//// set player animation state idle according to the direction
+				PlayerDirection pd = player->getPlayerDirection();
+				if(pd == ENUM_PLAYER_DIRECTION_DOWN)
+				{ 
+					wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_BACK.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_BACK.end());
+					player->setCurrentState(wStrState);
+				}
+				else if (pd == ENUM_PLAYER_DIRECTION_UP)
+				{
+					wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_FRONT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_FRONT.end());
+					player->setCurrentState(wStrState);
+				}
+				if (pd == ENUM_PLAYER_DIRECTION_LEFT)
+				{
+					wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_LEFT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_LEFT.end());
+					player->setCurrentState(wStrState);
+				}
+				if (pd == ENUM_PLAYER_DIRECTION_RIGHT)
+				{
+					wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_RIGHT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_RIGHT.end());
+					player->setCurrentState(wStrState);
+				}
+			}
+
+			player->updateSprite();
+		}
+		
+	}
 	// NOW UPDATE THE REST OF THE SPRITES ANIMATION FRAMES/STATES/ROTATIONS
 	list<Bot*>::iterator botIterator = bots.begin();
 	list<Bot*> markedBots;

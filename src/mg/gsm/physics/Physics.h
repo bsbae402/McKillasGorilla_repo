@@ -11,6 +11,7 @@
 
 #pragma once
 #include "mg_VS\stdafx.h"
+#include "mg\gsm\sprite\AnimatedSprite.h"
 
 class Physics
 {
@@ -37,4 +38,7 @@ public:
 	void startUp();
 	void shutDown();
 	void update();
+
+	//// --- physics helper functions
+	bool doesSpriteGoOutWorldThisFrame(AnimatedSprite *sprite);
 };

@@ -14,6 +14,8 @@
 #include "mg\gsm\sprite\AnimatedSprite.h"
 #include "mg\gsm\sprite\AnimatedSpriteType.h"
 
+#include "mg\gsm\state\GameStateManager.h"
+
 /*
 	AnimatedSprite - Default constructor, just sets everything to 0.
 */
@@ -100,6 +102,15 @@ void AnimatedSprite::updateSprite()
 	if (animationCounter >= duration)
 		changeFrame();
 
+	//// -- player sprite image doesn't need any rotation
+	Game *game = Game::getSingleton();
+	GameStateManager *gsm = game->getGSM();
+	if (this == gsm->getSpriteManager()->getPlayer())
+	{
+		return;		// so just return.
+	}
+
+	///// ---- followings are dealing with the sprite rotation
 	// AND NOW CALCULATE THE RADIANS
 	// FOR RENDERING THIS SPRITE
 	float vX = pp.getVelocityX();

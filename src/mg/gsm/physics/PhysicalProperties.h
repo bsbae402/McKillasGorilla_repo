@@ -17,6 +17,8 @@ protected:
 	float velocityY;
 	float accelerationX;
 	float accelerationY;
+	float finalX;
+	float finalY;
 
 public:
 	PhysicalProperties()	{accelerationX = 0; accelerationY = 0;}
@@ -30,6 +32,8 @@ public:
 	float getX()							{ return x;						}
 	float getY()							{ return y;						}
 	float getZ()							{ return z;						}
+	float getFinalX()						{ return finalX;				}
+	float getFinalY()						{ return finalY;				}
 	float getVelocityX()					{ return velocityX;				}
 	float getVelocityY()					{ return velocityY;				}
 	float getAccelerationX()				{ return accelerationX;			}
@@ -43,6 +47,8 @@ public:
 	void setY(float initY)					{ y = initY;					}
 	void incY(float yToInc)					{ y += yToInc;					}
 	void setZ(float initZ)					{ z = initZ;					}
+	void setFinalX(float x)					{ finalX = x;					}
+	void setFinalY(float y)					{ finalY = y;					}
 
 	int round(float realNum)
 	{

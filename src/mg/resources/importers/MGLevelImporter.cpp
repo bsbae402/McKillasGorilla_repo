@@ -173,6 +173,8 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 		{
 			int initX = xmlReader.extractIntAtt(bot, MG_INIT_X_ATT);
 			int initY = xmlReader.extractIntAtt(bot, MG_INIT_Y_ATT);
+			int finalX = xmlReader.extractIntAtt(bot, MG_FINAL_X_ATT);
+			int finalY = xmlReader.extractIntAtt(bot, MG_FINAL_Y_ATT);
 			int initVx = xmlReader.extractIntAtt(bot, MG_INIT_VX_ATT);
 			int initVy = xmlReader.extractIntAtt(bot, MG_INIT_VY_ATT);
 			wstring debugText = L"Bot x, y, vX, vY: ";
@@ -203,6 +205,8 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			// INIT THE BOT WITH THE DATA WE'VE PULLED OUT
 			PhysicalProperties *pp = botToSpawn->getPhysicalProperties();
 			pp->setPosition(initX, initY);
+			pp->setFinalX(finalX);
+			pp->setFinalY(finalY);
 			pp->setVelocity(initVx, initVy);
 			BotState botState = botToSpawn->getBotStateForString(initialBotState);
 			botToSpawn->setBotState(botState);

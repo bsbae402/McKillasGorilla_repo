@@ -22,6 +22,7 @@
 
 #include "mg\gsm\sprite\LevelObjectSprite.h"
 #include "mg\gsm\sprite\PlayerSprite.h"
+#include "mg\gsm\physics\PhysicalProperties.h"
 
 bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 {

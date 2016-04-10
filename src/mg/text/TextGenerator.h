@@ -23,4 +23,6 @@ protected:
 public:
 	virtual void startUp() = 0;
 	virtual void update()=0;
+	virtual void setdebug(wstring newdebug) = 0;
+	virtual void setTime(int time) = 0;
 };

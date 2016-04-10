@@ -19,6 +19,9 @@
 #include "mg\resources\GameResources.h"
 #include "mg\resources\importers\MGLevelImporter.h"
 
+#include "mg\text\TextGenerator.h"
+#include "rebelle\RebelleTextGenerator.h"
+
 /*
 	GameStateManager - Default Constructor, it starts the app at the
 	splash screen with no level loaded.
@@ -210,6 +213,8 @@ void GameStateManager::loadCurrentLevel()
 
 void GameStateManager::loadNextLevel()
 {
+	int newkey = rand() % 9;
+	setSafety(newkey);
 	if (currentLevelIndex == NO_LEVEL_LOADED)
 	{
 		currentLevelIndex = 0;
@@ -258,11 +263,100 @@ void GameStateManager::unloadCurrentLevel()
 void GameStateManager::update()
 {
 	Game *game = Game::getSingleton();
+	GameClock *clock = game->getClock();
+	GameText *text = game->getText();
+	TextGenerator *generator = text->getTextGenerator();
 	gameStateMachine->update();
 	spriteManager->update();
 	world.update();
+
+	int newkey = getSafety();
+
+	//generator->setTime(countdownCounter);
+	//if (countdownCounter/40 <= 5 && countdownCounter/40 > 0)
+	generator->setTime(countdownCounter);
+
+	if (countdownCounter <= 1)
+	{
+		while (newkey == getSafety())
+		{
+			newkey = rand() % 9;
+		}
+		setSafety(newkey);
+		countdownCounter = 500;
+	}
+	countdownCounter--;
+
 	if (physics.isActivated() || physics.isActivatedForSingleUpdate())
 	{
 		physics.update();
+	}
+}
+
+wstring GameStateManager::getKey()
+{
+	switch (getSafety())
+	{
+	case(0) :
+		return L"Q";
+		break;
+	case(1) :
+		return L"W";
+		break;
+	case(2) :
+		return L"E";
+		break;
+	case(3) :
+		return L"A";
+		break;
+	case(4) :
+		return L"S";
+		break;
+	case(5) :
+		return L"D";
+		break;
+	case(6) :
+		return L"Z";
+		break;
+	case(7) :
+		return L"X";
+		break;
+	case(8) :
+		return L"C";
+		break;
+	}
+}
+
+int GameStateManager::getIntKey()
+{
+	switch (getSafety())
+	{
+	case(0) :
+		return (unsigned int)'Q';
+		break;
+	case(1) :
+		return (unsigned int)'W';
+		break;
+	case(2) :
+		return (unsigned int)'E';
+		break;
+	case(3) :
+		return (unsigned int)'A';
+		break;
+	case(4) :
+		return (unsigned int)'S';
+		break;
+	case(5) :
+		return (unsigned int)'D';
+		break;
+	case(6) :
+		return (unsigned int)'Z';
+		break;
+	case(7) :
+		return (unsigned int)'X';
+		break;
+	case(8) :
+		return (unsigned int)'C';
+		break;
 	}
 }

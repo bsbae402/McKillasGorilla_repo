@@ -66,6 +66,11 @@ private:
 	// FOR DOING ALL COLLISION DETECTION AND RESOLUTION
 	Physics			physics;
 
+	int score = 0;
+	int money = 0;
+	int safety;
+	int countdownCounter = 500;
+
 public:
 	// INLINED ACCESSOR METHODS
 	GameState			getCurrentGameState()	{ return currentGameState;				}
@@ -76,7 +81,14 @@ public:
 	World*				getWorld()				{ return &world;						}
 	GameStateMachine*	getGameStateMachine()	{ return gameStateMachine; }
 	wstring				getCurrentLevelName()	{ return levelNames[currentLevelIndex];	}
-
+	int getScore() { return score; }
+	int getMoney() { return money; }
+	int getSafety() { return safety; }
+	void setScore(int newscore) { score = newscore; }
+	void setMoney(int newmoney) { money = newmoney; }
+	void setSafety(int newsafety) { safety = newsafety; }
+	wstring getKey();
+	int getIntKey();
 	// INLINED MUTATOR METHOD
 	void setGameStateMachine(GameStateMachine *initBotStateManager)
 	{

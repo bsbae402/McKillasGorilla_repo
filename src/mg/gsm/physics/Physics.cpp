@@ -19,6 +19,8 @@
 
 #include "mg\input\GameInput.h"
 #include "mg\gsm\sprite\PlayerSprite.h"
+#include "mg\gsm\world\World.h"
+#include "mg\gsm\world\TiledLayer.h"
 
 void Physics::startUp()
 {
@@ -60,14 +62,97 @@ void Physics::update()
 		else 
 		{
 			PlayerDirection pd = playerSprite->getPlayerDirection();
+
+			World *world = gsm->getWorld();
+			TiledLayer *collidableLayer = world->getCollidableLayer();
+			int playerSpriteWidth = playerSprite->getSpriteType()->getTextureWidth();
+			int playerSpriteHeight = playerSprite->getSpriteType()->getTextureHeight();
+
+			float playerLeft = playerPP->getX();
+			float playerRight = playerLeft + playerSpriteWidth;
+			float playerTop = playerPP->getY();
+			float playerBottom = playerTop + playerSpriteHeight;
+
+			int leftColumn = collidableLayer->getColumnByX(playerLeft);
+			int rightColumn = collidableLayer->getColumnByX(playerRight);
+			int topRow = collidableLayer->getRowByY(playerTop);
+			int bottomRow = collidableLayer->getRowByY(playerBottom);
+
 			if (pd == ENUM_PLAYER_DIRECTION_DOWN)
-				playerPP->setVelocity(0.0f, 40.0f);
+			{
+				float vY = MG_DEFAULT_PLAYER_SPEED;
+				float playerBottomNextFrame = playerBottom + vY;
+				
+				if(playerBottomNextFrame < world->getWorldHeight()){
+					int bottomRowNextFrame = collidableLayer->getRowByY(playerBottomNextFrame);
+				
+					for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++)
+					{
+						Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+						if (tile->collidable)
+						{
+							vY = 0.0f;
+							break;
+						}
+					}
+					playerPP->setVelocity(0.0f, vY);
+				}
+			}
 			else if (pd == ENUM_PLAYER_DIRECTION_UP)
-				playerPP->setVelocity(0.0f, -40.0f);
-			else if (pd == ENUM_PLAYER_DIRECTION_LEFT)
-				playerPP->setVelocity(-40.0f, 0.0f);
-			else if (pd == ENUM_PLAYER_DIRECTION_RIGHT)
-				playerPP->setVelocity(40.0f, 0.0f);
+			{
+				float vY = -MG_DEFAULT_PLAYER_SPEED;
+				float playerTopNextFrame = playerTop + vY;
+
+				if(playerTopNextFrame > 0.0f){
+					int topRowNextFrame = collidableLayer->getRowByY(playerTopNextFrame);
+
+					for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++){
+						Tile *tile = collidableLayer->getTile(topRowNextFrame, columnIndex);
+						if (tile->collidable)
+						{
+							vY = 0.0f;
+							break;
+						}
+					}
+					playerPP->setVelocity(0.0f, vY);
+				}
+			}
+			else if (pd == ENUM_PLAYER_DIRECTION_LEFT){
+				float vX = -MG_DEFAULT_PLAYER_SPEED;
+				float playerLeftNextFrame = playerLeft + vX;
+
+				if (playerLeftNextFrame > 0.0f) {
+					int leftColumnNextFrame = collidableLayer->getColumnByX(playerLeftNextFrame);
+
+					for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
+						Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
+						if (tile->collidable)
+						{
+							vX = 0.0f;
+							break;
+						}
+					}
+					playerPP->setVelocity(vX, 0.0f);
+				}			
+			}
+			else if (pd == ENUM_PLAYER_DIRECTION_RIGHT) {
+				float vX = MG_DEFAULT_PLAYER_SPEED;
+				float playerRightNextFrame = playerRight + vX;
+
+				if (playerRightNextFrame > 0.0f) {
+					int rightColumnNextFrame = collidableLayer->getColumnByX(playerRightNextFrame);
+
+					for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
+						Tile *tile = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
+						if (tile->collidable)
+						{
+							vX = 0.0f;
+							break;
+						}
+					}
+					playerPP->setVelocity(vX, 0.0f);
+				}
+			}
 		}
 
 		//// check if player sprite is going out of the world or not

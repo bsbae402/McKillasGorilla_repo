@@ -74,4 +74,15 @@ public:
 					bool collidableTiles, 
 					int worldWidth, int worldHeight);
 	void	setTile(Tile *initTile, int row, int column);
+
+	//// useful functions
+	// return row index
+	int		getColumnByX(float x)
+	{
+		return x / tileWidth;
+	}
+	int		getRowByY(float y)
+	{
+		return y / tileHeight;
+	}
 };

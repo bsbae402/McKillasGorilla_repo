@@ -71,6 +71,28 @@ void World::addWorldRenderItemsToRenderList()
 	}
 }
 
+bool World::isInsideCollidableTile(int targetX, int targetY)
+{
+	//// size of collidable layer's tiles
+	int cellWidth = collidableLayer->getTileWidth();
+	int cellHeight = collidableLayer->getTileHeight();
+	int halfCellWidth = cellWidth / 2;
+	int halfCellHeight = cellHeight / 2;
+
+	//// x=96 -> (x-32)=64 -> (x-32)/64 = 1
+	//// x=160 -> (x-32)=128 -> (x-32)/64 = 2
+	int columnIdx = (targetX - halfCellWidth) / cellWidth;
+	int rowIdx = (targetY - halfCellHeight) / cellHeight;
+
+	//// just found that the getTile() wants us to consider the row/col starts from [0] to [49]
+	//// like the array of programmings. Good.
+	Tile *targetTile = collidableLayer->getTile(rowIdx, columnIdx);
+	if (targetTile->collidable)
+		return true;
+	else
+		return false;
+}
+
 /*
 	clear - This method removes all data from the World. It should
 	be called first when a level is unloaded or changed. If it
@@ -83,6 +105,9 @@ void World::addWorldRenderItemsToRenderList()
 */
 void World::unloadWorld()
 {
+	//// unload newly implemented World properties of Rebelle
+	collidableLayer = nullptr;
+
 	// GO THROUGH AND DELETE ALL THE LAYERS
 	vector<WorldLayer*>::iterator it = layers->begin();
 	while (it != layers->end())

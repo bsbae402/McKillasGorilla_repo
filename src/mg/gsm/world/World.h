@@ -20,6 +20,7 @@
 #include "mg_VS\stdafx.h"
 #include "mg\graphics\RenderList.h"
 #include "mg\gsm\world\WorldLayer.h"
+#include "mg\gsm\world\TiledLayer.h"
 
 class Game;
 class SpriteManager;
@@ -36,6 +37,10 @@ private:
 
 	// THESE ARE THE BACKGROUND LAYERS
 	vector<WorldLayer*> *layers;
+
+	//// We assume there is only one collidable layer (and its type is TiledLayer). 
+	//// And we are going to reference it by this following member
+	TiledLayer *collidableLayer;
 
 public:
 	// INLINED ACCESSOR METHODS
@@ -57,8 +62,19 @@ public:
 	void	addWorldRenderItemsToRenderList();
 	int		getCollidableGridColumns();
 	int		getCollidableGridRows();
-	bool	overlapsCollidableTiles(int centerX, int centerY, int nodeWidth, int nodeHeight);
-	bool	isInsideCollidableTile(int centerX, int centerY);
+	
+	//// arguments are sprites's physical info. return true if the sprite is overlaps a collidable tile. Not using it...
+	bool	overlapsCollidableTiles(int centerX, int centerY, int nodeWidth, int nodeHeight);	
+	
+	//// BONGSUNG- I prefer use this one.
+	bool	isInsideCollidableTile(int targetX, int targetY);
+
 	void	unloadWorld();
 	void	update();
+
+	TiledLayer *getCollidableLayer() { return collidableLayer; }
+	void	setCollidableLayer(TiledLayer* initCollidableLayer)
+	{
+		collidableLayer = initCollidableLayer;
+	}
 };

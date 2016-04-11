@@ -68,6 +68,8 @@ static const string MG_PLAYER_ANIMATION_STATE_DAMAGE_RIGHT = "DAMAGE_RIGHT";	// 
 
 static const int MG_NO_PLAYER_INPUT = -1;		//// playerInputStorage == MG_NO_PLAYER_INPUT when no player input from keys
 
+static const float MG_DEFAULT_PLAYER_SPEED = 10.0f;
+
 class PlayerSprite : public AnimatedSprite
 {
 private:

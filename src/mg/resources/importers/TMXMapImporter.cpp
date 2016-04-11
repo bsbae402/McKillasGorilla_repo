@@ -10,6 +10,8 @@
 #include "tinyxml\tinyxml.h";
 #include "xmlfi\XMLFileImporter.h"
 
+#include "mg\gsm\world\World.h"
+
 bool TMXMapImporter::load(wstring mapDir, wstring mapFile)
 {
 	this->dir = mapDir;
@@ -392,7 +394,14 @@ void TMXMapImporter::buildTiledLayer(TiledLayerInfo *tli, int idOffset)
 													largestLayerWidth,
 													largestLayerHeight);
 	Game *game = Game::getSingleton();
-	game->getGSM()->getWorld()->addLayer(tiledLayerToAdd);
+	World *world = game->getGSM()->getWorld();
+	world->addLayer(tiledLayerToAdd);
+
+	//// if this new layer is a collidable layer
+	if (tli->collidable)
+	{
+		world->setCollidableLayer(tiledLayerToAdd);
+	}
 
 	// WE HAVE TO ADD ALL THE TILES
 	int row = 0;

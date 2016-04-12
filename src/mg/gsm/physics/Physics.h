@@ -20,6 +20,10 @@ private:
 	bool activated;
 	bool activatedForSingleUpdate;
 
+	//// additional switches for testing
+	bool playerActivated;
+	bool botActivated;
+
 public:
 
 	// CONSTRUCDT/DESTRUCTOR
@@ -41,4 +45,9 @@ public:
 
 	//// --- physics helper functions
 	bool doesSpriteGoOutWorldThisFrame(AnimatedSprite *sprite);
+
+	//// --- player physics update enable
+	void togglePlayerPhysics() { playerActivated = !playerActivated; }
+	void toggleBotPhysics() { botActivated = !botActivated; }
+
 };

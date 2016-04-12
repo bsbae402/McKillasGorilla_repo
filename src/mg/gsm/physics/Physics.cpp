@@ -74,9 +74,9 @@ void Physics::update()
 				int playerSpriteHeight = playerSprite->getSpriteType()->getTextureHeight();
 
 				float playerLeft = playerPP->getX();
-				float playerRight = playerLeft + playerSpriteWidth;
-				float playerTop = playerPP->getY();
-				float playerBottom = playerTop + playerSpriteHeight;
+				float playerRight = playerLeft + 64;
+				float playerTop = playerPP->getY() + 80;
+				float playerBottom = playerTop + 48;
 
 				int leftColumn = collidableLayer->getColumnByX(playerLeft);
 				int rightColumn = collidableLayer->getColumnByX(playerRight);

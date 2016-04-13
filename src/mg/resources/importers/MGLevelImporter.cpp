@@ -285,7 +285,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 
 			PhysicalProperties *pp = playerSprite->getPhysicalProperties();
 			pp->setPosition(initX, initY);
-			pp->setVelocity(0, 0);
+			pp->setVelocity(6, 6);
 			PlayerState playerState = playerSprite->getPlayerStateForString(initialPlayerState);
 			playerSprite->setPlayerState(playerState);	//// setting player sprite's state
 			playerSprite->setCurrentState(wInitialSpriteState);	//// setting animation_state

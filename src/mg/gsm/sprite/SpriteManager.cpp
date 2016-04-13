@@ -246,25 +246,29 @@ void SpriteManager::update()
 
 				//// set player animation state idle according to the direction
 				PlayerDirection pd = player->getPlayerDirection();
-				if(pd == ENUM_PLAYER_DIRECTION_DOWN)
-				{ 
-					wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_BACK.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_BACK.end());
-					player->setCurrentState(wStrState);
-				}
-				else if (pd == ENUM_PLAYER_DIRECTION_UP)
+
+				if (!game->getGSM()->getPhysics()->isStrafing())
 				{
-					wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_FRONT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_FRONT.end());
-					player->setCurrentState(wStrState);
-				}
-				if (pd == ENUM_PLAYER_DIRECTION_LEFT)
-				{
-					wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_LEFT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_LEFT.end());
-					player->setCurrentState(wStrState);
-				}
-				if (pd == ENUM_PLAYER_DIRECTION_RIGHT)
-				{
-					wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_RIGHT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_RIGHT.end());
-					player->setCurrentState(wStrState);
+					if (pd == ENUM_PLAYER_DIRECTION_DOWN)
+					{
+						wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_BACK.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_BACK.end());
+						player->setCurrentState(wStrState);
+					}
+					else if (pd == ENUM_PLAYER_DIRECTION_UP)
+					{
+						wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_FRONT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_FRONT.end());
+						player->setCurrentState(wStrState);
+					}
+					if (pd == ENUM_PLAYER_DIRECTION_LEFT)
+					{
+						wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_LEFT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_LEFT.end());
+						player->setCurrentState(wStrState);
+					}
+					if (pd == ENUM_PLAYER_DIRECTION_RIGHT)
+					{
+						wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_RIGHT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_RIGHT.end());
+						player->setCurrentState(wStrState);
+					}
 				}
 			}
 

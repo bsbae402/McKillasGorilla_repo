@@ -23,6 +23,8 @@ private:
 	//// additional switches for testing
 	bool playerActivated;
 	bool botActivated;
+	bool strafing;
+	bool punching;
 
 public:
 
@@ -33,15 +35,19 @@ public:
 	// INLINED GET/SET METHODS
 	bool				isActivated()					{ return activated;					}
 	bool				isActivatedForSingleUpdate()	{ return activatedForSingleUpdate;	}
+	bool isStrafing() { return strafing; }
+	bool isPunching() { return punching; }
 
 	// PUBLIC METHODS DEFINED INSIDE Physics.cpp - YOU ARE WELCOME TO ADD MORE OR CHANGE WHAT YOU LIKE
 	void togglePhysics() { activated = !activated; }
 	void activateForSingleUpdate() { activatedForSingleUpdate = true; }
+	void punch() { punching = true; }
 
 	// ALL SUBSYTEMS HAVE THESE
 	void startUp();
 	void shutDown();
 	void update();
+	
 
 	//// --- physics helper functions
 	bool doesSpriteGoOutWorldThisFrame(AnimatedSprite *sprite);
@@ -49,5 +55,6 @@ public:
 	//// --- player physics update enable
 	void togglePlayerPhysics() { playerActivated = !playerActivated; }
 	void toggleBotPhysics() { botActivated = !botActivated; }
+	void toggleStrafe() { strafing = !strafing; }
 
 };

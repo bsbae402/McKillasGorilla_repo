@@ -160,11 +160,62 @@ void Physics::update()
 				}
 			}
 
+			if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0) {
+
+					// CHECK TO SEE IF THE DYING ANIMATION IS DONE
+					AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
+					unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
+					unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
+					if (frameIndex > sequenceSize) {
+						
+						playerSprite->setCurrentState(L"IDLE_FRONT");
+					}
+				
+			}
+			if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0) {
+
+				// CHECK TO SEE IF THE DYING ANIMATION IS DONE
+				AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
+				unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
+				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
+				if (frameIndex > sequenceSize) {
+
+					playerSprite->setCurrentState(L"IDLE_BACK");
+				}
+
+			}
+			if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0) {
+
+				// CHECK TO SEE IF THE DYING ANIMATION IS DONE
+				AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
+				unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
+				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
+				if (frameIndex > sequenceSize) {
+
+					playerSprite->setCurrentState(L"IDLE_LEFT");
+				}
+
+			}
+			if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0) {
+
+				// CHECK TO SEE IF THE DYING ANIMATION IS DONE
+				AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
+				unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
+				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
+				if (frameIndex > sequenceSize) {
+
+					playerSprite->setCurrentState(L"IDLE_RIGHT");
+				}
+
+			}
+
 			//// check if player sprite is going out of the world or not
 			bool playerGoesOutWorld = doesSpriteGoOutWorldThisFrame(playerSprite);
 			if(!playerGoesOutWorld)
 				playerPP->update();
 		}
+
+		
 		/// here
 
 		//// --- bot physics update

@@ -121,7 +121,7 @@ void GameGraphics::shutDown()
 */
 void GameGraphics::renderAllText()
 {
-	if (debugTextShouldBeRendered)
+	//if (debugTextShouldBeRendered)
 	{
 		GameText *text = Game::getSingleton()->getText();
 		int numTextObjects = text->getRenderTextSize();

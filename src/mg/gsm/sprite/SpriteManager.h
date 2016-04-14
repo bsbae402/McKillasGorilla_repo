@@ -20,6 +20,7 @@
 
 #include "mg\gsm\sprite\LevelObjectSprite.h"
 #include "mg\gsm\sprite\PlayerSprite.h"
+#include "mg\gsm\sprite\BulletRecycler.h"
 
 class SpriteManager
 {
@@ -33,6 +34,8 @@ private:
 	// THAT MOVES AROUND AND IS NOT THE PLAYER
 	list<Bot*> bots;
 
+	list<LevelObjectSprite*> bullets;
+
 	// AND THIS IS THE PLAYER. AS-IS, WE ONLY ALLOW FOR ONE PLAYER AT A TIME
 	//// AnimatedSprite *player;
 	PlayerSprite *player;
@@ -40,6 +43,8 @@ private:
 	// THE BotRecycler MAKES SURE WE DON'T HAVE TO CONSTRUCT BOTS WHENEVER
 	// WE NEED TO SPAWN THEM, INSTEAD IT WILL RECYCLE THEM FOR US
 	BotRecycler botRecycler;
+
+	BulletRecycler bulletRecycler;
 
 	// THESE ARE THIS LEVEL'S SPAWNING POOLS
 	vector<BotSpawningPool*> spawningPools;
@@ -54,6 +59,7 @@ public:
 
 	// INLINED ACCESSOR METHODS
 	BotRecycler*			getBotRecycler()		{ return &botRecycler;		}
+	BulletRecycler*			getBulletRecycler() { return &bulletRecycler; }
 	int						getNumberOfBots()		{ return bots.size();		}
 	PlayerSprite*			getPlayer()				{ return player;			}
 	list<Bot*>::iterator	getBotsIterator()		{ return bots.begin();		}
@@ -80,6 +86,8 @@ public:
 	Bot*				removeBot(Bot *botToRemove);
 	void				unloadSprites();
 	void				update();
+
+	void				fireBullet(AnimatedSprite *sprite);
 
 	//// ---- methods for level object management ----
 	list<LevelObjectSprite*>::iterator	getLevelSpriteObjectsIterator() { return losList.begin(); }

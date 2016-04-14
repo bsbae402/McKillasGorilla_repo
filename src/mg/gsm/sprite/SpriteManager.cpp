@@ -19,6 +19,8 @@
 #include "mg\gsm\state\GameStateManager.h"
 
 #include "mg\input\GameInput.h"
+#include "mg\gsm\sprite\BulletRecycler.h"
+#include "mg\gsm\sprite\LevelObjectSprite.h"
 
 /*
 	addSpriteToRenderList - This method checks to see if the sprite
@@ -313,4 +315,42 @@ void SpriteManager::update()
 void SpriteManager::addLevelObject(LevelObjectSprite * losToAdd)
 {
 	losList.push_back(losToAdd);
+}
+
+void SpriteManager::fireBullet(AnimatedSprite *sprite)
+{
+	BulletRecycler *bulletRecycler = this->getBulletRecycler();
+	LevelObjectSprite *bullet = bulletRecycler->retrieveBullet(L"bullet");
+
+	addLevelObject(bullet);
+
+	PhysicalProperties *pp = bullet->getPhysicalProperties();
+	PhysicalProperties *spritepp = sprite->getPhysicalProperties();
+
+	if (player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_DOWN)
+	{
+		bullet->setRotationInRadians(M_PI / 2);
+		pp->setX(spritepp->getX() + 20);
+		pp->setY(spritepp->getY() + 64);
+		pp->setVelocity(0, 30);
+	}
+	else if (player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_UP)
+	{
+		bullet->setRotationInRadians(M_PI / 2);
+		pp->setX(spritepp->getX() + 30);
+		pp->setY(spritepp->getY());
+		pp->setVelocity(0, -30);
+	}
+	else if (player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_LEFT)
+	{
+		pp->setX(spritepp->getX());
+		pp->setY(spritepp->getY() + 40);
+		pp->setVelocity(-30, 0);
+	}
+	else if (player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_RIGHT)
+	{
+		pp->setX(spritepp->getX()+ 60);
+		pp->setY(spritepp->getY() + 40);
+		pp->setVelocity(30, 0);
+	}
 }

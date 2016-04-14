@@ -10,3 +10,18 @@ LevelObjectSprite::LevelObjectSprite()
 LevelObjectSprite::~LevelObjectSprite()
 {
 }
+
+LevelObjectSprite* LevelObjectSprite::clone()
+{
+	LevelObjectSprite *clonedBot = new LevelObjectSprite();
+	clonedBot->alpha = alpha;
+	clonedBot->animationCounter = animationCounter;
+	//clonedBot->botState = botState;
+	clonedBot->currentlyCollidable = currentlyCollidable;
+	clonedBot->currentState = currentState;
+	clonedBot->frameIndex = frameIndex;
+	clonedBot->rotationInRadians = rotationInRadians;
+	clonedBot->spriteType = spriteType;
+	clonedBot->type = type;
+	return clonedBot;
+}

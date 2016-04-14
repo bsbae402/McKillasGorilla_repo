@@ -51,7 +51,7 @@ void Physics::update()
 		/// here
 		if(playerActivated)
 		{
-			//// RebelleApp.h : MAX_VIEWPORT_AXIS_VELOCITY = 40.0f;
+			
 			PlayerSprite *playerSprite = spriteManager->getPlayer();
 			PhysicalProperties *playerPP = playerSprite->getPhysicalProperties();
 		
@@ -82,6 +82,8 @@ void Physics::update()
 				int rightColumn = collidableLayer->getColumnByX(playerRight);
 				int topRow = collidableLayer->getRowByY(playerTop);
 				int bottomRow = collidableLayer->getRowByY(playerBottom);
+
+				playerPP->setVelocity(0.0f, 0.0f);
 
 				if (pd == ENUM_PLAYER_DIRECTION_DOWN)
 				{
@@ -160,50 +162,54 @@ void Physics::update()
 				}
 			}
 
-			if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0) {
+			if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0) {
 
 					// CHECK TO SEE IF THE DYING ANIMATION IS DONE
 					AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
 					unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
 					unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 					if (frameIndex > sequenceSize) {
-						
+						if (playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0) 
+							gsm->getSpriteManager()->fireBullet(playerSprite);
 						playerSprite->setCurrentState(L"IDLE_FRONT");
 					}
 				
 			}
-			if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0) {
+			if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0) {
 
 				// CHECK TO SEE IF THE DYING ANIMATION IS DONE
 				AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
 				unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
 				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 				if (frameIndex > sequenceSize) {
-
+					if (playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0)
+						gsm->getSpriteManager()->fireBullet(playerSprite);
 					playerSprite->setCurrentState(L"IDLE_BACK");
 				}
 
 			}
-			if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0) {
+			if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0) {
 
 				// CHECK TO SEE IF THE DYING ANIMATION IS DONE
 				AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
 				unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
 				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 				if (frameIndex > sequenceSize) {
-
+					if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0)
+						gsm->getSpriteManager()->fireBullet(playerSprite);
 					playerSprite->setCurrentState(L"IDLE_LEFT");
 				}
 
 			}
-			if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0) {
+			if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0) {
 
 				// CHECK TO SEE IF THE DYING ANIMATION IS DONE
 				AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
 				unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
 				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 				if (frameIndex > sequenceSize) {
-
+					if (playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0)
+						gsm->getSpriteManager()->fireBullet(playerSprite);
 					playerSprite->setCurrentState(L"IDLE_RIGHT");
 				}
 
@@ -213,10 +219,9 @@ void Physics::update()
 			bool playerGoesOutWorld = doesSpriteGoOutWorldThisFrame(playerSprite);
 			if(!playerGoesOutWorld)
 				playerPP->update();
+
 		}
 
-		
-		/// here
 
 		//// --- bot physics update
 		/// here
@@ -243,6 +248,44 @@ void Physics::update()
 					pp->setVelocity(pp->getVelocityX(), -pp->getVelocityY());
 				botIterator++;
 			}
+		}
+
+		list<LevelObjectSprite*>::iterator itemIterator = spriteManager->getLevelSpriteObjectsIterator();
+		list<LevelObjectSprite*>::iterator end = spriteManager->getEndOfLevelSpriteObjectsIterator();
+		while (itemIterator != end)
+		{
+			LevelObjectSprite *LevelObjectSprite = (*itemIterator);
+			PhysicalProperties *pp = LevelObjectSprite->getPhysicalProperties();
+			pp->update();
+			float left = pp->getX();
+			float top = pp->getY();
+			float right = pp->getX() + LevelObjectSprite->getSpriteType()->getTextureWidth();
+			float bottom = pp->getY() + LevelObjectSprite->getSpriteType()->getTextureHeight();
+
+			/*TiledLayer *collidableLayer = world->getCollidableLayer();
+
+			int leftColumn = collidableLayer->getColumnByX(left);
+			int rightColumn = collidableLayer->getColumnByX(right);
+			int topRow = collidableLayer->getRowByY(top);
+			int bottomRow = collidableLayer->getRowByY(bottom);
+
+			float BottomNextFrame = bottom + pp->getY();
+
+			if (BottomNextFrame < world->getWorldHeight()) {
+				int bottomRowNextFrame = collidableLayer->getRowByY(BottomNextFrame);
+
+				for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++)
+				{
+					Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+					if (tile->collidable)
+					{
+						vY = 0.0f;
+						break;
+					}
+				}
+				playerPP->setVelocity(0.0f, vY);*/
+
+			itemIterator++;
 		}
 		//// here
 	}

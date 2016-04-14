@@ -23,5 +23,7 @@ public:
 	{
 		type = initType;
 	}
+
+	LevelObjectSprite* clone();
 };
 

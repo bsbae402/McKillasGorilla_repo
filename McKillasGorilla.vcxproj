@@ -28,6 +28,7 @@
     <ClCompile Include="src\mg\gsm\physics\Physics.cpp" />
     <ClCompile Include="src\mg\gsm\sprite\AnimatedSprite.cpp" />
     <ClCompile Include="src\mg\gsm\sprite\AnimatedSpriteType.cpp" />
+    <ClCompile Include="src\mg\gsm\sprite\BulletRecycler.cpp" />
     <ClCompile Include="src\mg\gsm\sprite\LevelObjectSprite.cpp" />
     <ClCompile Include="src\mg\gsm\sprite\PlayerSprite.cpp" />
     <ClCompile Include="src\mg\gsm\sprite\SpriteManager.cpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="src\mg\gsm\physics\Physics.h" />
     <ClInclude Include="src\mg\gsm\sprite\AnimatedSprite.h" />
     <ClInclude Include="src\mg\gsm\sprite\AnimatedSpriteType.h" />
+    <ClInclude Include="src\mg\gsm\sprite\BulletRecycler.h" />
     <ClInclude Include="src\mg\gsm\sprite\LevelObjectSprite.h" />
     <ClInclude Include="src\mg\gsm\sprite\PlayerSprite.h" />
     <ClInclude Include="src\mg\gsm\sprite\SpriteManager.h" />

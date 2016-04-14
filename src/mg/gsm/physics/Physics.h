@@ -47,7 +47,6 @@ public:
 	void startUp();
 	void shutDown();
 	void update();
-	
 
 	//// --- physics helper functions
 	bool doesSpriteGoOutWorldThisFrame(AnimatedSprite *sprite);

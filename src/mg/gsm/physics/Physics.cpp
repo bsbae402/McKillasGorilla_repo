@@ -51,7 +51,6 @@ void Physics::update()
 		/// here
 		if(playerActivated)
 		{
-			//// RebelleApp.h : MAX_VIEWPORT_AXIS_VELOCITY = 40.0f;
 			PlayerSprite *playerSprite = spriteManager->getPlayer();
 			PhysicalProperties *playerPP = playerSprite->getPhysicalProperties();
 		
@@ -82,6 +81,14 @@ void Physics::update()
 				int rightColumn = collidableLayer->getColumnByX(playerRight);
 				int topRow = collidableLayer->getRowByY(playerTop);
 				int bottomRow = collidableLayer->getRowByY(playerBottom);
+
+				//// THERE IS A BUG THAT PLAYER FLOATING THROUGH THE WALL WHEN 
+				//// GO TO WORLD LEFT EDGE -> MOVING DOWNWARD -> INSTANTLY CHANGE THE MOVING DIRECTION TO LEFT
+				//// IF THIS CONDITION OCCURS, THE PLAYER FLOATING DOWNWARD AND TO COLLISIONS BY THE WALL DECTECED
+
+				//// THIS CAN BE FIXED BY SET THE PLAYER VELOCITY INITIALLY (0.0, 0.0)
+				//// BEFORE CALCULATING ANYTHING BELOW.
+				playerPP->setVelocity(0.0f, 0.0f);
 
 				if (pd == ENUM_PLAYER_DIRECTION_DOWN)
 				{

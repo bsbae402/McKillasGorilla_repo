@@ -87,7 +87,7 @@ void Physics::update()
 
 				if (pd == ENUM_PLAYER_DIRECTION_DOWN)
 				{
-					float vY = MG_DEFAULT_PLAYER_SPEED;
+					int vY = playerSprite->getSpeed();
 					float playerBottomNextFrame = playerBottom + vY;
 				
 					if(playerBottomNextFrame < world->getWorldHeight()){
@@ -107,7 +107,7 @@ void Physics::update()
 				}
 				else if (pd == ENUM_PLAYER_DIRECTION_UP)
 				{
-					float vY = -MG_DEFAULT_PLAYER_SPEED;
+					int vY = -playerSprite->getSpeed();
 					float playerTopNextFrame = playerTop + vY;
 
 					if(playerTopNextFrame > 0.0f){
@@ -125,7 +125,7 @@ void Physics::update()
 					}
 				}
 				else if (pd == ENUM_PLAYER_DIRECTION_LEFT){
-					float vX = -MG_DEFAULT_PLAYER_SPEED;
+					int vX = -playerSprite->getSpeed();
 					float playerLeftNextFrame = playerLeft + vX;
 
 					if (playerLeftNextFrame > 0.0f) {
@@ -143,7 +143,7 @@ void Physics::update()
 					}			
 				}
 				else if (pd == ENUM_PLAYER_DIRECTION_RIGHT) {
-					float vX = MG_DEFAULT_PLAYER_SPEED;
+					int vX = playerSprite->getSpeed();
 					float playerRightNextFrame = playerRight + vX;
 
 					if (playerRightNextFrame > 0.0f) {
@@ -170,7 +170,7 @@ void Physics::update()
 					unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 					if (frameIndex > sequenceSize) {
 						if (playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0) 
-							gsm->getSpriteManager()->fireBullet(playerSprite, true);
+							gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
 						playerSprite->setCurrentState(L"IDLE_FRONT");
 					}
 				
@@ -183,7 +183,7 @@ void Physics::update()
 				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 				if (frameIndex > sequenceSize) {
 					if (playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0)
-						gsm->getSpriteManager()->fireBullet(playerSprite, true);
+						gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
 					playerSprite->setCurrentState(L"IDLE_BACK");
 				}
 
@@ -196,7 +196,7 @@ void Physics::update()
 				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 				if (frameIndex > sequenceSize) {
 					if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0)
-						gsm->getSpriteManager()->fireBullet(playerSprite, true);
+						gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
 					playerSprite->setCurrentState(L"IDLE_LEFT");
 				}
 
@@ -209,7 +209,7 @@ void Physics::update()
 				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 				if (frameIndex > sequenceSize) {
 					if (playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0)
-						gsm->getSpriteManager()->fireBullet(playerSprite, true);
+						gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
 					playerSprite->setCurrentState(L"IDLE_RIGHT");
 				}
 
@@ -249,7 +249,7 @@ void Physics::update()
 				botIterator++;
 			}
 		}
-
+		bool fired = false;
 		list<LevelObjectSprite*>::iterator itemIterator = spriteManager->getLevelSpriteObjectsIterator();
 		list<LevelObjectSprite*>::iterator end = spriteManager->getEndOfLevelSpriteObjectsIterator();
 		while (itemIterator != end)
@@ -354,15 +354,21 @@ void Physics::update()
 
 				list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
 				list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+
 				while (botIterator != end)
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *bpp = bot->getPhysicalProperties();
 
-					if (pp->getX() >= bpp->getX() && pp->getX() <= bpp->getX() + 64
-						&& pp->getY() <= bpp->getY() + 128 && pp->getY() >= bpp->getY())
+					if (pp->getX() >= bpp->getX() - 10 && pp->getX() <= bpp->getX() + 74
+						&& pp->getY() <= bpp->getY() + 138 && pp->getY() >= bpp->getY() - 10)
 					{
-						pp->setVelocity(0.0f, 0.0f);
+						spriteManager->removeLevelObject(LevelObjectSprite);
+						fired = true;
+						if (LevelObjectSprite->getSafetyon())
+							bot->setCurrentState(L"DIE");
+						else
+							game->quitGame();
 						break;
 					}
 
@@ -371,7 +377,8 @@ void Physics::update()
 			}
 
 			
-
+			if (fired)
+				break;
 
 			itemIterator++;
 		}

@@ -70,6 +70,7 @@ private:
 	int money = 0;
 	int safety;
 	int countdownCounter = 500;
+	bool safetyon;
 
 public:
 	// INLINED ACCESSOR METHODS
@@ -89,6 +90,9 @@ public:
 	void setSafety(int newsafety) { safety = newsafety; }
 	wstring getKey();
 	int getIntKey();
+	bool isSafetyon() { return safetyon; }
+	void SafetyOn() { safetyon = true; }
+	void SafetyOff() { safetyon = false; }
 	// INLINED MUTATOR METHOD
 	void setGameStateMachine(GameStateMachine *initBotStateManager)
 	{

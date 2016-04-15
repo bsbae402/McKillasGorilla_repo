@@ -76,6 +76,7 @@ public:
 		player = initPlayer;
 	}
 
+
 	// METHODS DEFINED IN SpriteManager.cpp
 	void				addBot(Bot *botToAdd);
 	void				addSpriteItemsToRenderList();
@@ -87,10 +88,11 @@ public:
 	void				unloadSprites();
 	void				update();
 
-	void				fireBullet(AnimatedSprite *sprite, bool isplayer);
+	void				fireBullet(AnimatedSprite *sprite, bool isplayer, bool safety);
 
 	//// ---- methods for level object management ----
 	list<LevelObjectSprite*>::iterator	getLevelSpriteObjectsIterator() { return losList.begin(); }
 	list<LevelObjectSprite*>::iterator	getEndOfLevelSpriteObjectsIterator() { return losList.end(); }
 	void				addLevelObject(LevelObjectSprite *losToAdd);
+	LevelObjectSprite*				removeLevelObject(LevelObjectSprite *losToRemove);
 };

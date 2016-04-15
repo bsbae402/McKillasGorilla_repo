@@ -101,7 +101,7 @@ public:
 	int getHealth() { return health; }
 	int getAttack() { return attack; }
 	int getDefense() { return defense; }
-	int getSpeed() { return health; }
+	int getSpeed() { return speed; }
 	int getMaxhealth() { return maxhealth; }
 
 	void setPlayerState(PlayerState state)

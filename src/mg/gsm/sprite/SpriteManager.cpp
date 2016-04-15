@@ -317,13 +317,21 @@ void SpriteManager::addLevelObject(LevelObjectSprite * losToAdd)
 	losList.push_back(losToAdd);
 }
 
-void SpriteManager::fireBullet(AnimatedSprite *sprite, bool isplayer)
+LevelObjectSprite* SpriteManager::removeLevelObject(LevelObjectSprite *losToRemove)
+{
+	this->losList.remove(losToRemove);
+	return losToRemove;
+}
+
+void SpriteManager::fireBullet(AnimatedSprite *sprite, bool isplayer, bool safety)
 {
 	BulletRecycler *bulletRecycler = this->getBulletRecycler();
 	LevelObjectSprite *bullet = bulletRecycler->retrieveBullet(L"bullet");
 	bullet->setplayer(isplayer);
 
 	addLevelObject(bullet);
+
+	bullet->setSafetyon(safety);
 
 	PhysicalProperties *pp = bullet->getPhysicalProperties();
 	PhysicalProperties *spritepp = sprite->getPhysicalProperties();

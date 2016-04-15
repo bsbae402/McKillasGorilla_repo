@@ -13,6 +13,7 @@ class LevelObjectSprite : public AnimatedSprite
 private:
 	wstring type;
 	bool isplayer;
+	bool safetyon;
 	
 public:
 	LevelObjectSprite();
@@ -31,7 +32,13 @@ public:
 	bool getPlayer() {
 		return isplayer;
 	}
-
+	void setSafetyon(bool newsafetyon)
+	{
+		safetyon = newsafetyon;
+	}
+	bool getSafetyon() {
+		return safetyon;
+	}
 
 	LevelObjectSprite* clone();
 };

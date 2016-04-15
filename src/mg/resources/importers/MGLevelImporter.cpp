@@ -298,6 +298,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			playerSprite->setSpriteType(playerSpriteType);
 			playerSprite->setAlpha(255);
 
+			int x = initV;
 
 			PhysicalProperties *pp = playerSprite->getPhysicalProperties();
 			pp->setPosition(initX, initY);
@@ -310,6 +311,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			playerSprite->setMaxhealth(health);
 			playerSprite->setAttack(attack);
 			playerSprite->setDefense(defense);
+			
 
 			//// no rotation for the player sprite
 			playerSprite->setRotationInRadians(0.0f);
@@ -408,7 +410,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			wstring wStrBeingState(BEING_LEVEL_OBJECT_SPRITE_STATE_VALUE.begin(), BEING_LEVEL_OBJECT_SPRITE_STATE_VALUE.end());
 			los->setCurrentState(wStrBeingState);
 
-			//spriteManager->addLevelObject(los);
+			spriteManager->addLevelObject(los);
 			bulletRecycler->registerItemType(wSpriteType, los);
 
 			LevelObjectSprite* bullet = bulletRecycler->retrieveBullet(wSpriteType);

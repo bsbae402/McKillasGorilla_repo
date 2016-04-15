@@ -317,10 +317,11 @@ void SpriteManager::addLevelObject(LevelObjectSprite * losToAdd)
 	losList.push_back(losToAdd);
 }
 
-void SpriteManager::fireBullet(AnimatedSprite *sprite)
+void SpriteManager::fireBullet(AnimatedSprite *sprite, bool isplayer)
 {
 	BulletRecycler *bulletRecycler = this->getBulletRecycler();
 	LevelObjectSprite *bullet = bulletRecycler->retrieveBullet(L"bullet");
+	bullet->setplayer(isplayer);
 
 	addLevelObject(bullet);
 

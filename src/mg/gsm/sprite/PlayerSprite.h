@@ -77,6 +77,12 @@ private:
 	PlayerDirection playerDirection;
 	unsigned int playerInputStorage;
 
+	int health;
+	int attack;
+	int defense;
+	int speed;
+	int maxhealth;
+
 public:
 	PlayerSprite() {}
 	~PlayerSprite() {}
@@ -86,6 +92,18 @@ public:
 	wstring getWstringForPlayerState(PlayerState state);
 	PlayerState getPlayerStateForString(string state);
 	
+	void setHealth(int newhealth) { health = newhealth; }
+	void setAttack(int newattack) { attack = newattack; }
+	void setDefense(int newdefense) { defense = newdefense; }
+	void setSpeed(int newspeed) { speed = newspeed; }
+	void setMaxhealth(int newhealth) { maxhealth = newhealth; }
+
+	int getHealth() { return health; }
+	int getAttack() { return attack; }
+	int getDefense() { return defense; }
+	int getSpeed() { return health; }
+	int getMaxhealth() { return maxhealth; }
+
 	void setPlayerState(PlayerState state)
 	{
 		playerState = state;

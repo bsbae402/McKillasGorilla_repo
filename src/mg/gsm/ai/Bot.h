@@ -32,10 +32,27 @@ private:
 	wstring type;
 	BotState botState;
 	map<BotState, BotBehavior*> behaviors;
+	int health;
+	int attack;
+	int defense;
+	int speed;
+	int maxhealth;
 
 public:
 	Bot()	{}
 	~Bot();
+
+	void setHealth(int newhealth) { health = newhealth; }
+	void setAttack(int newattack) { attack = newattack; }
+	void setDefense(int newdefense) { defense = newdefense; }
+	void setSpeed(int newspeed) { speed = newspeed; }
+	void setMaxhealth(int newhealth) { maxhealth = newhealth; }
+
+	int getHealth() { return health; }
+	int getAttack() { return attack; }
+	int getDefense() { return defense; }
+	int getSpeed() { return health; }
+	int getMaxhealth() { return maxhealth; }
 
 	// INLINED
 	wstring getType() { return type; }

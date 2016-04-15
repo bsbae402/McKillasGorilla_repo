@@ -177,13 +177,17 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			int initY = xmlReader.extractIntAtt(bot, MG_INIT_Y_ATT);
 			int finalX = xmlReader.extractIntAtt(bot, MG_FINAL_X_ATT);
 			int finalY = xmlReader.extractIntAtt(bot, MG_FINAL_Y_ATT);
-			int initVx = xmlReader.extractIntAtt(bot, MG_INIT_VX_ATT);
-			int initVy = xmlReader.extractIntAtt(bot, MG_INIT_VY_ATT);
+			//int initVx = xmlReader.extractIntAtt(bot, MG_INIT_VX_ATT);
+			int initV = xmlReader.extractIntAtt(bot, "init_v");
+			int health = xmlReader.extractIntAtt(bot, "health");
+			int attack = xmlReader.extractIntAtt(bot, "attack");
+			int defense = xmlReader.extractIntAtt(bot, "defense");
+
 			wstring debugText = L"Bot x, y, vX, vY: ";
 			wstringstream wss;
-			wss << initX; wss << L", "; wss << initY; wss << initVx; wss << L","; wss << initVy;
-			debugText += wss.str();
-			text->writeDebugOutput(debugText);
+			//wss << initV; wss << L", "; wss << initV;
+			//debugText += wss.str();
+			//text->writeDebugOutput(debugText);
 
 			const char* initialBotState = xmlReader.extractCharAtt(bot, MG_INIT_BOT_STATE_ATT);
 			string strInitialBotState(initialBotState);
@@ -209,11 +213,16 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			pp->setPosition(initX, initY);
 			pp->setFinalX(finalX);
 			pp->setFinalY(finalY);
-			pp->setVelocity(initVx, initVy);
+			pp->setVelocity(0, 0);
 			BotState botState = botToSpawn->getBotStateForString(initialBotState);
 			botToSpawn->setBotState(botState);
 			botToSpawn->setCurrentState(wInitialSpriteState);
 			botToSpawn->setRotationInRadians(PI / 2);
+			botToSpawn->setSpeed(initV);
+			botToSpawn->setHealth(health);
+			botToSpawn->setMaxhealth(health);
+			botToSpawn->setAttack(attack);
+			botToSpawn->setDefense(defense);
 
 			// AND GIVE IT TO THE SPRITE MANAGER
 			spriteManager->addBot(botToSpawn);
@@ -229,6 +238,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 		{
 			int initX = xmlReader.extractIntAtt(spawningPool, MG_X_ATT);
 			int initY = xmlReader.extractIntAtt(spawningPool, MG_Y_ATT);
+			
 
 			// GET THE INTERVAL TYPE
 			const char* intervalTypeChar = xmlReader.extractCharAtt(spawningPool, MG_INTERVAL_TYPE_ATT);
@@ -265,6 +275,10 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 
 			int initX = xmlReader.extractIntAtt(player, MG_INIT_X_ATT);
 			int initY = xmlReader.extractIntAtt(player, MG_INIT_Y_ATT);
+			int initV = xmlReader.extractIntAtt(player, "init_v");
+			int health = xmlReader.extractIntAtt(player, "health");
+			int attack = xmlReader.extractIntAtt(player, "attack");
+			int defense = xmlReader.extractIntAtt(player, "defense");
 			//// I guess we don't ever check the debug file, so I'm skipping debug text process
 
 			//// get the value of init_player_state property
@@ -284,12 +298,18 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			playerSprite->setSpriteType(playerSpriteType);
 			playerSprite->setAlpha(255);
 
+
 			PhysicalProperties *pp = playerSprite->getPhysicalProperties();
 			pp->setPosition(initX, initY);
-			pp->setVelocity(6, 6);
+			pp->setVelocity(0, 0);
 			PlayerState playerState = playerSprite->getPlayerStateForString(initialPlayerState);
 			playerSprite->setPlayerState(playerState);	//// setting player sprite's state
 			playerSprite->setCurrentState(wInitialSpriteState);	//// setting animation_state
+			playerSprite->setSpeed(initV);
+			playerSprite->setHealth(health);
+			playerSprite->setMaxhealth(health);
+			playerSprite->setAttack(attack);
+			playerSprite->setDefense(defense);
 
 			//// no rotation for the player sprite
 			playerSprite->setRotationInRadians(0.0f);
@@ -330,6 +350,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			AnimatedSpriteType *losType = spriteManager->getSpriteType(wSpriteType);
 			los->setSpriteType(losType);
 			los->setType(wSpriteType);
+			los->setplayer(false);
 			los->setAlpha(255);
 
 			//// - set physical property -> actually level objects normally don't have any velocity
@@ -375,6 +396,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			LevelObjectSprite *los = new LevelObjectSprite();
 			AnimatedSpriteType *losType = spriteManager->getSpriteType(wSpriteType);
 			los->setSpriteType(losType);
+			los->setplayer(false);
 			los->setAlpha(255);
 
 			//// - set physical property -> actually level objects normally don't have any velocity

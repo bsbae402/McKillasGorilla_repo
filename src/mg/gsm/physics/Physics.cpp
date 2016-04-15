@@ -170,7 +170,7 @@ void Physics::update()
 					unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 					if (frameIndex > sequenceSize) {
 						if (playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0) 
-							gsm->getSpriteManager()->fireBullet(playerSprite);
+							gsm->getSpriteManager()->fireBullet(playerSprite, true);
 						playerSprite->setCurrentState(L"IDLE_FRONT");
 					}
 				
@@ -183,7 +183,7 @@ void Physics::update()
 				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 				if (frameIndex > sequenceSize) {
 					if (playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0)
-						gsm->getSpriteManager()->fireBullet(playerSprite);
+						gsm->getSpriteManager()->fireBullet(playerSprite, true);
 					playerSprite->setCurrentState(L"IDLE_BACK");
 				}
 
@@ -196,7 +196,7 @@ void Physics::update()
 				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 				if (frameIndex > sequenceSize) {
 					if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0)
-						gsm->getSpriteManager()->fireBullet(playerSprite);
+						gsm->getSpriteManager()->fireBullet(playerSprite, true);
 					playerSprite->setCurrentState(L"IDLE_LEFT");
 				}
 
@@ -209,7 +209,7 @@ void Physics::update()
 				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
 				if (frameIndex > sequenceSize) {
 					if (playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0)
-						gsm->getSpriteManager()->fireBullet(playerSprite);
+						gsm->getSpriteManager()->fireBullet(playerSprite, true);
 					playerSprite->setCurrentState(L"IDLE_RIGHT");
 				}
 
@@ -262,28 +262,116 @@ void Physics::update()
 			float right = pp->getX() + LevelObjectSprite->getSpriteType()->getTextureWidth();
 			float bottom = pp->getY() + LevelObjectSprite->getSpriteType()->getTextureHeight();
 
-			/*TiledLayer *collidableLayer = world->getCollidableLayer();
+			TiledLayer *collidableLayer = world->getCollidableLayer();
 
 			int leftColumn = collidableLayer->getColumnByX(left);
 			int rightColumn = collidableLayer->getColumnByX(right);
 			int topRow = collidableLayer->getRowByY(top);
 			int bottomRow = collidableLayer->getRowByY(bottom);
 
-			float BottomNextFrame = bottom + pp->getY();
+			float vX = pp->getVelocityX();
+			float vY = pp->getVelocityY();
 
-			if (BottomNextFrame < world->getWorldHeight()) {
-				int bottomRowNextFrame = collidableLayer->getRowByY(BottomNextFrame);
+			if (vY > 0)
+			{
+				float BottomNextFrame = bottom + vY;
 
-				for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++)
+				if (BottomNextFrame < world->getWorldHeight())
 				{
-					Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
-					if (tile->collidable)
+					int bottomRowNextFrame = collidableLayer->getRowByY(BottomNextFrame);
+
+					for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++)
 					{
-						vY = 0.0f;
+						Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+						if (tile->collidable)
+						{
+							vY = 0.0f;
+							break;
+						}
+					}
+
+					
+				}
+			}
+			else if (vY < 0)
+			{
+				float TopNextFrame = top + vY;
+
+				if (TopNextFrame > 0.0f) {
+					int topRowNextFrame = collidableLayer->getRowByY(TopNextFrame);
+
+					for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++) {
+						Tile *tile = collidableLayer->getTile(topRowNextFrame, columnIndex);
+						if (tile->collidable)
+						{
+							vY = 0.0f;
+							break;
+						}
+					}
+					pp->setVelocity(0.0f, vY);
+				}
+			}
+			else if (vX > 0)
+			{
+				float RightNextFrame = right + vX;
+
+				if (RightNextFrame > 0.0f) {
+					int rightColumnNextFrame = collidableLayer->getColumnByX(RightNextFrame);
+
+					for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
+						Tile *tile = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
+						if (tile->collidable)
+						{
+							vX = 0.0f;
+							break;
+						}
+					}
+					pp->setVelocity(vX, 0.0f);
+				}
+			}
+			else if (vX < 0)
+			{
+				float LeftNextFrame = left + vX;
+
+				if (LeftNextFrame > 0.0f) {
+					int leftColumnNextFrame = collidableLayer->getColumnByX(LeftNextFrame);
+
+					for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
+						Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
+						if (tile->collidable)
+						{
+							vX = 0.0f;
+							break;
+						}
+					}
+					pp->setVelocity(vX, 0.0f);
+				}
+			}
+
+			if (LevelObjectSprite->getPlayer())
+			{
+
+
+				list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+				list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+				while (botIterator != end)
+				{
+					Bot *bot = (*botIterator);
+					PhysicalProperties *bpp = bot->getPhysicalProperties();
+
+					if (pp->getX() >= bpp->getX() && pp->getX() <= bpp->getX() + 64
+						&& pp->getY() <= bpp->getY() + 128 && pp->getY() >= bpp->getY())
+					{
+						pp->setVelocity(0.0f, 0.0f);
 						break;
 					}
+
+					botIterator++;
 				}
-				playerPP->setVelocity(0.0f, vY);*/
+			}
+
+			
+
 
 			itemIterator++;
 		}

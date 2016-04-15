@@ -87,7 +87,7 @@ public:
 	void				unloadSprites();
 	void				update();
 
-	void				fireBullet(AnimatedSprite *sprite);
+	void				fireBullet(AnimatedSprite *sprite, bool isplayer);
 
 	//// ---- methods for level object management ----
 	list<LevelObjectSprite*>::iterator	getLevelSpriteObjectsIterator() { return losList.begin(); }

@@ -17,6 +17,7 @@ LevelObjectSprite* LevelObjectSprite::clone()
 	clonedBot->alpha = alpha;
 	clonedBot->animationCounter = animationCounter;
 	//clonedBot->botState = botState;
+	clonedBot->isplayer = isplayer;
 	clonedBot->currentlyCollidable = currentlyCollidable;
 	clonedBot->currentState = currentState;
 	clonedBot->frameIndex = frameIndex;

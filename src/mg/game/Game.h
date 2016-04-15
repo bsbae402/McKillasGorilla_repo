@@ -29,6 +29,7 @@
 // PREPROCESSOR INCLUDE STATEMENTS
 #include "mg_VS\stdafx.h"
 #include "mg\gsm\state\GameState.h"
+#include <Box2D\Box2D.h>
 
 // FORWARD DECLARATIONS OF CLASSES USED BY GAME
 class GameClock;
@@ -48,6 +49,8 @@ static const wstring CONFIG_FILE = L"mg_engine.config";
 class Game
 {
 private:
+	b2World *world;
+
 	// SINGLETON DESIGN PATTERN STUFF
 	static bool isSingletonInstantiated;
 	static Game* singleton;

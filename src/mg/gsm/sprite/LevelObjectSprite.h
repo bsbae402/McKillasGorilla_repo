@@ -12,6 +12,7 @@ class LevelObjectSprite : public AnimatedSprite
 {
 private:
 	wstring type;
+	bool isplayer;
 	
 public:
 	LevelObjectSprite();
@@ -23,6 +24,14 @@ public:
 	{
 		type = initType;
 	}
+	void setplayer(bool newisplayer)
+	{
+		isplayer = newisplayer;
+	}
+	bool getPlayer() {
+		return isplayer;
+	}
+
 
 	LevelObjectSprite* clone();
 };

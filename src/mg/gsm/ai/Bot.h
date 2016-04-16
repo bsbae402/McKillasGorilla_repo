@@ -37,6 +37,7 @@ private:
 	int defense;
 	int speed;
 	int maxhealth;
+	bool injured;
 
 public:
 	Bot()	{}
@@ -47,12 +48,14 @@ public:
 	void setDefense(int newdefense) { defense = newdefense; }
 	void setSpeed(int newspeed) { speed = newspeed; }
 	void setMaxhealth(int newhealth) { maxhealth = newhealth; }
+	void setInjured(bool newinjured) { injured = newinjured; }
 
 	int getHealth() { return health; }
 	int getAttack() { return attack; }
 	int getDefense() { return defense; }
 	int getSpeed() { return speed; }
 	int getMaxhealth() { return maxhealth; }
+	bool getInjured() { return injured; }
 
 	// INLINED
 	wstring getType() { return type; }

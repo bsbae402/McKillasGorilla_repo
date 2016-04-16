@@ -41,7 +41,7 @@ public:
 	// PUBLIC METHODS DEFINED INSIDE Physics.cpp - YOU ARE WELCOME TO ADD MORE OR CHANGE WHAT YOU LIKE
 	void togglePhysics() { activated = !activated; }
 	void activateForSingleUpdate() { activatedForSingleUpdate = true; }
-	void punch() { punching = true; }
+	void punch(AnimatedSprite *sprite, bool player, bool safety);
 
 	// ALL SUBSYTEMS HAVE THESE
 	void startUp();

@@ -104,6 +104,37 @@ void Physics::update()
 						}
 						playerPP->setVelocity(0.0f, vY);
 					}
+
+					list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+					list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+					while (botIterator != end)
+					{
+						Bot *bot = (*botIterator);
+						PhysicalProperties *pp = bot->getPhysicalProperties();
+						pp->update();
+						float left = pp->getX();
+						float top = pp->getY();
+						float right = pp->getX() + 64;
+						float bottom = pp->getY() + bot->getSpriteType()->getTextureHeight();
+
+						if (bot->getInjured() == false)
+						{
+
+
+							if (((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
+								|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
+								&& playerPP->getY() <= top && playerBottomNextFrame >= top + 64)
+							{
+								if (bot->getInjured() == false)
+									vY = 0.0f;
+							}
+						}
+
+						playerPP->setVelocity(0.0f, vY);
+
+
+						botIterator++;
+					}
 				}
 				else if (pd == ENUM_PLAYER_DIRECTION_UP)
 				{
@@ -123,6 +154,37 @@ void Physics::update()
 						}
 						playerPP->setVelocity(0.0f, vY);
 					}
+
+					list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+					list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+					while (botIterator != end)
+					{
+						Bot *bot = (*botIterator);
+						PhysicalProperties *pp = bot->getPhysicalProperties();
+						pp->update();
+						float left = pp->getX();
+						float top = pp->getY();
+						float right = pp->getX() + 64;
+						float bottom = pp->getY() + 128;
+
+						if (bot->getInjured() == false)
+						{
+
+
+							if (((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
+								|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
+								&& playerPP->getY() + 80 >= bottom && playerPP->getY() + vY <= bottom - 40)
+							{
+								if (bot->getInjured() == false)
+									vY = 0.0f;
+							}
+						}
+
+						playerPP->setVelocity(0.0f, vY);
+
+
+						botIterator++;
+					}
 				}
 				else if (pd == ENUM_PLAYER_DIRECTION_LEFT){
 					int vX = -playerSprite->getSpeed();
@@ -140,7 +202,38 @@ void Physics::update()
 							}
 						}
 						playerPP->setVelocity(vX, 0.0f);
-					}			
+					}		
+
+					list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+					list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+					while (botIterator != end)
+					{
+						Bot *bot = (*botIterator);
+						PhysicalProperties *pp = bot->getPhysicalProperties();
+						pp->update();
+						float left = pp->getX();
+						float top = pp->getY();
+						float right = pp->getX() + 64;
+						float bottom = pp->getY() + bot->getSpriteType()->getTextureHeight();
+
+						if (bot->getInjured() == false)
+						{
+
+
+							if (((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
+								|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
+								&& playerPP->getX() >= right-5 && playerLeftNextFrame <= right + 5)
+							{
+								if (bot->getInjured() == false)
+									vX = 0.0f;
+							}
+						}
+
+						playerPP->setVelocity(vX, 0.0f);
+
+
+						botIterator++;
+					}
 				}
 				else if (pd == ENUM_PLAYER_DIRECTION_RIGHT) {
 					int vX = playerSprite->getSpeed();
@@ -159,6 +252,37 @@ void Physics::update()
 						}
 						playerPP->setVelocity(vX, 0.0f);
 					}
+
+					list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+					list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+					while (botIterator != end)
+					{
+						Bot *bot = (*botIterator);
+						PhysicalProperties *pp = bot->getPhysicalProperties();
+						pp->update();
+						float left = pp->getX();
+						float top = pp->getY();
+						float right = pp->getX() + 64;
+						float bottom = pp->getY() + bot->getSpriteType()->getTextureHeight();
+
+						if (bot->getInjured() == false)
+						{
+
+
+							if (((playerPP->getY() + 20 >= pp->getY() && playerPP->getY() + 20 <= pp->getY() + 128)
+								|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
+								&& playerPP->getX() <= right - 5 && playerRightNextFrame >= right)
+							{
+								if (bot->getInjured() == false)
+									vX = 0.0f;
+							}
+						}
+
+						playerPP->setVelocity(vX, 0.0f);
+
+
+						botIterator++;
+					}
 				}
 			}
 
@@ -171,6 +295,8 @@ void Physics::update()
 					if (frameIndex > sequenceSize) {
 						if (playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0) 
 							gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
+						if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0)
+							punch(playerSprite, true, gsm->isSafetyon());
 						playerSprite->setCurrentState(L"IDLE_FRONT");
 					}
 				
@@ -184,6 +310,8 @@ void Physics::update()
 				if (frameIndex > sequenceSize) {
 					if (playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0)
 						gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
+					if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0)
+						punch(playerSprite, true, gsm->isSafetyon());
 					playerSprite->setCurrentState(L"IDLE_BACK");
 				}
 
@@ -197,6 +325,8 @@ void Physics::update()
 				if (frameIndex > sequenceSize) {
 					if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0)
 						gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
+					if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0)
+						punch(playerSprite, true, gsm->isSafetyon());
 					playerSprite->setCurrentState(L"IDLE_LEFT");
 				}
 
@@ -210,6 +340,8 @@ void Physics::update()
 				if (frameIndex > sequenceSize) {
 					if (playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0)
 						gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
+					if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0)
+						punch(playerSprite, true, gsm->isSafetyon());
 					playerSprite->setCurrentState(L"IDLE_RIGHT");
 				}
 
@@ -227,6 +359,9 @@ void Physics::update()
 		/// here
 		if (botActivated) 
 		{
+			PlayerSprite *playerSprite = spriteManager->getPlayer();
+			PhysicalProperties *playerPP = playerSprite->getPhysicalProperties();
+
 			list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
 			list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
 			while (botIterator != end)
@@ -246,6 +381,21 @@ void Physics::update()
 					pp->setVelocity(-pp->getVelocityX(), pp->getVelocityY());
 				if ((bottom >= worldHeight) && (pp->getVelocityY() > 0))
 					pp->setVelocity(pp->getVelocityX(), -pp->getVelocityY());
+
+				if (bot->getInjured() == false)
+				{
+
+					float BottomNextFrame = bottom + playerPP->getVelocityY();
+
+					if (playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64
+						&& playerPP->getY() <= pp->getY() + 128 && playerPP->getY() >= pp->getY())
+					{
+						if (bot->getInjured() == false)
+							playerPP->setVelocity(0.0f, 0.0f);
+					}
+				}
+
+
 				botIterator++;
 			}
 		}
@@ -413,4 +563,16 @@ bool Physics::doesSpriteGoOutWorldThisFrame(AnimatedSprite * sprite)
 		return true;
 
 	return false;
+}
+
+void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
+{
+	Game *game = Game::getSingleton();
+	SpriteManager *spriteManager = game->getGSM()->getSpriteManager();
+	GameStateManager *gsm = game->getGSM();
+
+	if (sprite == spriteManager->getPlayer())
+	{
+
+	}
 }

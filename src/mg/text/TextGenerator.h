@@ -25,4 +25,5 @@ public:
 	virtual void update()=0;
 	virtual void setdebug(wstring newdebug) = 0;
 	virtual void setTime(int time) = 0;
+	virtual void setHeal(wstring heal) = 0;
 };

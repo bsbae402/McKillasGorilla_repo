@@ -26,6 +26,9 @@ private:
 	bool strafing;
 	bool punching;
 
+	int exit = 0;
+	
+
 public:
 
 	// CONSTRUCDT/DESTRUCTOR
@@ -37,6 +40,8 @@ public:
 	bool				isActivatedForSingleUpdate()	{ return activatedForSingleUpdate;	}
 	bool isStrafing() { return strafing; }
 	bool isPunching() { return punching; }
+
+	
 
 	// PUBLIC METHODS DEFINED INSIDE Physics.cpp - YOU ARE WELCOME TO ADD MORE OR CHANGE WHAT YOU LIKE
 	void togglePhysics() { activated = !activated; }

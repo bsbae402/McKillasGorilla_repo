@@ -182,6 +182,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			int health = xmlReader.extractIntAtt(bot, "health");
 			int attack = xmlReader.extractIntAtt(bot, "attack");
 			int defense = xmlReader.extractIntAtt(bot, "defense");
+			bool injured = xmlReader.extractBoolAtt(bot, "injured");
 
 			wstring debugText = L"Bot x, y, vX, vY: ";
 			wstringstream wss;
@@ -223,6 +224,8 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			botToSpawn->setMaxhealth(health);
 			botToSpawn->setAttack(attack);
 			botToSpawn->setDefense(defense);
+			botToSpawn->setInjured(injured);
+			botToSpawn->setStartinjured(injured);
 
 			// AND GIVE IT TO THE SPRITE MANAGER
 			spriteManager->addBot(botToSpawn);
@@ -279,6 +282,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			int health = xmlReader.extractIntAtt(player, "health");
 			int attack = xmlReader.extractIntAtt(player, "attack");
 			int defense = xmlReader.extractIntAtt(player, "defense");
+			
 			//// I guess we don't ever check the debug file, so I'm skipping debug text process
 
 			//// get the value of init_player_state property

@@ -38,6 +38,7 @@ private:
 	int speed;
 	int maxhealth;
 	bool injured;
+	bool startinjured;
 
 public:
 	Bot()	{}
@@ -49,6 +50,7 @@ public:
 	void setSpeed(int newspeed) { speed = newspeed; }
 	void setMaxhealth(int newhealth) { maxhealth = newhealth; }
 	void setInjured(bool newinjured) { injured = newinjured; }
+	void setStartinjured(bool newinjured) { startinjured = newinjured; }
 
 	int getHealth() { return health; }
 	int getAttack() { return attack; }
@@ -56,6 +58,7 @@ public:
 	int getSpeed() { return speed; }
 	int getMaxhealth() { return maxhealth; }
 	bool getInjured() { return injured; }
+	bool getStartinjured() { return startinjured; }
 
 	// INLINED
 	wstring getType() { return type; }

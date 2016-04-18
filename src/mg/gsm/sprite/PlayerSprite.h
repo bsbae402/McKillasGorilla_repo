@@ -82,6 +82,8 @@ private:
 	int defense;
 	int speed;
 	int maxhealth;
+	bool canheal;
+	bool ishealing;
 
 public:
 	PlayerSprite() {}
@@ -97,12 +99,16 @@ public:
 	void setDefense(int newdefense) { defense = newdefense; }
 	void setSpeed(int newspeed) { speed = newspeed; }
 	void setMaxhealth(int newhealth) { maxhealth = newhealth; }
+	void setCanheal(bool newcanheal) { canheal = newcanheal; }
+	void setIshealing(bool newishealing) { ishealing = newishealing; }
 
 	int getHealth() { return health; }
 	int getAttack() { return attack; }
 	int getDefense() { return defense; }
 	int getSpeed() { return speed; }
 	int getMaxhealth() { return maxhealth; }
+	bool getCanheal() { return canheal; }
+	bool getIshealing() { return ishealing; }
 
 	void setPlayerState(PlayerState state)
 	{

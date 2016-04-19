@@ -378,78 +378,7 @@ void Physics::update()
 				}
 			}
 
-			if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0) {
-
-					// CHECK TO SEE IF THE DYING ANIMATION IS DONE
-					AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
-					unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
-					unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
-
-					if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0)
-						punch(playerSprite, true, gsm->isSafetyon());
-
-					if (frameIndex > sequenceSize) {
-						if (playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0) 
-							gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
-						
-						playerSprite->setCurrentState(L"IDLE_FRONT");
-					}
-				
-			}
-			else if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0) {
-
-				// CHECK TO SEE IF THE DYING ANIMATION IS DONE
-				AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
-				unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
-				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
-
-				if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0)
-					punch(playerSprite, true, gsm->isSafetyon());
-
-				if (frameIndex > sequenceSize) {
-					if (playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0)
-						gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
-					
-					playerSprite->setCurrentState(L"IDLE_BACK");
-				}
-
-			}
-			else if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0) {
-
-				// CHECK TO SEE IF THE DYING ANIMATION IS DONE
-				AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
-				unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
-				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
-
-				if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0)
-					punch(playerSprite, true, gsm->isSafetyon());
-
-				if (frameIndex > sequenceSize) {
-					if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0)
-						gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
-					
-					playerSprite->setCurrentState(L"IDLE_LEFT");
-				}
-
-			}
-			else if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0) {
-
-				// CHECK TO SEE IF THE DYING ANIMATION IS DONE
-				AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
-				unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
-				unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
-
-				if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0)
-					punch(playerSprite, true, gsm->isSafetyon());
-
-				if (frameIndex > sequenceSize) {
-					if (playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0)
-						gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
-					
-					playerSprite->setCurrentState(L"IDLE_RIGHT");
-				}
-
-			}
+			
 
 			if (exit == 0)
 			{
@@ -462,6 +391,7 @@ void Physics::update()
 
 		}
 
+		
 		
 		//// --- bot physics update
 		/// here
@@ -510,181 +440,193 @@ void Physics::update()
 				}
 			}
 
+
+			CheckPunchShoot(spriteManager->getPlayer());
 			
-
-			bool used = false; //Check for if we are removing an item to get out of the list loop
-			list<LevelObjectSprite*>::iterator itemIterator = spriteManager->getLevelSpriteObjectsIterator();
-			list<LevelObjectSprite*>::iterator end = spriteManager->getEndOfLevelSpriteObjectsIterator();
-			while (itemIterator != end)
+			if (exit == 0)
 			{
-				LevelObjectSprite *LevelObjectSprite = (*itemIterator);
-				PhysicalProperties *pp = LevelObjectSprite->getPhysicalProperties();
-				pp->update();
-				float left = pp->getX();
-				float top = pp->getY();
-				float right = pp->getX() + LevelObjectSprite->getSpriteType()->getTextureWidth();
-				float bottom = pp->getY() + LevelObjectSprite->getSpriteType()->getTextureHeight();
 
-				TiledLayer *collidableLayer = world->getCollidableLayer();
-
-				int leftColumn = collidableLayer->getColumnByX(left);
-				int rightColumn = collidableLayer->getColumnByX(right);
-				int topRow = collidableLayer->getRowByY(top);
-				int bottomRow = collidableLayer->getRowByY(bottom);
-
-				float vX = pp->getVelocityX();
-				float vY = pp->getVelocityY();
-
-				//Check that a bullet is removed if it hits a wall
-				if (vY > 0)
+				bool used = false; //Check for if we are removing an item to get out of the list loop
+				list<LevelObjectSprite*>::iterator itemIterator = spriteManager->getLevelSpriteObjectsIterator();
+				list<LevelObjectSprite*>::iterator end = spriteManager->getEndOfLevelSpriteObjectsIterator();
+				while (itemIterator != end)
 				{
-					float BottomNextFrame = bottom + vY;
+					LevelObjectSprite *LevelObjectSprite = (*itemIterator);
+					PhysicalProperties *pp = LevelObjectSprite->getPhysicalProperties();
+					pp->update();
+					float left = pp->getX();
+					float top = pp->getY();
+					float right = pp->getX() + LevelObjectSprite->getSpriteType()->getTextureWidth();
+					float bottom = pp->getY() + LevelObjectSprite->getSpriteType()->getTextureHeight();
 
-					if (BottomNextFrame < world->getWorldHeight())
+					TiledLayer *collidableLayer = world->getCollidableLayer();
+
+					int leftColumn = collidableLayer->getColumnByX(left);
+					int rightColumn = collidableLayer->getColumnByX(right);
+					int topRow = collidableLayer->getRowByY(top);
+					int bottomRow = collidableLayer->getRowByY(bottom);
+
+					float vX = pp->getVelocityX();
+					float vY = pp->getVelocityY();
+
+					//Check that a bullet is removed if it hits a wall
+					if (vY > 0)
 					{
-						int bottomRowNextFrame = collidableLayer->getRowByY(BottomNextFrame);
+						float BottomNextFrame = bottom + vY;
 
-						for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++)
+						if (BottomNextFrame < world->getWorldHeight())
 						{
-							Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
-							if (tile->collidable)
+							int bottomRowNextFrame = collidableLayer->getRowByY(BottomNextFrame);
+
+							for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++)
 							{
-								spriteManager->removeLevelObject(LevelObjectSprite);
-								vY = 0.0f;
-								used = true;
-								break;
+								Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+								if (tile->collidable)
+								{
+									spriteManager->removeLevelObject(LevelObjectSprite);
+									vY = 0.0f;
+									used = true;
+									break;
+								}
 							}
+
+
 						}
-
-
 					}
-				}
-				else if (vY < 0)
-				{
-					float TopNextFrame = top + vY;
-
-					if (TopNextFrame > 0.0f) {
-						int topRowNextFrame = collidableLayer->getRowByY(TopNextFrame);
-
-						for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++) {
-							Tile *tile = collidableLayer->getTile(topRowNextFrame, columnIndex);
-							if (tile->collidable)
-							{
-								spriteManager->removeLevelObject(LevelObjectSprite);
-								vY = 0.0f;
-								used = true;
-								break;
-							}
-						}
-						pp->setVelocity(0.0f, vY);
-					}
-				}
-				else if (vX > 0)
-				{
-					float RightNextFrame = right + vX;
-
-					if (RightNextFrame > 0.0f) {
-						int rightColumnNextFrame = collidableLayer->getColumnByX(RightNextFrame);
-
-						for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
-							Tile *tile = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
-							if (tile->collidable)
-							{
-								spriteManager->removeLevelObject(LevelObjectSprite);
-								vX = 0.0f;
-								used = true;
-								break;
-							}
-						}
-						pp->setVelocity(vX, 0.0f);
-					}
-				}
-				else if (vX < 0)
-				{
-					float LeftNextFrame = left + vX;
-
-					if (LeftNextFrame > 0.0f) {
-						int leftColumnNextFrame = collidableLayer->getColumnByX(LeftNextFrame);
-
-						for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
-							Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
-							if (tile->collidable)
-							{
-								spriteManager->removeLevelObject(LevelObjectSprite);
-								vX = 0.0f;
-								used = true;
-								break;
-							}
-						}
-						pp->setVelocity(vX, 0.0f);
-					}
-				}
-
-				//Remove money and add to money count if a player moves into money sprite
-				if (LevelObjectSprite->getType().compare(L"money") == 0)
-				{
-					PhysicalProperties *playerpp = spriteManager->getPlayer()->getPhysicalProperties();
-					
-					if ((playerpp->getX() >= pp->getX() && playerpp->getX() <= pp->getX() + 64
-						|| playerpp->getX() + 64 >= pp->getX() && playerpp->getX() + 64 <= pp->getX() + 64)
-						&& (playerpp->getY() >= pp->getY() && playerpp->getY() <= pp->getY() + 64
-							|| playerpp->getY() + 128 >= pp->getY() && playerpp->getY() + 128 <= pp->getY() + 64))
+					else if (vY < 0)
 					{
-						spriteManager->removeLevelObject(LevelObjectSprite);
-						gsm->setMoney(gsm->getMoney() + 500);
-						used = true;
+						float TopNextFrame = top + vY;
+
+						if (TopNextFrame > 0.0f) {
+							int topRowNextFrame = collidableLayer->getRowByY(TopNextFrame);
+
+							for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++) {
+								Tile *tile = collidableLayer->getTile(topRowNextFrame, columnIndex);
+								if (tile->collidable)
+								{
+									spriteManager->removeLevelObject(LevelObjectSprite);
+									vY = 0.0f;
+									used = true;
+									break;
+								}
+							}
+							pp->setVelocity(0.0f, vY);
+						}
+					}
+					else if (vX > 0)
+					{
+						float RightNextFrame = right + vX;
+
+						if (RightNextFrame > 0.0f) {
+							int rightColumnNextFrame = collidableLayer->getColumnByX(RightNextFrame);
+
+							for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
+								Tile *tile = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
+								if (tile->collidable)
+								{
+									spriteManager->removeLevelObject(LevelObjectSprite);
+									vX = 0.0f;
+									used = true;
+									break;
+								}
+							}
+							pp->setVelocity(vX, 0.0f);
+						}
+					}
+					else if (vX < 0)
+					{
+						float LeftNextFrame = left + vX;
+
+						if (LeftNextFrame > 0.0f) {
+							int leftColumnNextFrame = collidableLayer->getColumnByX(LeftNextFrame);
+
+							for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
+								Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
+								if (tile->collidable)
+								{
+									spriteManager->removeLevelObject(LevelObjectSprite);
+									vX = 0.0f;
+									used = true;
+									break;
+								}
+							}
+							pp->setVelocity(vX, 0.0f);
+						}
+					}
+
+					//Remove money and add to money count if a player moves into money sprite
+					if (LevelObjectSprite->getType().compare(L"money") == 0)
+					{
+						PhysicalProperties *playerpp = spriteManager->getPlayer()->getPhysicalProperties();
+
+						if ((playerpp->getX() >= pp->getX() && playerpp->getX() <= pp->getX() + 64
+							|| playerpp->getX() + 64 >= pp->getX() && playerpp->getX() + 64 <= pp->getX() + 64)
+							&& (playerpp->getY() >= pp->getY() && playerpp->getY() <= pp->getY() + 64
+								|| playerpp->getY() + 128 >= pp->getY() && playerpp->getY() + 128 <= pp->getY() + 64))
+						{
+							spriteManager->removeLevelObject(LevelObjectSprite);
+							gsm->setMoney(gsm->getMoney() + 500);
+							used = true;
+							break;
+						}
+
+					}
+
+					//Check for if a bullet came from the player. Bullets from bots cannot kill a bot
+					if (LevelObjectSprite->getPlayer())
+					{
+
+
+						list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+						list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+
+						while (botIterator != end)
+						{
+							Bot *bot = (*botIterator);
+							PhysicalProperties *bpp = bot->getPhysicalProperties();
+
+							//Can only shoot a bot that is not injured
+							if (bot->getInjured() == false)
+							{
+								if (pp->getX() >= bpp->getX() - 10 && pp->getX() <= bpp->getX() + 74
+									&& pp->getY() <= bpp->getY() + 138 && pp->getY() >= bpp->getY() - 10)
+								{
+									spriteManager->removeLevelObject(LevelObjectSprite);
+									used = true;
+
+									//If the safety is on, set bot to injured (Dying is the animation). Otherwise 
+									//it's an automatic game over
+									if (LevelObjectSprite->getSafetyon())
+									{
+										bot->setCurrentState(L"DIE");
+										bot->setInjured(true);
+									}
+									else
+										game->quitGame();
+									break;
+								}
+							}
+
+							botIterator++;
+						}
+					}
+
+
+
+					if (used)
 						break;
-					}
-					
+
+					itemIterator++;
 				}
-				
-				//Check for if a bullet came from the player. Bullets from bots cannot kill a bot
-				if (LevelObjectSprite->getPlayer())
-				{
 
-
-					list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
-					list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
-
-					while (botIterator != end)
-					{
-						Bot *bot = (*botIterator);
-						PhysicalProperties *bpp = bot->getPhysicalProperties();
-
-						//Can only shoot a bot that is not injured
-						if (bot->getInjured() == false)
-						{
-							if (pp->getX() >= bpp->getX() - 10 && pp->getX() <= bpp->getX() + 74
-								&& pp->getY() <= bpp->getY() + 138 && pp->getY() >= bpp->getY() - 10)
-							{
-								spriteManager->removeLevelObject(LevelObjectSprite);
-								used = true;
-
-								//If the safety is on, set bot to injured (Dying is the animation). Otherwise 
-								//it's an automatic game over
-								if (LevelObjectSprite->getSafetyon())
-									bot->setCurrentState(L"DIE");
-								else
-									game->quitGame();
-								break;
-							}
-						}
-
-						botIterator++;
-					}
-				}
-				
-
-
-				if (used)
-					break;
-
-				itemIterator++;
+				used = false;
 			}
 
-			used = false;
+			
 		}
 		//// here
+
+		
 	}
 	activatedForSingleUpdate = false;
 }
@@ -722,6 +664,8 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 	Game *game = Game::getSingleton();
 	SpriteManager *spriteManager = game->getGSM()->getSpriteManager();
 	GameStateManager *gsm = game->getGSM();
+
+	
 
 	if (sprite == spriteManager->getPlayer())
 	{
@@ -778,9 +722,23 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 						{
 							if (safety == false)
 							{
-								game->quitGame();
+								//game->quitGame();
+								if (punched == false)
+								{
+									gsm->setScore(gsm->getScore() - 100);
+									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+									punched = true;
+								}
 								exit = 1;
 							}
+
+							if (bot->getHealth() <= 0 && safety == true)
+							{
+								bot->setCurrentState(L"DIE");
+								bot->setInjured(true);
+							}
+							else if (bot->getHealth() <= 0 && safety == false)
+								game->quitGame();
 							break;
 						}
 					}
@@ -820,9 +778,24 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 						{
 							if (safety == false)
 							{
-								game->quitGame();
+								//game->quitGame();
+								if (punched == false)
+								{
+									gsm->setScore(gsm->getScore() - 100);
+									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+									punched = true;
+								}
 								exit = 1;
 							}
+
+							if (bot->getHealth() <= 0 && safety == true)
+							{
+								bot->setCurrentState(L"DIE");
+								bot->setInjured(true);
+							}
+							else if (bot->getHealth() <= 0 && safety == false)
+								game->quitGame();
+							
 							break;
 						}
 					}
@@ -858,11 +831,31 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
 							&& playerPP->getX() >= right - 5 && playerLeftNextFrame <= right + 5)
 						{
-							if (safety == false)
+
+								//game->quitGame();
+							if (punched == false)
+							{
+								if(safety == false)
+									gsm->setScore(gsm->getScore() - 100);
+								bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+								punched = true;
+							}
+							exit = 1;
+
+							if (bot->getHealth() <= 0 && safety == true)
+							{
+								bot->setCurrentState(L"DIE");
+								bot->setInjured(true);
+							}
+							else if (bot->getHealth() <= 0 && safety == false)
 							{
 								game->quitGame();
 								exit = 1;
 							}
+							
+
+							
+							
 							break;
 						}
 					}
@@ -900,6 +893,23 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 						{
 							if (safety == false)
 							{
+								//game->quitGame();
+								if (punched == false)
+								{
+									gsm->setScore(gsm->getScore() - 100);
+									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+									punched = true;
+								}
+								exit = 1;
+							}
+
+							if (bot->getHealth() <= 0 && safety == true)
+							{
+								bot->setCurrentState(L"DIE");
+								bot->setInjured(true);
+							}
+							else if (bot->getHealth() <= 0 && safety == false)
+							{
 								game->quitGame();
 								exit = 1;
 							}
@@ -914,5 +924,95 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 				}
 			}
 		
+	}
+}
+
+void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
+{
+	Game *game = Game::getSingleton();
+	SpriteManager *spriteManager = game->getGSM()->getSpriteManager();
+	GameStateManager *gsm = game->getGSM();
+
+
+	if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") != 0
+		&& playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") != 0
+		&& playerSprite->getCurrentState().compare(L"PUNCH_FRONT") != 0
+		&& playerSprite->getCurrentState().compare(L"PUNCH_BACK") != 0)
+		punched = false;
+
+	if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0) {
+
+		// CHECK TO SEE IF THE DYING ANIMATION IS DONE
+		AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
+		unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
+		unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
+
+		if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0)
+			punch(playerSprite, true, gsm->isSafetyon());
+
+		if (frameIndex > sequenceSize) {
+			if (playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0)
+				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
+
+			playerSprite->setCurrentState(L"IDLE_FRONT");
+		}
+
+	}
+	else if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0) {
+
+		// CHECK TO SEE IF THE DYING ANIMATION IS DONE
+		AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
+		unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
+		unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
+
+		if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0)
+			punch(playerSprite, true, gsm->isSafetyon());
+
+		if (frameIndex > sequenceSize) {
+			if (playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0)
+				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
+
+			playerSprite->setCurrentState(L"IDLE_BACK");
+		}
+
+	}
+	else if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0) {
+
+
+		// CHECK TO SEE IF THE DYING ANIMATION IS DONE
+		AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
+		unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
+		unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
+
+		if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0)
+			punch(playerSprite, true, gsm->isSafetyon());
+		else
+			punched = false;
+
+		if (frameIndex > sequenceSize) {
+			if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0)
+				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
+
+			playerSprite->setCurrentState(L"IDLE_LEFT");
+		}
+
+	}
+	else if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0) {
+
+		// CHECK TO SEE IF THE DYING ANIMATION IS DONE
+		AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
+		unsigned int frameIndex = (playerSprite->getFrameIndex() * 2);
+		unsigned int sequenceSize = spriteType->getSequenceSize(playerSprite->getCurrentState()) + 2;
+
+		if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0)
+			punch(playerSprite, true, gsm->isSafetyon());
+
+		if (frameIndex > sequenceSize) {
+			if (playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0)
+				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
+
+			playerSprite->setCurrentState(L"IDLE_RIGHT");
+		}
+
 	}
 }

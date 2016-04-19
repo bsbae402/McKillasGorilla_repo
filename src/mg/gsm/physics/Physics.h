@@ -27,6 +27,7 @@ private:
 	bool punching;
 
 	int exit = 0;
+	bool punched;
 	
 
 public:
@@ -47,6 +48,7 @@ public:
 	void togglePhysics() { activated = !activated; }
 	void activateForSingleUpdate() { activatedForSingleUpdate = true; }
 	void punch(AnimatedSprite *sprite, bool player, bool safety);
+	void CheckPunchShoot(AnimatedSprite *playersprite);
 
 	// ALL SUBSYTEMS HAVE THESE
 	void startUp();

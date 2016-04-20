@@ -33,12 +33,14 @@ private:
 	BotState botState;
 	map<BotState, BotBehavior*> behaviors;
 	int health;
+	int starthealth;
 	int attack;
 	int defense;
 	int speed;
 	int maxhealth;
 	bool injured;
 	bool startinjured;
+	bool washealed;
 
 public:
 	Bot()	{}
@@ -51,14 +53,19 @@ public:
 	void setMaxhealth(int newhealth) { maxhealth = newhealth; }
 	void setInjured(bool newinjured) { injured = newinjured; }
 	void setStartinjured(bool newinjured) { startinjured = newinjured; }
+	void setWasHealed(bool newwashealed) { washealed = newwashealed; }
+	void setStarthealth(int newstarthealth) { starthealth = newstarthealth; }
 
 	int getHealth() { return health; }
+	int getStarthealth() { return starthealth; }
 	int getAttack() { return attack; }
 	int getDefense() { return defense; }
 	int getSpeed() { return speed; }
 	int getMaxhealth() { return maxhealth; }
 	bool getInjured() { return injured; }
 	bool getStartinjured() { return startinjured; }
+	bool getWasHealed() { return washealed; }
+
 
 	// INLINED
 	wstring getType() { return type; }

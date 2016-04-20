@@ -218,9 +218,10 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			BotState botState = botToSpawn->getBotStateForString(initialBotState);
 			botToSpawn->setBotState(botState);
 			botToSpawn->setCurrentState(wInitialSpriteState);
-			botToSpawn->setRotationInRadians(PI / 2);
+			//botToSpawn->setRotationInRadians(PI / 2);
 			botToSpawn->setSpeed(initV);
 			botToSpawn->setHealth(health);
+			botToSpawn->setStarthealth(health);
 			botToSpawn->setMaxhealth(health);
 			botToSpawn->setAttack(attack);
 			botToSpawn->setDefense(defense);

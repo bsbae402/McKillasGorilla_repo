@@ -72,7 +72,7 @@ void Physics::update()
 			}
 
 			/// ONLY if player is moving, then we set the velocity
-			else 
+			else
 			{
 				PlayerDirection pd = playerSprite->getPlayerDirection();
 
@@ -93,287 +93,336 @@ void Physics::update()
 
 				playerPP->setVelocity(0.0f, 0.0f);
 
-				if (pd == ENUM_PLAYER_DIRECTION_DOWN)
+				if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") != 0
+					&& playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") != 0
+					&& playerSprite->getCurrentState().compare(L"SHOOT_FRONT") != 0
+					&& playerSprite->getCurrentState().compare(L"SHOOT_BACK") != 0)
 				{
-					int vY = playerSprite->getSpeed();
-					float playerBottomNextFrame = playerBottom + vY;
-				
-					if(playerBottomNextFrame < world->getWorldHeight()){
-						int bottomRowNextFrame = collidableLayer->getRowByY(playerBottomNextFrame);
-				
-						for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++)
+
+					if (pd == ENUM_PLAYER_DIRECTION_DOWN)
+					{
+						int vY = playerSprite->getSpeed();
+						float playerBottomNextFrame = playerBottom + vY;
+
+						if (playerBottomNextFrame < world->getWorldHeight()) {
+							int bottomRowNextFrame = collidableLayer->getRowByY(playerBottomNextFrame);
+
+							for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++)
+							{
+								Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+								if (tile->collidable)
+								{
+									vY = 0.0f;
+									break;
+								}
+							}
+							playerPP->setVelocity(0.0f, vY);
+						}
+
+
+						list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+						list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+						while (botIterator != end)
 						{
-							Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
-							if (tile->collidable)
+							Bot *bot = (*botIterator);
+							PhysicalProperties *pp = bot->getPhysicalProperties();
+							pp->update();
+							float left = pp->getX();
+							float top = pp->getY();
+							float right = pp->getX() + 64;
+							float bottom = pp->getY() + bot->getSpriteType()->getTextureHeight();
+
+							//Check that the player does not move through bots that are not injured
+							if (bot->getInjured() == false && ((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
+								|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
+								&& playerPP->getY() <= top && playerBottomNextFrame >= top + 64)
 							{
 								vY = 0.0f;
-								break;
 							}
-						}
-						playerPP->setVelocity(0.0f, vY);
-					}
-
-					
-					list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
-					list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
-					while (botIterator != end)
-					{
-						Bot *bot = (*botIterator);
-						PhysicalProperties *pp = bot->getPhysicalProperties();
-						pp->update();
-						float left = pp->getX();
-						float top = pp->getY();
-						float right = pp->getX() + 64;
-						float bottom = pp->getY() + bot->getSpriteType()->getTextureHeight();
-
-						//Check that the player does not move through bots that are not injured
-						if (bot->getInjured() == false && ((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
-							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
-							&& playerPP->getY() <= top && playerBottomNextFrame >= top + 64)
-						{
-							vY = 0.0f;
-						}
-						//If a bot is injured, the player can heal him
-						else if (bot->getInjured() == true && ((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
-							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
-							&& playerPP->getY() - 64 <= bottom + 10 && playerPP->getY() + 64 >= top - 10)
-						{
-							generator->setHeal(L"HEAL");
-							playerSprite->setCanheal(true);
-
-							//Heal the bot (Set to dying for testing)
-							if (playerSprite->getIshealing() == true)
+							//If a bot is injured, the player can heal him
+							else if (bot->getInjured() == true && ((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
+								|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
+								&& playerPP->getY() - 64 <= bottom + 10 && playerPP->getY() + 64 >= top - 10)
 							{
-								bot->setCurrentState(L"DIE");
-								playerSprite->setIshealing(false);
+								generator->setHeal(L"HEAL");
+								playerSprite->setCanheal(true);
+
+								//Heal the bot (Set to dying for testing)
+								if (playerSprite->getIshealing() == true && bot->getInjured() == true)
+								{
+									bot->setCurrentState(L"IDLE_BACK");
+									bot->setInjured(false);
+									playerSprite->setIshealing(false);
+
+									if (bot->getStartinjured() == true)
+										gsm->setScore(gsm->getScore() + 1000);
+									else
+										gsm->setScore(gsm->getScore() + 500);
+
+									bot->setHealth(bot->getStarthealth());
+									bot->setWasHealed(true);
+								}
 							}
+							//Set toolbar heal caption to blank
+							else if (((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
+								|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
+								&& playerSprite->getCanheal() == true && playerPP->getY() >= bottom)
+							{
+
+								generator->setHeal(L"");
+								playerSprite->setCanheal(false);
+							}
+
+
+							playerPP->setVelocity(0.0f, vY);
+
+
+							botIterator++;
 						}
-						//Set toolbar heal caption to blank
-						else if (((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
-							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
-							&& playerSprite->getCanheal() == true && playerPP->getY() >= bottom)
+					}
+					else if (pd == ENUM_PLAYER_DIRECTION_UP)
+					{
+						int vY = -playerSprite->getSpeed();
+						float playerTopNextFrame = playerTop + vY;
+
+						if (playerTopNextFrame > 0.0f) {
+							int topRowNextFrame = collidableLayer->getRowByY(playerTopNextFrame);
+
+							for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++) {
+								Tile *tile = collidableLayer->getTile(topRowNextFrame, columnIndex);
+								if (tile->collidable)
+								{
+									vY = 0.0f;
+									break;
+								}
+							}
+							playerPP->setVelocity(0.0f, vY);
+						}
+
+						list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+						list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+						while (botIterator != end)
 						{
+							Bot *bot = (*botIterator);
+							PhysicalProperties *pp = bot->getPhysicalProperties();
+							pp->update();
+							float left = pp->getX();
+							float top = pp->getY();
+							float right = pp->getX() + 64;
+							float bottom = pp->getY() + 128;
+
+
+							//Check that the player does not move through bots that are not injured
+							if (bot->getInjured() == false && ((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
+								|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
+								&& playerPP->getY() + 80 >= bottom && playerPP->getY() + vY <= bottom - 40)
+							{
+								vY = 0.0f;
+
+							}
+							//If a bot is injured, the player can heal him
+							else if (bot->getInjured() == true && ((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
+								|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
+								&& playerPP->getY() + 64 <= bottom + 10 && playerPP->getY() >= top - 10)
+							{
+								generator->setHeal(L"HEAL");
+								playerSprite->setCanheal(true);
+
+								//Heal the bot (Set to dying for testing)
+								if (playerSprite->getIshealing() == true && bot->getInjured() == true)
+								{
+									bot->setCurrentState(L"IDLE_BACK");
+									bot->setInjured(false);
+									playerSprite->setIshealing(false);
+
+									if (bot->getStartinjured() == true)
+										gsm->setScore(gsm->getScore() + 1000);
+									else
+										gsm->setScore(gsm->getScore() + 500);
+
+									bot->setHealth(bot->getStarthealth());
+									bot->setWasHealed(true);
+								}
+							}
+							//Set toolbar heal caption to blank
+							else if (((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
+								|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
+								&& playerSprite->getCanheal() == true && playerPP->getY() <= top)
+							{
+								int x = playerPP->getX();
+								generator->setHeal(L"");
+								playerSprite->setCanheal(false);
+							}
+
+
+							playerPP->setVelocity(0.0f, vY);
+
+
+							botIterator++;
+						}
+					}
+					else if (pd == ENUM_PLAYER_DIRECTION_LEFT) {
+						int vX = -playerSprite->getSpeed();
+						float playerLeftNextFrame = playerLeft + vX;
+
+
+
+						if (playerLeftNextFrame > 0.0f) {
+							int leftColumnNextFrame = collidableLayer->getColumnByX(playerLeftNextFrame);
+
+							for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
+								Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
+								if (tile->collidable)
+								{
+									vX = 0.0f;
+									break;
+								}
+							}
+							playerPP->setVelocity(vX, 0.0f);
+						}
+
+						list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+						list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+						while (botIterator != end)
+						{
+							Bot *bot = (*botIterator);
+							PhysicalProperties *pp = bot->getPhysicalProperties();
+							pp->update();
+							float left = pp->getX();
+							float top = pp->getY();
+							float right = pp->getX() + 64;
+							float bottom = pp->getY() + bot->getSpriteType()->getTextureHeight();
+
+
+							//Check that the player does not move through bots that are not injured
+							if (bot->getInjured() == false && ((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
+								|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
+								&& playerPP->getX() >= right - 5 && playerLeftNextFrame <= right + 5)
+							{
+								vX = 0.0f;
+
+							}
+							//If a bot is injured, the player can heal him
+							else if (bot->getInjured() == true && ((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
+								|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
+								&& playerPP->getX() >= left - 10 && playerPP->getX() <= right + 10)
+							{
+								generator->setHeal(L"HEAL");
+								playerSprite->setCanheal(true);
+
+								//Heal the bot (Set to dying for testing)
+								if (playerSprite->getIshealing() == true && bot->getInjured() == true)
+								{
+									bot->setCurrentState(L"IDLE_BACK");
+									bot->setInjured(false);
+									playerSprite->setIshealing(false);
+
+									if (bot->getStartinjured() == true)
+										gsm->setScore(gsm->getScore() + 1000);
+									else
+										gsm->setScore(gsm->getScore() + 500);
+
+									bot->setHealth(bot->getStarthealth());
+
+									bot->setWasHealed(true);
+									pp->setX(pp->getX() + 50);
+								}
+							}
+							//Set toolbar heal caption to blank
+							else if (((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
+								|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
+								&& playerSprite->getCanheal() == true && playerPP->getX() <= left)
+							{
+								int x = playerPP->getX();
+								generator->setHeal(L"");
+								playerSprite->setCanheal(false);
+							}
+
+							playerPP->setVelocity(vX, 0.0f);
+
+
+							botIterator++;
+						}
+					}
+					else if (pd == ENUM_PLAYER_DIRECTION_RIGHT) {
+						int vX = playerSprite->getSpeed();
+						float playerRightNextFrame = playerRight + vX;
+
+						if (playerRightNextFrame > 0.0f) {
+							int rightColumnNextFrame = collidableLayer->getColumnByX(playerRightNextFrame);
+
+							for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
+								Tile *tile = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
+								if (tile->collidable)
+								{
+									vX = 0.0f;
+									break;
+								}
+							}
+							playerPP->setVelocity(vX, 0.0f);
+						}
+
+						list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
+						list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
+						while (botIterator != end)
+						{
+							Bot *bot = (*botIterator);
+							PhysicalProperties *pp = bot->getPhysicalProperties();
+							pp->update();
+							float left = pp->getX();
+							float top = pp->getY();
+							float right = pp->getX() + 64;
+							float bottom = pp->getY() + bot->getSpriteType()->getTextureHeight();
 							
-							generator->setHeal(L"");
-							playerSprite->setCanheal(false);
-						}
-						
-
-						playerPP->setVelocity(0.0f, vY);
-
-
-						botIterator++;
-					}
-				}
-				else if (pd == ENUM_PLAYER_DIRECTION_UP)
-				{
-					int vY = -playerSprite->getSpeed();
-					float playerTopNextFrame = playerTop + vY;
-
-					if(playerTopNextFrame > 0.0f){
-						int topRowNextFrame = collidableLayer->getRowByY(playerTopNextFrame);
-
-						for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++){
-							Tile *tile = collidableLayer->getTile(topRowNextFrame, columnIndex);
-							if (tile->collidable)
-							{
-								vY = 0.0f;
-								break;
-							}
-						}
-						playerPP->setVelocity(0.0f, vY);
-					}
-
-					list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
-					list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
-					while (botIterator != end)
-					{
-						Bot *bot = (*botIterator);
-						PhysicalProperties *pp = bot->getPhysicalProperties();
-						pp->update();
-						float left = pp->getX();
-						float top = pp->getY();
-						float right = pp->getX() + 64;
-						float bottom = pp->getY() + 128;
-
-
-						//Check that the player does not move through bots that are not injured
-						if (bot->getInjured() == false && ((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
-							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
-							&& playerPP->getY() + 80 >= bottom && playerPP->getY() + vY <= bottom - 40)
-						{
-							vY = 0.0f;
-	
-						}
-						//If a bot is injured, the player can heal him
-						else if (bot->getInjured() == true && ((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
-							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
-							&& playerPP->getY() + 64 <= bottom + 10 && playerPP->getY() >= top - 10)
-						{
-							generator->setHeal(L"HEAL");
-							playerSprite->setCanheal(true);
-
-							//Heal the bot (Set to dying for testing)
-							if (playerSprite->getIshealing() == true)
-							{
-								bot->setCurrentState(L"DIE");
-								playerSprite->setIshealing(false);
-							}
-						}
-						//Set toolbar heal caption to blank
-						else if (((playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64)
-							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
-							&& playerSprite->getCanheal() == true && playerPP->getY() <= top)
-						{
-							int x = playerPP->getX();
-							generator->setHeal(L"");
-							playerSprite->setCanheal(false);
-						}
-						
-
-						playerPP->setVelocity(0.0f, vY);
-
-
-						botIterator++;
-					}
-				}
-				else if (pd == ENUM_PLAYER_DIRECTION_LEFT){
-					int vX = -playerSprite->getSpeed();
-					float playerLeftNextFrame = playerLeft + vX;
-
-					if (playerLeftNextFrame > 0.0f) {
-						int leftColumnNextFrame = collidableLayer->getColumnByX(playerLeftNextFrame);
-
-						for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
-							Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
-							if (tile->collidable)
+							//Check that the player does not move through bots that are not injured
+							if (bot->getInjured() == false && ((playerPP->getY() + 20 >= pp->getY() && playerPP->getY() + 20 <= pp->getY() + 128)
+								|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
+								&& playerPP->getX() <= right - 5 && playerRightNextFrame >= right)
 							{
 								vX = 0.0f;
-								break;
+
 							}
-						}
-						playerPP->setVelocity(vX, 0.0f);
-					}		
-
-					list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
-					list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
-					while (botIterator != end)
-					{
-						Bot *bot = (*botIterator);
-						PhysicalProperties *pp = bot->getPhysicalProperties();
-						pp->update();
-						float left = pp->getX();
-						float top = pp->getY();
-						float right = pp->getX() + 64;
-						float bottom = pp->getY() + bot->getSpriteType()->getTextureHeight();
-
-						//Check that the player does not move through bots that are not injured
-						if (bot->getInjured() == false && ((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
-							|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
-							&& playerPP->getX() >= right-5 && playerLeftNextFrame <= right + 5)
-						{
-							vX = 0.0f;
-
-						}
-						//If a bot is injured, the player can heal him
-						else if (bot->getInjured() == true && ((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
-							|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
-							&& playerPP->getX() >= left - 10 && playerPP->getX() <= right + 10)
-						{
-							generator->setHeal(L"HEAL");
-							playerSprite->setCanheal(true);
-
-							//Heal the bot (Set to dying for testing)
-							if (playerSprite->getIshealing() == true)
+							//If a bot is injured, the player can heal him
+							else if (bot->getInjured() == true && ((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
+								|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
+								&& playerPP->getX() >= left - 10 && playerPP->getX() <= right + 10)
 							{
-								bot->setCurrentState(L"DIE");
-								playerSprite->setIshealing(false);
+								generator->setHeal(L"HEAL");
+								playerSprite->setCanheal(true);
+
+								//Heal the bot (Set to dying for testing)
+								if (playerSprite->getIshealing() == true && bot->getInjured() == true)
+								{
+									bot->setCurrentState(L"IDLE_BACK");
+									bot->setInjured(false);
+									playerSprite->setIshealing(false);
+
+									if (bot->getStartinjured() == true)
+										gsm->setScore(gsm->getScore() + 1000);
+									else
+										gsm->setScore(gsm->getScore() + 500);
+
+									bot->setHealth(bot->getStarthealth());
+
+									bot->setWasHealed(true);
+								}
 							}
-						}
-						//Set toolbar heal caption to blank
-						else if (((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
-							|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
-							&& playerSprite->getCanheal() == true && playerPP->getX() <= left)
-						{
-							int x = playerPP->getX();
-							generator->setHeal(L"");
-							playerSprite->setCanheal(false);
-						}
-
-						playerPP->setVelocity(vX, 0.0f);
-
-
-						botIterator++;
-					}
-				}
-				else if (pd == ENUM_PLAYER_DIRECTION_RIGHT) {
-					int vX = playerSprite->getSpeed();
-					float playerRightNextFrame = playerRight + vX;
-
-					if (playerRightNextFrame > 0.0f) {
-						int rightColumnNextFrame = collidableLayer->getColumnByX(playerRightNextFrame);
-
-						for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
-							Tile *tile = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
-							if (tile->collidable)
+							//Set toolbar heal caption to blank
+							else if (((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
+								|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
+								&& playerSprite->getCanheal() == true && playerPP->getX() >= right)
 							{
-								vX = 0.0f;
-								break;
+								int x = playerPP->getX();
+								generator->setHeal(L"");
+								playerSprite->setCanheal(false);
 							}
+
+
+							playerPP->setVelocity(vX, 0.0f);
+
+
+							botIterator++;
 						}
-						playerPP->setVelocity(vX, 0.0f);
-					}
-
-					list<Bot*>::iterator botIterator = spriteManager->getBotsIterator();
-					list<Bot*>::iterator end = spriteManager->getEndOfBotsIterator();
-					while (botIterator != end)
-					{
-						Bot *bot = (*botIterator);
-						PhysicalProperties *pp = bot->getPhysicalProperties();
-						pp->update();
-						float left = pp->getX();
-						float top = pp->getY();
-						float right = pp->getX() + 64;
-						float bottom = pp->getY() + bot->getSpriteType()->getTextureHeight();
-
-						//Check that the player does not move through bots that are not injured
-						if (bot->getInjured() == false && ((playerPP->getY() + 20 >= pp->getY() && playerPP->getY() + 20 <= pp->getY() + 128)
-							|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
-							&& playerPP->getX() <= right - 5 && playerRightNextFrame >= right)
-						{
-							vX = 0.0f;
-
-						}
-						//If a bot is injured, the player can heal him
-						else if (bot->getInjured() == true && ((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
-							|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
-							&& playerPP->getX() >= left - 10 && playerPP->getX() <= right + 10)
-						{
-							generator->setHeal(L"HEAL");
-							playerSprite->setCanheal(true);
-
-							//Heal the bot (Set to dying for testing)
-							if (playerSprite->getIshealing() == true)
-							{
-								bot->setCurrentState(L"DIE");
-								playerSprite->setIshealing(false);
-							}
-						}
-						//Set toolbar heal caption to blank
-						else if (((playerPP->getY() >= pp->getY() && playerPP->getY() <= pp->getY() + 128)
-							|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
-							&& playerSprite->getCanheal() == true && playerPP->getX() >= right)
-						{
-							int x = playerPP->getX();
-							generator->setHeal(L"");
-							playerSprite->setCanheal(false);
-						}
-						
-
-						playerPP->setVelocity(vX, 0.0f);
-
-
-						botIterator++;
 					}
 				}
 			}
@@ -397,7 +446,7 @@ void Physics::update()
 		/// here
 		if (exit == 0)
 		{
-			if (botActivated)
+			//if (botActivated)
 			{
 				PlayerSprite *playerSprite = spriteManager->getPlayer();
 				PhysicalProperties *playerPP = playerSprite->getPhysicalProperties();
@@ -425,7 +474,7 @@ void Physics::update()
 					if (bot->getInjured() == false)
 					{
 
-						float BottomNextFrame = bottom + playerPP->getVelocityY();
+						
 
 						if (playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64
 							&& playerPP->getY() <= pp->getY() + 128 && playerPP->getY() >= pp->getY())
@@ -435,11 +484,22 @@ void Physics::update()
 						}
 					}
 
+					if (bot->getCurrentState().compare(L"DYING") == 0)
+					{
+						unsigned int frameIndex = (bot->getFrameIndex() * 2);
+						unsigned int sequenceSize = bot->getSpriteType()->getSequenceSize(bot->getCurrentState()) + 2;
+
+						if (frameIndex >= sequenceSize) {
+
+							bot->setCurrentState(L"DEAD");
+						}
+					}
+
 
 					botIterator++;
 				}
 			}
-
+		
 
 			CheckPunchShoot(spriteManager->getPlayer());
 			
@@ -598,8 +658,13 @@ void Physics::update()
 									//it's an automatic game over
 									if (LevelObjectSprite->getSafetyon())
 									{
-										bot->setCurrentState(L"DIE");
+										bot->setCurrentState(L"DYING");
 										bot->setInjured(true);
+
+										if (bot->getStartinjured() == true && bot->getWasHealed() == true)
+											gsm->setScore(gsm->getScore() - 1000);
+										else if (bot->getStartinjured() == false && bot->getWasHealed() == true)
+											gsm->setScore(gsm->getScore() - 500);
 									}
 									else
 										game->quitGame();
@@ -734,8 +799,12 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
-								bot->setCurrentState(L"DIE");
+								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
+								if (bot->getStartinjured() == true && bot->getWasHealed() == true)
+									gsm->setScore(gsm->getScore() - 1000);
+								else if (bot->getStartinjured() == false && bot->getWasHealed() == true)
+									gsm->setScore(gsm->getScore() - 500);
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 								game->quitGame();
@@ -790,8 +859,12 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
-								bot->setCurrentState(L"DIE");
+								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
+								if (bot->getStartinjured() == true && bot->getWasHealed() == true)
+									gsm->setScore(gsm->getScore() - 1000);
+								else if (bot->getStartinjured() == false && bot->getWasHealed() == true)
+									gsm->setScore(gsm->getScore() - 500);
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 								game->quitGame();
@@ -844,8 +917,12 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
-								bot->setCurrentState(L"DIE");
+								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
+								if (bot->getStartinjured() == true && bot->getWasHealed() == true)
+									gsm->setScore(gsm->getScore() - 1000);
+								else if (bot->getStartinjured() == false && bot->getWasHealed() == true)
+									gsm->setScore(gsm->getScore() - 500);
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 							{
@@ -891,12 +968,13 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
 							&& playerPP->getX() <= right - 5 && playerRightNextFrame >= right)
 						{
-							if (safety == false)
+							
 							{
 								//game->quitGame();
 								if (punched == false)
 								{
-									gsm->setScore(gsm->getScore() - 100);
+									if (safety == false)
+										gsm->setScore(gsm->getScore() - 100);
 									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
 									punched = true;
 								}
@@ -905,8 +983,12 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
-								bot->setCurrentState(L"DIE");
+								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
+								if (bot->getStartinjured() == true && bot->getWasHealed() == true)
+									gsm->setScore(gsm->getScore() - 1000);
+								else if (bot->getStartinjured() == false && bot->getWasHealed() == true)
+									gsm->setScore(gsm->getScore() - 500);
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 							{
@@ -950,7 +1032,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0)
 			punch(playerSprite, true, gsm->isSafetyon());
 
-		if (frameIndex > sequenceSize) {
+		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0)
 				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
 
@@ -968,7 +1050,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0)
 			punch(playerSprite, true, gsm->isSafetyon());
 
-		if (frameIndex > sequenceSize) {
+		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0)
 				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
 
@@ -989,7 +1071,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		else
 			punched = false;
 
-		if (frameIndex > sequenceSize) {
+		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0)
 				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
 
@@ -1007,7 +1089,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0)
 			punch(playerSprite, true, gsm->isSafetyon());
 
-		if (frameIndex > sequenceSize) {
+		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0)
 				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
 

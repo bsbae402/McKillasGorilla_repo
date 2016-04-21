@@ -46,6 +46,8 @@ enum GameState
 	// THESE ARE MID-LEVEL GAME PLAYING STATES. NONE OF THEM WOULD PROCESS
 	// GAME LOGIC, BUT YOU MAY WISH TO RENDER THE CURRENT GAME WITH A
 	// GUI OVERLAYED ON TOP
+	//// --comment:bongsung--
+	//// I will use this PAUSED state for ESC button -> ingame pause menu
 	GS_PAUSED,
 	GS_GAME_OVER,
 	GS_IN_GAME_HELP,

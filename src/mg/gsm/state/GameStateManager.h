@@ -106,12 +106,16 @@ public:
 	bool			isGameLevelLoading();
 	bool			isPreGame();
 	bool			isWorldRenderable();
+	////// -- true if game is in pause menu
+	bool			isGameInPauseMenu();
 
 	// METHODS FOR TRANSITIONING TO OTHER GAME STATES
 	void			goToGame();
 	void			goToLoadLevel();
 	void			goToMainMenu();
 	void			goToPreGame();
+	//// -- go to ingame menu
+	void			goToIngamePauseMenu();
 
 	// METHODS DEFINED in GameStateManager.cpp
 	GameStateManager();

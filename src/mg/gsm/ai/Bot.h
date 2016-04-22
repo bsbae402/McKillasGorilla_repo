@@ -38,6 +38,9 @@ private:
 	int defense;
 	int speed;
 	int maxhealth;
+
+	int facing = 0;
+
 	bool injured;
 	bool startinjured;
 	bool washealed;
@@ -65,6 +68,9 @@ public:
 	bool getInjured() { return injured; }
 	bool getStartinjured() { return startinjured; }
 	bool getWasHealed() { return washealed; }
+
+	void setFacing(int newfacing) { facing = newfacing; }
+	int getFacing() { return facing; }
 
 
 	// INLINED

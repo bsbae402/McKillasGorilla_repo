@@ -427,7 +427,12 @@ void Physics::update()
 				}
 			}
 
-			
+			if (playerPP->getX() >= gsm->getEndlevelx() && playerPP->getX() <= gsm->getEndlevelxwidth()
+				&& playerPP->getY() >= gsm->getEndlevely() && playerPP->getY() <= gsm->getEndlevelywidth())
+			{
+				game->quitGame();
+				exit = 1;
+			}
 
 			if (exit == 0)
 			{

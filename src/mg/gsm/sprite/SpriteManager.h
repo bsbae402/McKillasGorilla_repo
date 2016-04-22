@@ -52,6 +52,8 @@ private:
 	//// ---- our new sprite category: level object (los == level object sprite) ---
 	list<LevelObjectSprite*> losList;
 
+	int facing = 0;
+
 public:
 	// NOTHING TO INIT OR DESTROY
 	SpriteManager() { player = nullptr; }
@@ -76,6 +78,8 @@ public:
 		player = initPlayer;
 	}
 
+	void setFacing(int newfacing) { facing = newfacing; }
+	int getFacing() { return facing; }
 
 	// METHODS DEFINED IN SpriteManager.cpp
 	void				addBot(Bot *botToAdd);

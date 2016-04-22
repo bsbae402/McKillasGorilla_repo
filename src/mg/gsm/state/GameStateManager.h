@@ -72,6 +72,12 @@ private:
 	int countdownCounter = 500;
 	bool safetyon;
 
+	int endlevelx;
+	int endlevelxwidth;
+	int endlevely;
+	int endlevelywidth;
+
+
 public:
 	// INLINED ACCESSOR METHODS
 	GameState			getCurrentGameState()	{ return currentGameState;				}
@@ -93,6 +99,17 @@ public:
 	bool isSafetyon() { return safetyon; }
 	void SafetyOn() { safetyon = true; }
 	void SafetyOff() { safetyon = false; }
+
+	void setEndlevelx(int newendlevelx) { endlevelx = newendlevelx; }
+	void setEndlevelxwidth(int newendlevelxwidth) { endlevelxwidth = newendlevelxwidth; }
+	void setEndlevely(int newendlevely) { endlevely = newendlevely; }
+	void setEndlevelywidth(int newendlevelywidth) { endlevelywidth = newendlevelywidth; }
+
+	int getEndlevelx() { return endlevelx; }
+	int getEndlevelxwidth() { return endlevelxwidth; }
+	int getEndlevely() { return endlevely; }
+	int getEndlevelywidth() { return endlevelywidth; }
+
 	// INLINED MUTATOR METHOD
 	void setGameStateMachine(GameStateMachine *initBotStateManager)
 	{

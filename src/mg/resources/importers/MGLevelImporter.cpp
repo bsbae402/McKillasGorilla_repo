@@ -63,6 +63,16 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 		wstring wFile(file.begin(), file.end());
 		text->writeDebugOutput(L"Map File: " + wFile);
 
+		int levelx = xmlReader.extractIntAtt(levelMap, "levelendx");
+		int levelxwidth = xmlReader.extractIntAtt(levelMap, "levelendxwidth");
+		int levely = xmlReader.extractIntAtt(levelMap, "levelendy");
+		int levelywidth = xmlReader.extractIntAtt(levelMap, "levelendywidth");
+
+		gsm->setEndlevelx(levelx);
+		gsm->setEndlevelxwidth(levelxwidth);
+		gsm->setEndlevely(levely);
+		gsm->setEndlevelywidth(levelywidth);
+
 		// NOW LOAD THE MAP
 		GameResources *resources = game->getResources();
 		TMXMapImporter *mapImporter = (TMXMapImporter*)resources->getMapImporter();

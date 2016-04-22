@@ -77,6 +77,8 @@ private:
 	PlayerDirection playerDirection;
 	unsigned int playerInputStorage;
 
+	int facing = 0;
+
 	int health;
 	int attack;
 	int defense;
@@ -84,6 +86,7 @@ private:
 	int maxhealth;
 	bool canheal;
 	bool ishealing;
+	bool strafing;
 
 public:
 	PlayerSprite() {}
@@ -109,6 +112,12 @@ public:
 	int getMaxhealth() { return maxhealth; }
 	bool getCanheal() { return canheal; }
 	bool getIshealing() { return ishealing; }
+
+	void setFacing(int newfacing) { facing = newfacing; }
+	int getFacing() { return facing; }
+
+	bool isStrafing() { return strafing; }
+	void togglestrafe() { strafing = !strafing; }
 
 	void setPlayerState(PlayerState state)
 	{

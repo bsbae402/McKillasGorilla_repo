@@ -10,7 +10,12 @@
 #include "tinyxml\tinyxml.h";
 #include "xmlfi\XMLFileImporter.h"
 
+#include "xaudio2.h"
 #include "mg\gsm\world\World.h"
+
+IXAudio2* g_engine;
+IXAudio2SourceVoice* g_source;
+IXAudio2MasteringVoice* g_master;
 
 bool TMXMapImporter::load(wstring mapDir, wstring mapFile)
 {

@@ -93,9 +93,16 @@ void GameStateManager::goToPreGame()
 	currentGameState = GS_PRE_GAME;
 }
 
+//// -- paused menu 
 void GameStateManager::goToIngamePauseMenu()
 {
 	currentGameState = GS_PAUSED;
+}
+
+//// --- upgrade screen
+void GameStateManager::goToUpgradeScreen()
+{
+	currentGameState = GS_UPGRADE_SCREEN;
 }
 
 /*
@@ -151,7 +158,9 @@ bool GameStateManager::isWorldRenderable()
 {
 	return (	(currentGameState == GS_GAME_IN_PROGRESS)
 		||		(currentGameState == GS_PAUSED)
-		||		(currentGameState == GS_GAME_OVER));
+		||		(currentGameState == GS_GAME_OVER)
+		||		(currentGameState == GS_UPGRADE_SCREEN));
+	//// GS_UPGRADE_SCREEN added --- by Bongsung 23 APR
 }
 
 bool GameStateManager::isGameInPauseMenu()

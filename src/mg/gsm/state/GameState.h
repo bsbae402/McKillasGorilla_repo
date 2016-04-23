@@ -64,4 +64,8 @@ enum GameState
 
 	// WHEN A GAME APP IS TO CLOSE, WE'LL NEED TO UNLOAD GUI ARTWORK
 	GS_UNLOADING_GAME,
+
+
+	//// -- upgrade screen state
+	GS_UPGRADE_SCREEN,
 };

@@ -133,6 +133,8 @@ public:
 	void			goToPreGame();
 	//// -- go to ingame menu
 	void			goToIngamePauseMenu();
+	//// -- go to upgrade screen
+	void			goToUpgradeScreen();
 
 	// METHODS DEFINED in GameStateManager.cpp
 	GameStateManager();

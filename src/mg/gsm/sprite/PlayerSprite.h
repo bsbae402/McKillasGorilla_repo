@@ -87,6 +87,7 @@ private:
 	bool canheal;
 	bool ishealing;
 	bool strafing;
+	bool invincible;
 
 public:
 	PlayerSprite() {}
@@ -118,6 +119,9 @@ public:
 
 	bool isStrafing() { return strafing; }
 	void togglestrafe() { strafing = !strafing; }
+
+	bool isInvincible() { return invincible; }
+	void toggleinvincible() { invincible = !invincible; }
 
 	void setPlayerState(PlayerState state)
 	{

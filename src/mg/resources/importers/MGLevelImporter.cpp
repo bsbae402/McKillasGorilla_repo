@@ -228,6 +228,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			BotState botState = botToSpawn->getBotStateForString(initialBotState);
 			botToSpawn->setBotState(botState);
 			botToSpawn->setCurrentState(wInitialSpriteState);
+			botToSpawn->setPreviousState(wInitialSpriteState);
 			//botToSpawn->setRotationInRadians(PI / 2);
 			botToSpawn->setSpeed(initV);
 			botToSpawn->setHealth(health);
@@ -321,6 +322,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			PlayerState playerState = playerSprite->getPlayerStateForString(initialPlayerState);
 			playerSprite->setPlayerState(playerState);	//// setting player sprite's state
 			playerSprite->setCurrentState(wInitialSpriteState);	//// setting animation_state
+			playerSprite->setPreviousState(wInitialSpriteState);
 			playerSprite->setSpeed(initV);
 			playerSprite->setHealth(health);
 			playerSprite->setMaxhealth(health);

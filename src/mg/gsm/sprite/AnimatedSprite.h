@@ -30,6 +30,7 @@ protected:
 	// IS CURRENTLY IN USE, BUT IT MAP ALSO BE USED TO HELP
 	// WITH OTHER GAME ACTIVITIES, LIKE PHYSICS
 	wstring currentState;
+	wstring previousState;
 
 	// THE INDEX OF THE CURRENT FRAME IN THE ANIMATION SEQUENCE
 	// NOTE THAT WE WILL COUNT BY 2s FOR THIS SINCE THE VECTOR
@@ -49,10 +50,13 @@ public:
 	// INLINED ACCESSOR METHODS
 	int					getAlpha()				{ return alpha;					}
 	wstring				getCurrentState()		{ return currentState;			}
+	wstring				getPreviousState() { return previousState; }
 	unsigned int		getFrameIndex()			{ return frameIndex;			}
 	float				getRotationInRadians()	{ return rotationInRadians;		}
 	AnimatedSpriteType*	getSpriteType()			{ return spriteType;			}
 	bool				isMarkedForRemoval() { return markedForRemoval; }
+
+	void setPreviousState(wstring newState) { previousState = newState; }
 
 	// INLINED MUTATOR METHODS
 	void setAlpha(int initAlpha)
@@ -72,5 +76,6 @@ public:
 	void changeFrame();
 	unsigned int getCurrentImageID();
 	void setCurrentState(wstring newState);
+	
 	void updateSprite();
 };

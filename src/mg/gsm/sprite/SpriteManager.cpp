@@ -249,26 +249,30 @@ void SpriteManager::update()
 				//// set player animation state idle according to the direction
 				PlayerDirection pd = player->getPlayerDirection();
 
-				if (!game->getGSM()->getPhysics()->isStrafing())
+				if (!game->getGSM()->getSpriteManager()->getPlayer()->isStrafing())
 				{
 					if (pd == ENUM_PLAYER_DIRECTION_DOWN)
 					{
 						wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_BACK.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_BACK.end());
+						player->setPreviousState(player->getCurrentState());
 						player->setCurrentState(wStrState);
 					}
 					else if (pd == ENUM_PLAYER_DIRECTION_UP)
 					{
 						wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_FRONT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_FRONT.end());
+						player->setPreviousState(player->getCurrentState());
 						player->setCurrentState(wStrState);
 					}
 					if (pd == ENUM_PLAYER_DIRECTION_LEFT)
 					{
 						wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_LEFT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_LEFT.end());
+						player->setPreviousState(player->getCurrentState());
 						player->setCurrentState(wStrState);
 					}
 					if (pd == ENUM_PLAYER_DIRECTION_RIGHT)
 					{
 						wstring wStrState(MG_PLAYER_ANIMATION_STATE_IDLE_RIGHT.begin(), MG_PLAYER_ANIMATION_STATE_IDLE_RIGHT.end());
+						player->setPreviousState(player->getCurrentState());
 						player->setCurrentState(wStrState);
 					}
 				}
@@ -336,27 +340,55 @@ void SpriteManager::fireBullet(AnimatedSprite *sprite, bool isplayer, bool safet
 	PhysicalProperties *pp = bullet->getPhysicalProperties();
 	PhysicalProperties *spritepp = sprite->getPhysicalProperties();
 
-	if (player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_DOWN)
+	if ((!(player->isStrafing()) && player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_DOWN) ||
+		(player->isStrafing() &&
+		(player->getPreviousState().compare(L"IDLE_BACK") == 0
+		|| player->getPreviousState().compare(L"PUNCH_BACK") == 0
+		|| player->getPreviousState().compare(L"WALK_BACK") == 0
+		|| player->getPreviousState().compare(L"SHOOT_BACK") == 0
+		|| player->getPreviousState().compare(L"DAMAGE_BACK") == 0
+		|| player->getPreviousState().compare(L"STRAFE_BACK") == 0)))
 	{
 		bullet->setRotationInRadians(M_PI / 2);
 		pp->setX(spritepp->getX() + 20);
 		pp->setY(spritepp->getY() + 64);
 		pp->setVelocity(0, 30);
 	}
-	else if (player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_UP)
+	else if ((!(player->isStrafing()) && player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_UP) ||
+		(player->isStrafing() &&
+		(player->getPreviousState().compare(L"IDLE_FRONT") == 0
+		|| player->getPreviousState().compare(L"PUNCH_FRONT") == 0
+		|| player->getPreviousState().compare(L"WALK_FRONT") == 0
+		|| player->getPreviousState().compare(L"SHOOT_FRONT") == 0
+		|| player->getPreviousState().compare(L"DAMAGE_FRONT") == 0
+		|| player->getPreviousState().compare(L"STRAFE_FRONT") == 0)))
 	{
 		bullet->setRotationInRadians(M_PI / 2);
 		pp->setX(spritepp->getX() + 30);
 		pp->setY(spritepp->getY());
 		pp->setVelocity(0, -30);
 	}
-	else if (player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_LEFT)
+	else if ((!(player->isStrafing()) && player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_LEFT) ||
+		(player->isStrafing() &&
+		(player->getPreviousState().compare(L"IDLE_LEFT") == 0
+		|| player->getPreviousState().compare(L"PUNCH_LEFT") == 0
+		|| player->getPreviousState().compare(L"WALK_LEFT") == 0
+		|| player->getPreviousState().compare(L"SHOOT_LEFT") == 0
+		|| player->getPreviousState().compare(L"DAMAGE_LEFT") == 0
+		|| player->getPreviousState().compare(L"STRAFE_LEFT") == 0)))
 	{
 		pp->setX(spritepp->getX());
 		pp->setY(spritepp->getY() + 40);
 		pp->setVelocity(-30, 0);
 	}
-	else if (player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_RIGHT)
+	else if ((!(player->isStrafing()) && player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_RIGHT) ||
+		(player->isStrafing() &&
+		(player->getPreviousState().compare(L"IDLE_RIGHT") == 0
+		|| player->getPreviousState().compare(L"PUNCH_RIGHT") == 0
+		|| player->getPreviousState().compare(L"WALK_RIGHT") == 0
+		|| player->getPreviousState().compare(L"SHOOT_RIGHT") == 0
+		|| player->getPreviousState().compare(L"DAMAGE_RIGHT") == 0
+		|| player->getPreviousState().compare(L"STRAFE_RIGHT") == 0)))
 	{
 		pp->setX(spritepp->getX()+ 60);
 		pp->setY(spritepp->getY() + 40);

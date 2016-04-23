@@ -150,6 +150,7 @@ void Physics::update()
 								//Heal the bot (Set to dying for testing)
 								if (playerSprite->getIshealing() == true && bot->getInjured() == true)
 								{
+									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
@@ -231,6 +232,7 @@ void Physics::update()
 								//Heal the bot (Set to dying for testing)
 								if (playerSprite->getIshealing() == true && bot->getInjured() == true)
 								{
+									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
@@ -313,6 +315,7 @@ void Physics::update()
 								//Heal the bot (Set to dying for testing)
 								if (playerSprite->getIshealing() == true && bot->getInjured() == true)
 								{
+									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
@@ -393,6 +396,7 @@ void Physics::update()
 								//Heal the bot (Set to dying for testing)
 								if (playerSprite->getIshealing() == true && bot->getInjured() == true)
 								{
+									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
@@ -495,7 +499,7 @@ void Physics::update()
 						unsigned int sequenceSize = bot->getSpriteType()->getSequenceSize(bot->getCurrentState()) + 2;
 
 						if (frameIndex >= sequenceSize) {
-
+							bot->setPreviousState(bot->getCurrentState());
 							bot->setCurrentState(L"DEAD");
 						}
 					}
@@ -627,7 +631,8 @@ void Physics::update()
 						if ((playerpp->getX() >= pp->getX() && playerpp->getX() <= pp->getX() + 64
 							|| playerpp->getX() + 64 >= pp->getX() && playerpp->getX() + 64 <= pp->getX() + 64)
 							&& (playerpp->getY() >= pp->getY() && playerpp->getY() <= pp->getY() + 64
-								|| playerpp->getY() + 128 >= pp->getY() && playerpp->getY() + 128 <= pp->getY() + 64))
+								|| playerpp->getY() + 128 >= pp->getY() && playerpp->getY() + 128 <= pp->getY() + 64
+								|| playerpp->getY() <= pp->getY() && playerpp->getY() + 128 >= pp->getY() + 64))
 						{
 							spriteManager->removeLevelObject(LevelObjectSprite);
 							gsm->setMoney(gsm->getMoney() + 500);
@@ -663,6 +668,7 @@ void Physics::update()
 									//it's an automatic game over
 									if (LevelObjectSprite->getSafetyon())
 									{
+										bot->setPreviousState(bot->getCurrentState());
 										bot->setCurrentState(L"DYING");
 										bot->setInjured(true);
 
@@ -804,6 +810,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
+								bot->setPreviousState(bot->getCurrentState());
 								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
 								if (bot->getStartinjured() == true && bot->getWasHealed() == true)
@@ -864,6 +871,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
+								bot->setPreviousState(bot->getCurrentState());
 								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
 								if (bot->getStartinjured() == true && bot->getWasHealed() == true)
@@ -922,6 +930,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
+								bot->setPreviousState(bot->getCurrentState());
 								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
 								if (bot->getStartinjured() == true && bot->getWasHealed() == true)
@@ -988,6 +997,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
+								bot->setPreviousState(bot->getCurrentState());
 								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
 								if (bot->getStartinjured() == true && bot->getWasHealed() == true)
@@ -1040,7 +1050,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0)
 				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
-
+			playerSprite->setPreviousState(playerSprite->getCurrentState());
 			playerSprite->setCurrentState(L"IDLE_FRONT");
 		}
 
@@ -1058,7 +1068,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0)
 				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
-
+			playerSprite->setPreviousState(playerSprite->getCurrentState());
 			playerSprite->setCurrentState(L"IDLE_BACK");
 		}
 
@@ -1079,7 +1089,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0)
 				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
-
+			playerSprite->setPreviousState(playerSprite->getCurrentState());
 			playerSprite->setCurrentState(L"IDLE_LEFT");
 		}
 
@@ -1097,7 +1107,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0)
 				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
-
+			playerSprite->setPreviousState(playerSprite->getCurrentState());
 			playerSprite->setCurrentState(L"IDLE_RIGHT");
 		}
 

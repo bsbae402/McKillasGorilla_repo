@@ -427,7 +427,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			wstring wStrBeingState(BEING_LEVEL_OBJECT_SPRITE_STATE_VALUE.begin(), BEING_LEVEL_OBJECT_SPRITE_STATE_VALUE.end());
 			los->setCurrentState(wStrBeingState);
 
-			spriteManager->addLevelObject(los);
+			spriteManager->addLevelObject(los);		//// <<-- here, the bullet "type"(check the bullet recycler) is added to losList.
 			bulletRecycler->registerItemType(wSpriteType, los);
 
 			LevelObjectSprite* bullet = bulletRecycler->retrieveBullet(wSpriteType);

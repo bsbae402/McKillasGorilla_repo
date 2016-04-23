@@ -156,7 +156,12 @@ void SpriteManager::unloadSprites()
 {
 	// CLEAR OUT THE PLAYER, BUT NOT ITS SpriteType
 	if (player != nullptr)
+	{
+		//// the problem was that the player sprite get deleted twice, which causes a runtime error.
+		//// exit-> restart game process will call this unloadSprites() function twice.
 		delete player;
+		player = nullptr;
+	}
 
 	// CLEAR OUT THE BOTS, BUT NOT THEIR SpriteTypes
 	list<Bot*>::iterator botsIt = bots.begin();
@@ -168,6 +173,35 @@ void SpriteManager::unloadSprites()
 		delete botToDelete;
 	}
 	bots.clear();
+
+	////// --- delete level object sprites(money sprites)
+	///// !! caution !! we need to unload these level objects seperately. 
+	///// Because each of them has totally different ways of implementations since different team members do those codes. 
+	//// First, I will unload the money sprites.
+	/// bullet sprites are later.
+	list<LevelObjectSprite*>::iterator losListIt = losList.begin();
+	while (losListIt != losList.end())
+	{
+		list<LevelObjectSprite*>::iterator tempIt = losListIt;
+		losListIt++;
+		LevelObjectSprite *losToDelete = (*tempIt);
+		if (losToDelete->getType().compare(L"money") == 0)
+		{
+			losList.remove(losToDelete);
+			delete losToDelete;
+		}
+	}
+	// don't clear the losList. because we still need to delete bullets. 
+
+	//// <bullets clearing>
+	//// I'm not sure I fully understand Steven's bulletRecycler implementation ....
+	//// As I know, following bulletRecyler unloading will delete the actual bullet and the bullet "type"
+	//// the bullet "type" is the one added to the losList during the MGLevelImporter's importing sequence.
+	//// therefore, now we just need to clear out the losList, 
+	//// because the bullet "type" los is deleted in the bulletRecycler's unload.
+	bulletRecycler.unload();
+	losList.clear();
+	//// --- delete level object sprites complete
 
 	// WE HAVE TO BE CAREFUL WITH SpriteTypes BECAUSE THEY ARE SHARED
 	// BETWEEN SpriteManager AND BotRecycler, AS WELL AS EVERY Sprite.
@@ -200,8 +234,6 @@ void SpriteManager::unloadSprites()
 		delete spToDelete;
 	}
 	spawningPools.clear();
-
-	//////**************** TBI: unload level objects *****************///////
 }
 
 Bot* SpriteManager::removeBot(Bot *botToRemove)

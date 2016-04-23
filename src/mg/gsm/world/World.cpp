@@ -17,6 +17,8 @@
 #include "mg\gsm\state\GameStateManager.h"
 #include "mg\gsm\world\World.h"
 #include "mg\gui\Viewport.h"
+#include "mg\gsm\world\TiledLayer.h"
+#include <vector>
 
 /*
 	World - Default Constructor, it constructs the layers
@@ -71,21 +73,41 @@ void World::addWorldRenderItemsToRenderList()
 	}
 }
 
+
+int World::getCollidableGridColumns()
+{
+	return getLayers()->front()->getColumns();
+	//return  getWorldWidth() / 64;
+}
+
+int World::getCollidableGridRows()
+{
+	return getLayers()->front()->getRows();
+	//return getWorldHeight() / 64;
+}
+
+bool World::overlapsCollidableTiles(int centerX, int centerY, int nodeWidth, int nodeHeight)
+{
+	return false;
+}
+
+
+
 bool World::isInsideCollidableTile(int targetX, int targetY)
 {
-	//// size of collidable layer's tiles
+	// size of collidable layer's tiles
 	int cellWidth = collidableLayer->getTileWidth();
 	int cellHeight = collidableLayer->getTileHeight();
 	int halfCellWidth = cellWidth / 2;
 	int halfCellHeight = cellHeight / 2;
 
-	//// x=96 -> (x-32)=64 -> (x-32)/64 = 1
-	//// x=160 -> (x-32)=128 -> (x-32)/64 = 2
+	// x=96 -> (x-32)=64 -> (x-32)/64 = 1
+	//x=160 -> (x-32)=128 -> (x-32)/64 = 2
 	int columnIdx = (targetX - halfCellWidth) / cellWidth;
 	int rowIdx = (targetY - halfCellHeight) / cellHeight;
 
-	//// just found that the getTile() wants us to consider the row/col starts from [0] to [49]
-	//// like the array of programmings. Good.
+	// just found that the getTile() wants us to consider the row/col starts from [0] to [49]
+	// like the array of programmings. Good.
 	Tile *targetTile = collidableLayer->getTile(rowIdx, columnIdx);
 	if (targetTile->collidable)
 		return true;
@@ -105,7 +127,7 @@ bool World::isInsideCollidableTile(int targetX, int targetY)
 */
 void World::unloadWorld()
 {
-	//// unload newly implemented World properties of Rebelle
+	// unload newly implemented World properties of Rebelle
 	collidableLayer = nullptr;
 
 	// GO THROUGH AND DELETE ALL THE LAYERS

@@ -55,4 +55,7 @@ public:
 	bool fireButtonCommand(Game *game);
 	void registerButtonEventHandler(ButtonEventHandler *eventHandler);
 	void updateAllButtons(long mouseX, long mouseY);
+
+	//// --- get overlayImage list
+	list<OverlayImage*>* getOverlayImageList() { return overlayImages; }
 };

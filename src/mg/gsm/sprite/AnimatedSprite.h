@@ -54,7 +54,7 @@ protected:
 
 
 	// CURRENT PATH OF THE ANIMATED SPRITE
-	list<PathNode> *currentPathToFollow;
+	list<PathNode> *currentPathToFollow ;
 
 public:
 	// INLINED ACCESSOR METHODS
@@ -85,6 +85,18 @@ public:
 	void markForRemoval()
 	{
 		markedForRemoval = true;
+	}
+
+	void setBoundingVolume() {
+		boundingVolume = new AABB();
+		boundingVolume->setWidth(this->getSpriteType()->getTextureWidth());
+		boundingVolume->setHeight(this->getSpriteType()->getTextureHeight());
+		boundingVolume->setCenterX(pp.getX() + (this->getSpriteType()->getTextureWidth() / 2));
+		boundingVolume->setCenterY(pp.getY() + (this->getSpriteType()->getTextureHeight() / 2));
+	}
+
+	void setCurrentPathToFollow() {
+		this->currentPathToFollow = new list<PathNode>;
 	}
 
 	// METHODS DEFINED IN AnimatedSprite.cpp

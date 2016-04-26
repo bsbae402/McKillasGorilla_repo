@@ -31,6 +31,7 @@
 
 // temp include
 #include "mg\platforms\DirectX\SDKwavefile.h"
+#include "mg\platforms\DirectX\GameAudio.h"
 
 bool Game::isSingletonInstantiated = false;
 Game* Game::singleton = 0;
@@ -47,62 +48,10 @@ Game* Game::getSingleton()
 
 void Game::startUp()
 {
-	/*
-		Audio test
-	*/
-	bool ciFailed = FAILED(CoInitializeEx(0, COINIT_MULTITHREADED));
-	IXAudio2* xAudio2Engine = 0;
-	UINT32 flags = 0;
-
-	bool xa2cSuccess = SUCCEEDED(XAudio2Create(&xAudio2Engine));
-
-	IXAudio2MasteringVoice* masterVoice = 0;
-	bool cmvSuccess = SUCCEEDED(xAudio2Engine->CreateMasteringVoice(&masterVoice,
-		XAUDIO2_DEFAULT_CHANNELS, XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, 0));
-
-	CWaveFile wav;
-
-	//// All the file references are rooted at the directory "Apps/Rebelle/data"
-	bool wavOpenSuccess = SUCCEEDED(wav.Open(L"data/clip.wav", 0, WAVEFILE_READ));
-	
-	WAVEFORMATEX *format = wav.GetFormat();
-	unsigned long wavSize = wav.GetSize();
-	unsigned char *wavData = new unsigned char[wavSize];
-
-	bool wavReadSuccess = SUCCEEDED(wav.Read(wavData, wavSize, &wavSize));
-
-	IXAudio2SourceVoice* srcVoice;
-
-	bool csvSuccess = SUCCEEDED(xAudio2Engine->CreateSourceVoice(&srcVoice, format,
-		0, XAUDIO2_DEFAULT_FREQ_RATIO, 0, 0, 0));
-
-	XAUDIO2_BUFFER buffer = { 0 };
-	buffer.pAudioData = wavData;
-	buffer.Flags = XAUDIO2_END_OF_STREAM;
-	buffer.AudioBytes = wavSize;
-
-	bool ssbSuccess = SUCCEEDED(srcVoice->SubmitSourceBuffer(&buffer));
-
-	HRESULT startResult = srcVoice->Start(0, XAUDIO2_COMMIT_NOW);
-	
-	bool isRunning = true;
-
-	/// break when isRunning == 0
-	while (SUCCEEDED(startResult) && isRunning)
-	{
-		XAUDIO2_VOICE_STATE state;
-
-		srcVoice->GetState(&state);
-		isRunning = (state.BuffersQueued > 0) != 0;
-	}
-
-	srcVoice->DestroyVoice();
-
-	delete[] wavData;
-
-	xAudio2Engine->Release();
-
-	CoUninitialize();
+	//// ---- Game Audio construction
+	audio = new GameAudio();
+	audio->initialize();
+	//// sound effects and musics should be registered in the specific game application (Rebelle.cpp)
 
 	// THESE TWO GUYS GET SETUP BY ENGINE CONFIG SETTINGS SO
 	// THEY HAVE TO ALREADY EXIST WHEN THOSE FILES GET LOADED
@@ -170,6 +119,13 @@ in the release of all game resources.
 */
 void Game::shutDown()
 {
+	//// game audio destruction
+	if (audio)
+	{
+		audio->shutDown();
+		delete audio;
+	}
+
 	if (text)
 		delete text;
 
@@ -285,6 +241,9 @@ void Game::runGameLoop()
 			// AND RENDER THE GAME
 			graphics->renderGame();
 		}
+
+		audio->processSoundEffect();
+		//// audio->processMusic();
 	}
 
 	// GAME'S OVER SHUTDOWN THE GAME

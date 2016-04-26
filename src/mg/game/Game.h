@@ -41,6 +41,7 @@ class GameTimer;
 class GameStateManager;
 class GameGUI;
 class GameText;
+class GameAudio;
 
 static const float PI = 3.1415926535897932384626433f;
 static const wstring CONFIG_DIR = L"data/";
@@ -75,6 +76,9 @@ private:
 	GameInput			*input;
 	GameOS				*os;
 
+	/// game audio
+	GameAudio			*audio;
+
 public:
 	// SINGLETON DESIGN PATTERN STUFF
 	static Game* getSingleton();
@@ -90,6 +94,9 @@ public:
 	GameGraphics*		getGraphics()			{ return graphics;							}
 	GameInput*			getInput()				{ return input;								}
 	GameOS*				getOS()					{ return os;								}
+
+	//// -- audio
+	GameAudio*			getAudio()				{ return audio; }
 
 	// METHODS DEFINED IN Game.cpp
 	void	exitApp();

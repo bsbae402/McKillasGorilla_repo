@@ -204,9 +204,6 @@
     <ClCompile Include="src\mg\gsm\sprite\BulletRecycler.cpp">
       <Filter>src\mg\gsm\sprite</Filter>
     </ClCompile>
-    <ClCompile Include="src\mg\gsm\ai\pathfinding\OrthographicGridPathfinder.cpp" />
-    <ClCompile Include="src\mg\gsm\ai\pathfinding\GridPathfinder.h" />
-    <ClCompile Include="src\mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\mg\game\Game.h">
@@ -401,8 +398,6 @@
     <ClInclude Include="src\mg\gsm\sprite\BulletRecycler.h">
       <Filter>src\mg\gsm\sprite</Filter>
     </ClInclude>
-    <ClInclude Include="src\mg\gsm\physics\AABB.cpp" />
-    <ClInclude Include="src\mg\gsm\physics\AABB.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\mg_VS\ReadMe.txt">

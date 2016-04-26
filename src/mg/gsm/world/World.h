@@ -24,7 +24,7 @@ be drawn first (the back-most layer), should be added first.
 
 class Game;
 class SpriteManager;
-class TiledLayer;
+
 class World
 {
 private:

@@ -238,7 +238,6 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			botToSpawn->setDefense(defense);
 			botToSpawn->setInjured(injured);
 			botToSpawn->setStartinjured(injured);
-			botToSpawn->setBoundingVolume();
 
 			// AND GIVE IT TO THE SPRITE MANAGER
 			spriteManager->addBot(botToSpawn);

@@ -320,6 +320,28 @@ void SpriteManager::update()
 	while (botIterator != bots.end())
 	{
 		Bot *bot = (*botIterator);
+
+
+		PhysicalProperties *pp = bot->getPhysicalProperties();
+		
+			/*PATHFINDING*/
+		GameStateManager *gsm = game->getGSM();
+		if (gsm->getPath() == NULL) {
+			OrthographicGridPathfinder *path = new OrthographicGridPathfinder(Game::getSingleton());
+			gsm->setPath(path);
+		}
+
+		if (bot->getCurrentPathToFollow()->empty()) {
+			gsm->getPath()->mapPath(bot, pp->getFinalX(), pp->getFinalY());
+		}
+
+		else {
+			gsm->getPath()->updatePath(bot);
+		}
+		bot->getBoundingVolume()->setCenterX(pp->getX() + (bot->getSpriteType()->getTextureWidth() / 2));
+		bot->getBoundingVolume()->setCenterY(pp->getY() + (bot->getSpriteType()->getTextureHeight() / 2));
+		bot->getPhysicalProperties()->update();
+
 		bot->think();
 		bot->updateSprite();
 		if (bot->isMarkedForRemoval())

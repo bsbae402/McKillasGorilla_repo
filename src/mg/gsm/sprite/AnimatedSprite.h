@@ -75,6 +75,19 @@ public:
 
 	void setPreviousState(wstring newState) { previousState = newState; }
 
+	void setBoundingVolume() {
+		boundingVolume = new AABB();
+		boundingVolume->setWidth(this->getSpriteType()->getTextureWidth());
+		boundingVolume->setHeight(this->getSpriteType()->getTextureHeight());
+		boundingVolume->setCenterX(pp.getX() + (this->getSpriteType()->getTextureWidth() / 2));
+		boundingVolume->setCenterY(pp.getY() + (this->getSpriteType()->getTextureHeight() / 2));
+	}
+
+	void setCurrentPathToFollow() {
+	this->currentPathToFollow = new list<PathNode>;
+	}
+
+
 	// INLINED MUTATOR METHODS
 	void setAlpha(int initAlpha)
 	{	alpha = initAlpha;						}

@@ -49,3 +49,4 @@ using namespace std;
 // DirectX
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <xaudio2.h>		/// XAudio2

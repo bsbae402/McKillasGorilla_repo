@@ -224,6 +224,8 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			pp->setPosition(initX, initY);
 			pp->setFinalX(finalX);
 			pp->setFinalY(finalY);
+			pp->setStartX(initX);
+			pp->setStartY(initY);
 			pp->setVelocity(0, 0);
 			BotState botState = botToSpawn->getBotStateForString(initialBotState);
 			botToSpawn->setBotState(botState);

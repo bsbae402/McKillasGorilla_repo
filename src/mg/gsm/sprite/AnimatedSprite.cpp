@@ -118,7 +118,7 @@ void AnimatedSprite::updateSprite()
 	float epsilon = 0.00001f;
 
 	// IF THE Y VELOCITY IS 0 WE HAVE TO BE CAREFUL DIVIDING
-	if (fabs(vY) < epsilon)
+	/*if (fabs(vY) < epsilon)
 	{
 		// IF X ISN'T MOVING EITHER, LEAVE IT WHAT IT IS
 		// AND PUT IT INTO AN IDLE STATE
@@ -143,5 +143,5 @@ void AnimatedSprite::updateSprite()
 			else
 				rotationInRadians -= M_PI;
 		}
-	}
+	}*/
 }

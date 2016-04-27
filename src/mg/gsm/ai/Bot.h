@@ -4,6 +4,7 @@
 #include "mg\game\Game.h"
 #include "mg\gsm\ai\behaviors\BotBehavior.h"
 #include "mg\gsm\sprite\AnimatedSprite.h"
+#include "mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h"
 
 enum BotState
 {
@@ -45,6 +46,7 @@ private:
 	bool startinjured;
 	bool washealed;
 
+	OrthographicGridPathfinder *path;
 public:
 	Bot()	{}
 	~Bot();
@@ -58,6 +60,9 @@ public:
 	void setStartinjured(bool newinjured) { startinjured = newinjured; }
 	void setWasHealed(bool newwashealed) { washealed = newwashealed; }
 	void setStarthealth(int newstarthealth) { starthealth = newstarthealth; }
+
+	OrthographicGridPathfinder* getPath() { return path; }
+	void setPath(OrthographicGridPathfinder *initPath) { path = initPath; }
 
 	int getHealth() { return health; }
 	int getStarthealth() { return starthealth; }

@@ -21,6 +21,7 @@
 #include "mg\input\GameInput.h"
 #include "mg\gsm\sprite\BulletRecycler.h"
 #include "mg\gsm\sprite\LevelObjectSprite.h"
+#include "mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h"
 
 /*
 	addSpriteToRenderList - This method checks to see if the sprite
@@ -323,24 +324,29 @@ void SpriteManager::update()
 
 
 		PhysicalProperties *pp = bot->getPhysicalProperties();
-		
+		if (game->getGSM()->getPhysics()->isActivated() && bot->getInjured() == false)
+		{
 			/*PATHFINDING*/
-		GameStateManager *gsm = game->getGSM();
-		if (gsm->getPath() == NULL) {
-			OrthographicGridPathfinder *path = new OrthographicGridPathfinder(Game::getSingleton());
-			gsm->setPath(path);
-		}
+			GameStateManager *gsm = game->getGSM();
+			if (bot->getPath() == NULL) {
+				OrthographicGridPathfinder *path = new OrthographicGridPathfinder(Game::getSingleton());
+				bot->setPath(path);
+				bot->setCurrentPathToFollow();
+			}
 
-		if (bot->getCurrentPathToFollow()->empty()) {
-			gsm->getPath()->mapPath(bot, pp->getFinalX(), pp->getFinalY());
-		}
+			if (bot->getCurrentPathToFollow()->empty()) {
+				//if (bot->getCurrentPathToFollow() == NULL) {
+				bot->getPath()->mapPath(bot, pp->getFinalX(), pp->getFinalY());
+			}
 
-		else {
-			gsm->getPath()->updatePath(bot);
+			else {
+				bot->getPath()->updatePath(bot);
+			}
+			bot->getBoundingVolume()->setCenterX(pp->getX() + (bot->getSpriteType()->getTextureWidth() / 2));
+			bot->getBoundingVolume()->setCenterY(pp->getY() + (bot->getSpriteType()->getTextureHeight() / 2));
+			bot->getPhysicalProperties()->update();
+
 		}
-		bot->getBoundingVolume()->setCenterX(pp->getX() + (bot->getSpriteType()->getTextureWidth() / 2));
-		bot->getBoundingVolume()->setCenterY(pp->getY() + (bot->getSpriteType()->getTextureHeight() / 2));
-		bot->getPhysicalProperties()->update();
 
 		bot->think();
 		bot->updateSprite();

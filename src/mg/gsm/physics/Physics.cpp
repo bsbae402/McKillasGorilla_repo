@@ -126,7 +126,7 @@ void Physics::update()
 						{
 							Bot *bot = (*botIterator);
 							PhysicalProperties *pp = bot->getPhysicalProperties();
-							pp->update();
+							//pp->update();
 							float left = pp->getX();
 							float top = pp->getY();
 							float right = pp->getX() + 64;
@@ -206,7 +206,7 @@ void Physics::update()
 						{
 							Bot *bot = (*botIterator);
 							PhysicalProperties *pp = bot->getPhysicalProperties();
-							pp->update();
+							//pp->update();
 							float left = pp->getX();
 							float top = pp->getY();
 							float right = pp->getX() + 64;
@@ -289,7 +289,7 @@ void Physics::update()
 						{
 							Bot *bot = (*botIterator);
 							PhysicalProperties *pp = bot->getPhysicalProperties();
-							pp->update();
+							//pp->update();
 							float left = pp->getX();
 							float top = pp->getY();
 							float right = pp->getX() + 64;
@@ -371,7 +371,7 @@ void Physics::update()
 						{
 							Bot *bot = (*botIterator);
 							PhysicalProperties *pp = bot->getPhysicalProperties();
-							pp->update();
+							//pp->update();
 							float left = pp->getX();
 							float top = pp->getY();
 							float right = pp->getX() + 64;
@@ -466,7 +466,7 @@ void Physics::update()
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + bot->getSpriteType()->getTextureWidth();
@@ -782,7 +782,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + 64;
@@ -843,7 +843,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + 64;
@@ -903,7 +903,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + 64;
@@ -968,7 +968,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + 64;

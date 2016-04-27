@@ -350,6 +350,27 @@ void OrthographicGridPathfinder::updatePath(AnimatedSprite *sprite)
 			{
 				sprite->getPhysicalProperties()->setVelocity(0.0f, 0.0f);
 				sprite->clearPath();
+
+				int temp = sprite->getPhysicalProperties()->getFinalX();
+				sprite->getPhysicalProperties()->setFinalX(sprite->getPhysicalProperties()->getStartX());
+				sprite->getPhysicalProperties()->setStartX(temp);
+
+				temp = sprite->getPhysicalProperties()->getFinalY();
+				sprite->getPhysicalProperties()->setFinalY(sprite->getPhysicalProperties()->getStartY());
+				sprite->getPhysicalProperties()->setStartY(temp);
+
+				if ((sprite->getCurrentState() == L"WALK_RIGHT")) {
+					sprite->setCurrentState(L"IDLE_RIGHT");
+				}
+				else if ((sprite->getCurrentState() == L"WALK_LEFT")) {
+					sprite->setCurrentState(L"IDLE_LEFT");
+				}
+				else if ((sprite->getCurrentState() == L"WALK_FRONT")) {
+					sprite->setCurrentState(L"IDLE_FRONT");
+				}
+				else if ((sprite->getCurrentState() == L"WALK_BACK")) {
+					sprite->setCurrentState(L"IDLE_BACK");
+				}
 				return;
 			}
 		}
@@ -376,13 +397,40 @@ void OrthographicGridPathfinder::updatePath(AnimatedSprite *sprite)
 		}*/
 
 		sprite->getPhysicalProperties()->setVelocity(vX, vY);
-		sprite->setCurrentState(L"WALKING");
+		if(vX > 0 && abs(vX) > abs(vY))
+			sprite->setCurrentState(L"WALK_RIGHT");
+		else if (vX < 0 && abs(vX) > abs(vY))
+			sprite->setCurrentState(L"WALK_LEFT");
+		else if (vY > 0 && abs(vX) < abs(vY))
+			sprite->setCurrentState(L"WALK_BACK");
+		else if (vY < 0 && abs(vX) < abs(vY))
+			sprite->setCurrentState(L"WALK_FRONT");
 	}
 	else
 	{
-		if ((sprite->getCurrentState() == L"WALKING") ) {
-			sprite->setCurrentState(L"IDLE");
+		
+		
+		int temp = sprite->getPhysicalProperties()->getFinalX();
+		sprite->getPhysicalProperties()->setFinalX(sprite->getPhysicalProperties()->getStartX());
+		sprite->getPhysicalProperties()->setStartX(temp);
+
+		temp = sprite->getPhysicalProperties()->getFinalY();
+		sprite->getPhysicalProperties()->setFinalY(sprite->getPhysicalProperties()->getStartY());
+		sprite->getPhysicalProperties()->setStartY(temp);
+
+		if ((sprite->getCurrentState() == L"WALK_RIGHT")) {
+			sprite->setCurrentState(L"IDLE_RIGHT");
 		}
+		else if ((sprite->getCurrentState() == L"WALK_LEFT")) {
+			sprite->setCurrentState(L"IDLE_LEFT");
+		}
+		else if ((sprite->getCurrentState() == L"WALK_FRONT")) {
+			sprite->setCurrentState(L"IDLE_FRONT");
+		}
+		else if ((sprite->getCurrentState() == L"WALK_BACK")) {
+			sprite->setCurrentState(L"IDLE_BACK");
+		}
+
 	}	
 }
 

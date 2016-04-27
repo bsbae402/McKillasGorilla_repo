@@ -21,6 +21,7 @@
 #include "mg\gsm\sprite\LevelObjectSprite.h"
 #include "mg\gsm\sprite\PlayerSprite.h"
 #include "mg\gsm\sprite\BulletRecycler.h"
+#include "mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h"
 
 class SpriteManager
 {

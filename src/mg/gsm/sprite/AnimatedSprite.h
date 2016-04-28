@@ -56,6 +56,9 @@ protected:
 	// CURRENT PATH OF THE ANIMATED SPRITE
 	list<PathNode> *currentPathToFollow;
 
+	bool strafing;
+	int fireinterval = 0;
+
 public:
 	// INLINED ACCESSOR METHODS
 	int					getAlpha()				{ return alpha;					}
@@ -86,6 +89,12 @@ public:
 	void setCurrentPathToFollow() {
 	this->currentPathToFollow = new list<PathNode>;
 	}
+
+	void setFireinterval(int newfireinterval) { fireinterval = newfireinterval; }
+	int getFireinterval() { return fireinterval; }
+
+	bool isStrafing() { return strafing; }
+	void togglestrafe() { strafing = !strafing; }
 
 
 	// INLINED MUTATOR METHODS

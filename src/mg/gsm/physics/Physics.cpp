@@ -152,6 +152,7 @@ void Physics::update()
 								{
 									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
+									bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
 
@@ -234,6 +235,7 @@ void Physics::update()
 								{
 									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
+									bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
 
@@ -317,6 +319,7 @@ void Physics::update()
 								{
 									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
+									bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
 
@@ -398,6 +401,7 @@ void Physics::update()
 								{
 									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
+									bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
 
@@ -524,7 +528,7 @@ void Physics::update()
 					PhysicalProperties *pp = LevelObjectSprite->getPhysicalProperties();
 					pp->update();
 					float left = pp->getX();
-					float top = pp->getY();
+					float top = pp->getY() + 80;
 					float right = pp->getX() + LevelObjectSprite->getSpriteType()->getTextureWidth();
 					float bottom = pp->getY() + LevelObjectSprite->getSpriteType()->getTextureHeight();
 
@@ -796,17 +800,14 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
 							&& playerPP->getY() <= top && playerBottomNextFrame >= top + 64)
 						{
-							if (safety == false)
+							if (punched == false)
 							{
-								//game->quitGame();
-								if (punched == false)
-								{
+								if (safety == false)
 									gsm->setScore(gsm->getScore() - 100);
-									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
-									punched = true;
-								}
-								exit = 1;
+								bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+								punched = true;
 							}
+							exit = 1;
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
@@ -857,17 +858,14 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
 							&& playerPP->getY() + 80 >= bottom && playerPP->getY() + vY <= bottom - 40)
 						{
-							if (safety == false)
+							if (punched == false)
 							{
-								//game->quitGame();
-								if (punched == false)
-								{
+								if (safety == false)
 									gsm->setScore(gsm->getScore() - 100);
-									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
-									punched = true;
-								}
-								exit = 1;
+								bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+								punched = true;
 							}
+							exit = 1;
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
@@ -983,17 +981,14 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							&& playerPP->getX() <= right - 5 && playerRightNextFrame >= right)
 						{
 							
+							if (punched == false)
 							{
-								//game->quitGame();
-								if (punched == false)
-								{
-									if (safety == false)
-										gsm->setScore(gsm->getScore() - 100);
-									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
-									punched = true;
-								}
-								exit = 1;
+								if (safety == false)
+									gsm->setScore(gsm->getScore() - 100);
+								bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+								punched = true;
 							}
+							exit = 1;
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{

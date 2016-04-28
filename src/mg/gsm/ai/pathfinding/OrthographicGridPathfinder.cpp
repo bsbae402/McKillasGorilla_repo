@@ -397,8 +397,11 @@ void OrthographicGridPathfinder::updatePath(AnimatedSprite *sprite)
 		}*/
 
 		sprite->getPhysicalProperties()->setVelocity(vX, vY);
-		if(vX > 0 && abs(vX) > abs(vY))
+		if (vX > 0 && abs(vX) > abs(vY))
+		{
 			sprite->setCurrentState(L"WALK_RIGHT");
+
+		}
 		else if (vX < 0 && abs(vX) > abs(vY))
 			sprite->setCurrentState(L"WALK_LEFT");
 		else if (vY > 0 && abs(vX) < abs(vY))

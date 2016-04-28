@@ -93,7 +93,10 @@ public:
 	void				unloadSprites();
 	void				update();
 
+	void				checkforplayer(Bot *sprite);
+
 	void				fireBullet(AnimatedSprite *sprite, bool isplayer, bool safety);
+	void				fireEnemyBullet(Bot *bot, bool isplayer, bool safety);
 
 	//// ---- methods for level object management ----
 	list<LevelObjectSprite*>::iterator	getLevelSpriteObjectsIterator() { return losList.begin(); }

@@ -86,7 +86,7 @@ private:
 	int maxhealth;
 	bool canheal;
 	bool ishealing;
-	bool strafing;
+	
 	bool invincible;
 
 public:
@@ -117,8 +117,7 @@ public:
 	void setFacing(int newfacing) { facing = newfacing; }
 	int getFacing() { return facing; }
 
-	bool isStrafing() { return strafing; }
-	void togglestrafe() { strafing = !strafing; }
+	
 
 	bool isInvincible() { return invincible; }
 	void toggleinvincible() { invincible = !invincible; }

@@ -15,6 +15,14 @@ enum BotState
 	NONE
 };
 
+enum EnemyDirection
+{
+	ENUM_Enemy_DIRECTION_UP,
+	ENUM_Enemy_DIRECTION_DOWN,
+	ENUM_Enemy_DIRECTION_RIGHT,
+	ENUM_Enemy_DIRECTION_LEFT
+};
+
 // BEHAVIORS
 static const string MG_DEAD_BEHAVIOR = "DEAD";
 static const string MG_DYING_BEHAVIOR = "DYING";
@@ -45,6 +53,13 @@ private:
 	bool injured;
 	bool startinjured;
 	bool washealed;
+	bool foundplayer;
+	int changeup;
+	int changedown;
+	int changeleft;
+	int changeright;
+
+	EnemyDirection enemyDirection;
 
 	OrthographicGridPathfinder *path;
 public:
@@ -60,6 +75,11 @@ public:
 	void setStartinjured(bool newinjured) { startinjured = newinjured; }
 	void setWasHealed(bool newwashealed) { washealed = newwashealed; }
 	void setStarthealth(int newstarthealth) { starthealth = newstarthealth; }
+	void setFoundPlayer(bool newfoundplayer) { foundplayer = newfoundplayer; }
+	void setChangeup(int newchangeup) { changeup = newchangeup; }
+	void setChangedown(int newchangedown) { changedown = newchangedown; }
+	void setChangeleft(int newchangeleft) { changeleft = newchangeleft; }
+	void setChangeright(int newchangeright) { changeright = newchangeright; }
 
 	OrthographicGridPathfinder* getPath() { return path; }
 	void setPath(OrthographicGridPathfinder *initPath) { path = initPath; }
@@ -73,6 +93,11 @@ public:
 	bool getInjured() { return injured; }
 	bool getStartinjured() { return startinjured; }
 	bool getWasHealed() { return washealed; }
+	bool getFoundPlayer() { return foundplayer; }
+	int getChangeup() { return changeup; }
+	int getChangedown() { return changedown; }
+	int getChangeleft() { return changeleft; }
+	int getChangeright() { return changeright; }
 
 	void setFacing(int newfacing) { facing = newfacing; }
 	int getFacing() { return facing; }
@@ -109,6 +134,11 @@ public:
 		else if (state.compare(MG_MOVING_BEHAVIOR) == 0) return BotState::MOVING;
 		else if (state.compare(MG_SPAWNING_BEHAVIOR) == 0) return BotState::SPAWNING;
 		else return BotState::NONE;
+	}
+
+	EnemyDirection getEnemyDirection() { return enemyDirection; }
+	void setEnemyDirection(EnemyDirection initED) {
+		enemyDirection = initED;
 	}
 
 	// DEFINED IN Bot.cpp

@@ -22,7 +22,7 @@
 #include "mg\gsm\world\World.h"
 #include "mg\gsm\world\TiledLayer.h"
 #include "rebelle\RebelleTextGenerator.h"
-
+#include "mg\gsm\sprite\LevelObjectSprite.h"
 
 
 void Physics::startUp()
@@ -46,7 +46,6 @@ void Physics::update()
 		GameStateManager *gsm = game->getGSM();
 		World *world = gsm->getWorld();
 		TextGenerator *generator = game->getText()->getTextGenerator();
-		
 
 		exit = 0;
 
@@ -526,13 +525,14 @@ void Physics::update()
 				list<LevelObjectSprite*>::iterator end = spriteManager->getEndOfLevelSpriteObjectsIterator();
 				while (itemIterator != end)
 				{
-					LevelObjectSprite *LevelObjectSprite = (*itemIterator);
-					PhysicalProperties *pp = LevelObjectSprite->getPhysicalProperties();
+					LevelObjectSprite *los = (*itemIterator);
+					PhysicalProperties *pp = los->getPhysicalProperties();
 					pp->update();
 					float left = pp->getX();
-					float top = pp->getY() + 80;
-					float right = pp->getX() + LevelObjectSprite->getSpriteType()->getTextureWidth();
-					float bottom = pp->getY() + LevelObjectSprite->getSpriteType()->getTextureHeight();
+
+					float top = pp->getY();
+					float right = pp->getX() + los->getSpriteType()->getTextureWidth();
+					float bottom = pp->getY() + los->getSpriteType()->getTextureHeight();
 
 					TiledLayer *collidableLayer = world->getCollidableLayer();
 
@@ -549,23 +549,22 @@ void Physics::update()
 					{
 						float BottomNextFrame = bottom + vY;
 
-						if (BottomNextFrame < world->getWorldHeight())
-						{
+						if (BottomNextFrame < world->getWorldHeight()) {
 							int bottomRowNextFrame = collidableLayer->getRowByY(BottomNextFrame);
 
 							for (int columnIndex = leftColumn; columnIndex <= rightColumn; columnIndex++)
 							{
 								Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+								
 								if (tile->collidable)
 								{
-									spriteManager->removeLevelObject(LevelObjectSprite);
+									spriteManager->removeLevelObject(los);
 									vY = 0.0f;
 									used = true;
 									break;
 								}
 							}
-
-
+							pp->setVelocity(0.0f, vY);
 						}
 					}
 					else if (vY < 0)
@@ -579,7 +578,7 @@ void Physics::update()
 								Tile *tile = collidableLayer->getTile(topRowNextFrame, columnIndex);
 								if (tile->collidable)
 								{
-									spriteManager->removeLevelObject(LevelObjectSprite);
+									spriteManager->removeLevelObject(los);
 									vY = 0.0f;
 									used = true;
 									break;
@@ -599,7 +598,7 @@ void Physics::update()
 								Tile *tile = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
 								if (tile->collidable)
 								{
-									spriteManager->removeLevelObject(LevelObjectSprite);
+									spriteManager->removeLevelObject(los);
 									vX = 0.0f;
 									used = true;
 									break;
@@ -619,18 +618,19 @@ void Physics::update()
 								Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
 								if (tile->collidable)
 								{
-									spriteManager->removeLevelObject(LevelObjectSprite);
+									spriteManager->removeLevelObject(los);
 									vX = 0.0f;
 									used = true;
 									break;
 								}
+								
 							}
 							pp->setVelocity(vX, 0.0f);
 						}
 					}
 
 					//Remove money and add to money count if a player moves into money sprite
-					if (LevelObjectSprite->getType().compare(L"money") == 0)
+					if (los->getType().compare(L"money") == 0)
 					{
 						PhysicalProperties *playerpp = spriteManager->getPlayer()->getPhysicalProperties();
 
@@ -640,7 +640,7 @@ void Physics::update()
 								|| playerpp->getY() + 128 >= pp->getY() && playerpp->getY() + 128 <= pp->getY() + 64
 								|| playerpp->getY() <= pp->getY() && playerpp->getY() + 128 >= pp->getY() + 64))
 						{
-							spriteManager->removeLevelObject(LevelObjectSprite);
+							spriteManager->removeLevelObject(los);
 							gsm->setMoney(gsm->getMoney() + 500);
 							used = true;
 							break;
@@ -649,7 +649,7 @@ void Physics::update()
 					}
 
 					//Check for if a bullet came from the player. Bullets from bots cannot kill a bot
-					else if (LevelObjectSprite->getPlayer())
+					if (los->getPlayer())
 					{
 
 
@@ -667,12 +667,12 @@ void Physics::update()
 								if (pp->getX() >= bpp->getX() - 10 && pp->getX() <= bpp->getX() + 74
 									&& pp->getY() <= bpp->getY() + 138 && pp->getY() >= bpp->getY() - 10)
 								{
-									spriteManager->removeLevelObject(LevelObjectSprite);
+									spriteManager->removeLevelObject(los);
 									used = true;
 
 									//If the safety is on, set bot to injured (Dying is the animation). Otherwise 
 									//it's an automatic game over
-									if (LevelObjectSprite->getSafetyon())
+									if (los->getSafetyon())
 									{
 										bot->setPreviousState(bot->getCurrentState());
 										bot->setCurrentState(L"DYING");
@@ -702,7 +702,7 @@ void Physics::update()
 							if (pp->getX() >= playerpp->getX() - 10 && pp->getX() <= playerpp->getX() + 74
 								&& pp->getY() <= playerpp->getY() + 138 && pp->getY() >= playerpp->getY() - 10)
 							{
-								spriteManager->removeLevelObject(LevelObjectSprite);
+								spriteManager->removeLevelObject(los);
 								used = true;
 
 								//If the safety is on, set bot to injured (Dying is the animation). Otherwise 
@@ -722,11 +722,12 @@ void Physics::update()
 						}
 					}
 
-
-
 					if (used)
+					{
+						delete los;
 						break;
-
+						
+					}
 					itemIterator++;
 				}
 

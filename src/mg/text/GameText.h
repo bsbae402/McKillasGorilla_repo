@@ -81,4 +81,6 @@ public:
 	// METHODS FOR DEBUG TEXT FILE
 	void initDebugFile(wstring debugFileName);
 	void writeDebugOutput(wstring output);
+
+	int getVectorIndexByRenderText(RenderText* renderTextToFind);
 };

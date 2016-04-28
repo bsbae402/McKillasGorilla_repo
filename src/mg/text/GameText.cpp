@@ -75,7 +75,20 @@ void GameText::updateRenderText(wstring *textToSet, int index)
 {
 	RenderText *textToUpdate = renderText.at(index);
 	wstring *oldText = textToUpdate->getText();
-	delete oldText;
+	//// I don't know why this engine wanted to delete the string object !!!
+	//// as I know, if the 
+
+	//// If *oldText == L"scorelabel" and *textToSet == L"scorelabel",
+	//// the two pointer basically point same location. It is a feature of 
+	//// string class in C++. 
+	//// Thus, need to make sure that the string we are deleting is not the one we will add 
+	if (oldText->compare(*textToSet) == 0)
+	{
+		/// do nothing
+	}
+	else {
+		delete oldText;
+	}
 	textToUpdate->setText(textToSet);
 }
 
@@ -106,4 +119,24 @@ void GameText::moveRenderText(int index, int xMove, int yMove)
 void GameText::writeDebugOutput(wstring output)	
 {	
 	debugWriter.writeText(output);
+}
+
+//// get index of RenderText* in the vector<RenderText*> renderText; by the actual text
+//// if there is more RednerText objects that has same text as the parameter, 
+//// the most least index one would be returned
+int GameText::getVectorIndexByRenderText(RenderText* renderTextToFind)
+{
+	int vectorSize = renderText.size();
+	for (int i = 0; i < vectorSize; i++)
+	{
+		RenderText* rtPtr = renderText.at(i);
+		if (rtPtr == renderTextToFind)
+		{
+			return i;
+		}
+	}
+	//// if process doesn't return i up there (loop escape),
+	//// it means there is the textToFind string doesn't exist in the vector
+	//// so return -1
+	return -1;
 }

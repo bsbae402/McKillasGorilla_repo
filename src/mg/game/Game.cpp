@@ -29,6 +29,10 @@
 #include "mg\text\TextFileWriter.h"
 #include "mg\text\TextGenerator.h"
 
+// temp include
+#include "mg\platforms\DirectX\SDKwavefile.h"
+#include "mg\platforms\DirectX\GameAudio.h"
+
 bool Game::isSingletonInstantiated = false;
 Game* Game::singleton = 0;
 
@@ -44,6 +48,11 @@ Game* Game::getSingleton()
 
 void Game::startUp()
 {
+	//// ---- Game Audio construction
+	audio = new GameAudio();
+	audio->initialize();
+	//// sound effects and musics should be registered in the specific game application (Rebelle.cpp)
+
 	// THESE TWO GUYS GET SETUP BY ENGINE CONFIG SETTINGS SO
 	// THEY HAVE TO ALREADY EXIST WHEN THOSE FILES GET LOADED
 	gsm = new GameStateManager();
@@ -110,6 +119,13 @@ in the release of all game resources.
 */
 void Game::shutDown()
 {
+	//// game audio destruction
+	if (audio)
+	{
+		audio->shutDown();
+		delete audio;
+	}
+
 	if (text)
 		delete text;
 
@@ -225,6 +241,9 @@ void Game::runGameLoop()
 			// AND RENDER THE GAME
 			graphics->renderGame();
 		}
+
+		audio->processSoundEffect();
+		//// audio->processMusic();
 	}
 
 	// GAME'S OVER SHUTDOWN THE GAME

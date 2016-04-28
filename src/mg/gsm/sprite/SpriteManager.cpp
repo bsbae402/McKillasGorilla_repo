@@ -587,14 +587,44 @@ void SpriteManager::checkforplayer(Bot *bot)
 		if ((playerpp->getX() >= pp->getX() - 400 && playerpp->getX() <= pp->getX()
 			&& playerpp->getY() >= pp->getY() - 150 && playerpp->getY() <= pp->getY() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getX() >= pp->getX() - 900 && playerpp->getX() <= pp->getX()
-				&& playerpp->getY() >= pp->getY() - 150 && playerpp->getY() <= pp->getY() + 150))
+				&& playerpp->getY() >= pp->getY() - 250 && playerpp->getY() <= pp->getY() + 250))
 		{
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
 				bot->clearPath();
 
 
-			if (playerpp->getY() <= pp->getY() + 64 && playerpp->getY() + 128 >= pp->getY() + 64)
+			int bottomRowNextFrame = collidableLayer->getRowByY(pp->getY() + 100);
+			int bottomRowNextFrame2 = collidableLayer->getRowByY(pp->getY() + 128);
+
+			bool dontshoot = false;
+			bool wallbetween = false;
+
+			/*for (int columnIndex = pp->getX() / 64; columnIndex >= (playerpp->getX() + 64) / 64; columnIndex--) {
+				Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+				Tile *tile2 = collidableLayer->getTile(bottomRowNextFrame2, columnIndex);
+				if (tile->collidable)
+				{
+					int a = pp->getX() / 64;
+					int b = (playerpp->getX() + 64)/ 64;
+					pp->setVelocity(0, 4);
+					bot->setChangeup(playerpp->getX());
+					bot->setChangedown(-1);
+					dontshoot = true;
+					break;
+				}
+				else if (tile2->collidable)
+				{
+					pp->setVelocity(0, -4);
+					bot->setChangeup(-1);
+					bot->setChangedown(playerpp->getX());
+					dontshoot = true;
+					break;
+				}
+			}*/
+
+
+			if (playerpp->getY() <= pp->getY() + 64 && playerpp->getY() + 128 >= pp->getY() + 64 && dontshoot == false)
 			{
 				bot->setCurrentState(L"SHOOT_LEFT");
 				pp->setVelocity(0, 0);
@@ -612,11 +642,26 @@ void SpriteManager::checkforplayer(Bot *bot)
 				bot->setCurrentState(L"STRAFE_LEFT");
 				float LeftNextFrame = left + vX;
 
-				if (pp->getX() <= bot->getChangeup() && bot->getChangeup() != -1)
+				int test = bot->getChangedown();
+
+				if (pp->getX() <= bot->getChangeup()
+					//|| (playerpp->getY() + 128 < pp->getY() && playerpp->getX() < pp->getX() + 64
+					//&& playerpp->getX() + 64 > pp->getX() + 64)
+					)
 				{
 					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_UP);
+					//bot->setChangeup(-1);
 				}
-				else
+				else if (pp->getX() <= bot->getChangedown()
+					//|| (playerpp->getY() > pp->getY() + 128 && playerpp->getX() < pp->getX() + 64
+					//&& playerpp->getX() + 64 > pp->getX() + 64)
+					)
+				{
+					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
+					//bot->setChangedown(-1);
+					//bot->setChangeup(-1);
+				}
+				else if (dontshoot == false && bot->getChangedown() <= 0 && bot->getChangeup() <= 0)
 				{
 					if (playerpp->getY() + 128 <= pp->getY() + 64)
 					{
@@ -626,6 +671,10 @@ void SpriteManager::checkforplayer(Bot *bot)
 					{
 						pp->setVelocity(0, 6);
 					}
+				}
+				else
+				{
+					//pp->setVelocity(-6, 0);
 				}
 
 				vY = pp->getVelocityY();
@@ -692,7 +741,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 	}
 	else if (bot->getEnemyDirection() == ENUM_Enemy_DIRECTION_RIGHT)
 	{
-		if ((playerpp->getX() <= pp->getX() + 500 && playerpp->getX() >= pp->getX()
+		if ((playerpp->getX() <= pp->getX() + 400 && playerpp->getX() >= pp->getX()
 			&& playerpp->getY() >= pp->getY() - 150 && playerpp->getY() <= pp->getY() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getX() <= pp->getX() + 900 && playerpp->getX() >= pp->getX()
 				&& playerpp->getY() <= pp->getY() - 150 && playerpp->getY() >= pp->getY() + 150))
@@ -700,6 +749,33 @@ void SpriteManager::checkforplayer(Bot *bot)
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
 				bot->clearPath();
+
+
+			int bottomRowNextFrame = collidableLayer->getRowByY(pp->getY() + 120);
+			int bottomRowNextFrame2 = collidableLayer->getRowByY(pp->getY() + 128);
+
+			bool dontshoot = false;
+
+			/*for (int columnIndex = pp->getX() / 64; columnIndex >= (playerpp->getX() + 64) / 64; columnIndex++) {
+				Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+				Tile *tile2 = collidableLayer->getTile(bottomRowNextFrame2, columnIndex);
+				if (tile->collidable)
+				{
+					pp->setVelocity(0, 4);
+					bot->setChangeup(playerpp->getX());
+					bot->setChangedown(-1);
+					dontshoot = true;
+					break;
+				}
+				else if (tile2->collidable)
+				{
+					pp->setVelocity(0, -4);
+					bot->setChangeup(-1);
+					bot->setChangedown(playerpp->getX());
+					dontshoot = true;
+					break;
+				}
+			}*/
 
 
 			if (playerpp->getY() <= pp->getY() + 64 && playerpp->getY() + 128 >= pp->getY() + 64)
@@ -720,9 +796,19 @@ void SpriteManager::checkforplayer(Bot *bot)
 				bot->setCurrentState(L"STRAFE_RIGHT");
 				float RightNextFrame = right + vX;
 
-				if (pp->getX() <= bot->getChangeup() && bot->getChangeup() != -1)
+				if (pp->getX() <= bot->getChangeup() && bot->getChangeup() != -1
+					|| playerpp->getY() + 128 < pp->getY() && playerpp->getX() < pp->getX() + 64
+					&& playerpp->getX() + 64 > pp->getX() + 64)
 				{
 					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_UP);
+					bot->setChangeup(-1);
+				}
+				else if (pp->getX() <= bot->getChangedown() && bot->getChangedown() != -1
+					|| playerpp->getY() > pp->getY() + 128 && playerpp->getX() < pp->getX() + 64
+					&& playerpp->getX() + 64 > pp->getX() + 64)
+				{
+					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
+					bot->setChangedown(-1);
 				}
 				else
 				{
@@ -810,8 +896,33 @@ void SpriteManager::checkforplayer(Bot *bot)
 			if (bot->getPath() != NULL)
 				bot->clearPath();
 
+			int leftColumnNextFrame = collidableLayer->getColumnByX(pp->getX());
+			int leftColumnNextFrame2 = collidableLayer->getColumnByX(pp->getX() + 64);
 
-			if (playerpp->getX() <= pp->getX() + 32 && playerpp->getX() + 64 >= pp->getX() + 32)
+			bool dontshoot = false;
+
+			/*for (int rowIndex = pp->getY()/64; rowIndex >= (playerpp->getY() + 130)/64; rowIndex--) {
+				Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
+				Tile *tile2 = collidableLayer->getTile(rowIndex, leftColumnNextFrame2);
+				if (tile->collidable)
+				{
+					pp->setVelocity(4, 0);
+					bot->setChangeright(-1);
+					bot->setChangeleft(playerpp->getY());
+					dontshoot = true;
+					break;
+				}
+				else if (tile2->collidable)
+				{
+					pp->setVelocity(-4, 0);
+					bot->setChangeright(playerpp->getY());
+					bot->setChangeleft(-1);
+					dontshoot = true;
+					break;
+				}
+			}*/
+
+			if (playerpp->getX() <= pp->getX() + 32 && playerpp->getX() + 64 >= pp->getX() + 32 && dontshoot == false)
 			{
 				bot->setCurrentState(L"SHOOT_FRONT");
 				pp->setVelocity(0, 0);
@@ -829,11 +940,21 @@ void SpriteManager::checkforplayer(Bot *bot)
 				bot->setCurrentState(L"STRAFE_FRONT");
 				float LeftNextFrame = left + vX;
 
-				if (pp->getX() <= bot->getChangeright() && bot->getChangeright() != -1)
+				if (pp->getX() <= bot->getChangeright() && bot->getChangeright() != -1
+					|| playerpp->getX() > pp->getX() + 64 && playerpp->getY() + 128 > pp->getY() + 64
+					&& playerpp->getY() < pp->getY() + 64)
 				{
 					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_RIGHT);
 				}
-				else
+				else if (pp->getX() <= bot->getChangeleft() && bot->getChangeleft() != -1
+					|| playerpp->getX() + 64 < pp->getX() && playerpp->getY() + 128 > pp->getY() + 64
+					&& playerpp->getY() < pp->getY() + 64)
+				{
+					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_LEFT);
+				}
+				else if (playerpp->getY() > pp->getY())
+					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
+				else if(dontshoot == false)
 				{
 					if (playerpp->getX() + 64 <= pp->getX() + 32)
 					{
@@ -843,6 +964,10 @@ void SpriteManager::checkforplayer(Bot *bot)
 					{
 						pp->setVelocity(6, 0);
 					}
+				}
+				else
+				{
+					pp->setVelocity(0, -6);
 				}
 
 				vX = pp->getVelocityX();
@@ -905,7 +1030,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 	}
 	else if (bot->getEnemyDirection() == ENUM_PLAYER_DIRECTION_DOWN)
 	{
-		if ((playerpp->getY() <= pp->getY() + 400 && playerpp->getY() >= pp->getY()
+		if ((playerpp->getY() <= pp->getY() + 250 && playerpp->getY() >= pp->getY()
 			&& playerpp->getX() >= pp->getX() - 150 && playerpp->getX() <= pp->getX() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getY() <= pp->getY() + 900 && playerpp->getY() >= pp->getY()
 				&& playerpp->getX() >= pp->getX() - 150 && playerpp->getX() <= pp->getX() + 150))
@@ -914,8 +1039,34 @@ void SpriteManager::checkforplayer(Bot *bot)
 			if (bot->getPath() != NULL)
 				bot->clearPath();
 
+			int leftColumnNextFrame = collidableLayer->getColumnByX(pp->getX());
+			int leftColumnNextFrame2 = collidableLayer->getColumnByX(pp->getX() + 64);
 
-			if (playerpp->getX() <= pp->getX() + 32 && playerpp->getX() + 64 >= pp->getX() + 32)
+			bool dontshoot = false;
+
+			/*for (int rowIndex = pp->getY() / 64; rowIndex >= (playerpp->getY() + 130) / 64; rowIndex++) {
+				Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
+				Tile *tile2 = collidableLayer->getTile(rowIndex, leftColumnNextFrame2);
+				if (tile->collidable)
+				{
+					pp->setVelocity(4, 0);
+					bot->setChangeright(-1);
+					bot->setChangeleft(playerpp->getY());
+					dontshoot = true;
+					break;
+				}
+				else if (tile2->collidable)
+				{
+					pp->setVelocity(-4, 0);
+					bot->setChangeright(playerpp->getY());
+					bot->setChangeleft(-1);
+					dontshoot = true;
+					break;
+				}
+			}*/
+
+
+			if (playerpp->getX() <= pp->getX() + 32 && playerpp->getX() + 64 >= pp->getX() + 32 && dontshoot == false)
 			{
 				bot->setCurrentState(L"SHOOT_BACK");
 				pp->setVelocity(0, 0);
@@ -933,10 +1084,20 @@ void SpriteManager::checkforplayer(Bot *bot)
 				bot->setCurrentState(L"STRAFE_BACK");
 				float LeftNextFrame = left + vX;
 
-				if (pp->getX() <= bot->getChangeright() && bot->getChangeright() != -1)
+				if (pp->getY() >= bot->getChangeright() && bot->getChangeright() != -1
+					|| (playerpp->getX() > pp->getX() + 64 && playerpp->getY() < pp->getY() + 64
+					&& playerpp->getY() > pp->getY()))
 				{
 					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_RIGHT);
 				}
+				else if (pp->getY() >= bot->getChangeleft() && bot->getChangeleft() != -1
+					|| (playerpp->getX() + 64 < pp->getX() && playerpp->getY() < pp->getY() + 64
+					&& playerpp->getY() > pp->getY()))
+				{
+					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_LEFT);
+				}
+				else if (playerpp->getY() < pp->getY())
+					bot->setEnemyDirection(ENUM_Enemy_DIRECTION_UP);
 				else
 				{
 					if (playerpp->getX() + 64 <= pp->getX() + 32)
@@ -962,7 +1123,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 							Tile *tile = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
 							if (tile->collidable)
 							{
-								pp->setVelocity(0, -4);
+								pp->setVelocity(0, 4);
 								bot->setChangeright(playerpp->getY());
 								bot->setChangeleft(-1);
 								break;
@@ -982,7 +1143,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 							Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
 							if (tile->collidable)
 							{
-								pp->setVelocity(0, -4);
+								pp->setVelocity(0, 4);
 								bot->setChangeright(-1);
 								bot->setChangeleft(playerpp->getY());
 								break;

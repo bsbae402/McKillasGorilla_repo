@@ -487,7 +487,7 @@ void Physics::update()
 					if (bot->getInjured() == false)
 					{
 
-						
+
 
 						if (playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64
 							&& playerPP->getY() <= pp->getY() + 128 && playerPP->getY() >= pp->getY())
@@ -496,6 +496,8 @@ void Physics::update()
 								playerPP->setVelocity(0.0f, 0.0f);
 						}
 					}
+					else
+						bot->setCurrentState(L"DEAD");
 
 					if (bot->getCurrentState().compare(L"DYING") == 0)
 					{
@@ -647,7 +649,7 @@ void Physics::update()
 					}
 
 					//Check for if a bullet came from the player. Bullets from bots cannot kill a bot
-					if (LevelObjectSprite->getPlayer())
+					else if (LevelObjectSprite->getPlayer())
 					{
 
 
@@ -688,6 +690,35 @@ void Physics::update()
 							}
 
 							botIterator++;
+						}
+					}
+					else
+					{
+						PhysicalProperties *playerpp = spriteManager->getPlayer()->getPhysicalProperties();
+
+						//Can only shoot a bot that is not injured
+						//if (bot->getInjured() == false)
+						{
+							if (pp->getX() >= playerpp->getX() - 10 && pp->getX() <= playerpp->getX() + 74
+								&& pp->getY() <= playerpp->getY() + 138 && pp->getY() >= playerpp->getY() - 10)
+							{
+								spriteManager->removeLevelObject(LevelObjectSprite);
+								used = true;
+
+								//If the safety is on, set bot to injured (Dying is the animation). Otherwise 
+								//it's an automatic game over
+								//if (LevelObjectSprite->getSafetyon())
+								{
+									//bot->setPreviousState(bot->getCurrentState());
+									//bot->setCurrentState(L"DYING");
+									//bot->setInjured(true);
+									if(spriteManager->getPlayer()->isInvincible() == false)
+										spriteManager->getPlayer()->setHealth(spriteManager->getPlayer()->getHealth() - 3);
+								}
+								if(spriteManager->getPlayer()->getHealth() <= 0)
+									game->quitGame();
+								
+							}
 						}
 					}
 

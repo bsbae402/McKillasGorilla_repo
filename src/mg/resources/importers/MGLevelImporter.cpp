@@ -224,6 +224,12 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			pp->setPosition(initX, initY);
 			pp->setFinalX(finalX);
 			pp->setFinalY(finalY);
+			pp->setStartX(initX);
+			pp->setStartY(initY);
+			pp->setOriginalFinalX(finalX);
+			pp->setOriginalFinalY(finalY);
+			pp->setOriginalStartX(initX);
+			pp->setOriginalStartY(initY);
 			pp->setVelocity(0, 0);
 			BotState botState = botToSpawn->getBotStateForString(initialBotState);
 			botToSpawn->setBotState(botState);
@@ -238,6 +244,8 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 			botToSpawn->setDefense(defense);
 			botToSpawn->setInjured(injured);
 			botToSpawn->setStartinjured(injured);
+			botToSpawn->setBoundingVolume();
+
 
 			// AND GIVE IT TO THE SPRITE MANAGER
 			spriteManager->addBot(botToSpawn);

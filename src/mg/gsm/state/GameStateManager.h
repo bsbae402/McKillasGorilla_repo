@@ -25,6 +25,8 @@
 #include "mg\gsm\state\GameStateMachine.h"
 #include "mg\gsm\world\World.h"
 #include "mg\gsm\world\WorldLayer.h"
+#include "mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h"
+
 
 class Game;
 
@@ -66,6 +68,10 @@ private:
 	// FOR DOING ALL COLLISION DETECTION AND RESOLUTION
 	Physics			physics;
 
+	//PATHFINDING
+	OrthographicGridPathfinder *path;
+
+
 	int score = 0;
 	int money = 0;
 	int safety;
@@ -88,6 +94,10 @@ public:
 	World*				getWorld()				{ return &world;						}
 	GameStateMachine*	getGameStateMachine()	{ return gameStateMachine; }
 	wstring				getCurrentLevelName()	{ return levelNames[currentLevelIndex];	}
+	OrthographicGridPathfinder* getPath() { return path; }
+	void setPath(OrthographicGridPathfinder *initPath) { path = initPath; }
+
+
 	int getScore() { return score; }
 	int getMoney() { return money; }
 	int getSafety() { return safety; }

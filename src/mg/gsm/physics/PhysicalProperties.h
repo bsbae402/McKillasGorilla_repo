@@ -19,6 +19,12 @@ protected:
 	float accelerationY;
 	float finalX;
 	float finalY;
+	float startX;
+	float startY;
+	float originalfinalX;
+	float originalfinalY;
+	float originalstartX;
+	float originalstartY;
 
 public:
 	PhysicalProperties()	{accelerationX = 0; accelerationY = 0;}
@@ -34,6 +40,12 @@ public:
 	float getZ()							{ return z;						}
 	float getFinalX()						{ return finalX;				}
 	float getFinalY()						{ return finalY;				}
+	float getStartX() { return startX; }
+	float getStartY() { return startY; }
+	float getOriginalFinalX() { return originalfinalX; }
+	float getOriginalFinalY() { return originalfinalY; }
+	float getOriginalStartX() { return originalstartX; }
+	float getOriginalStartY() { return originalstartY; }
 	float getVelocityX()					{ return velocityX;				}
 	float getVelocityY()					{ return velocityY;				}
 	float getAccelerationX()				{ return accelerationX;			}
@@ -49,6 +61,12 @@ public:
 	void setZ(float initZ)					{ z = initZ;					}
 	void setFinalX(float x)					{ finalX = x;					}
 	void setFinalY(float y)					{ finalY = y;					}
+	void setStartX(float x) { startX = x; }
+	void setStartY(float y) { startY = y; }
+	void setOriginalFinalX(float x) { originalfinalX = x; }
+	void setOriginalFinalY(float y) { originalfinalY = y; }
+	void setOriginalStartX(float x) { originalstartX = x; }
+	void setOriginalStartY(float y) { originalstartY = y; }
 
 	int round(float realNum)
 	{

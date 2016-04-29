@@ -18,7 +18,6 @@
 #include "mg\gsm\sprite\SpriteManager.h"
 #include "mg\resources\GameResources.h"
 #include "mg\resources\importers\MGLevelImporter.h"
-
 #include "mg\text\TextGenerator.h"
 #include "rebelle\RebelleTextGenerator.h"
 

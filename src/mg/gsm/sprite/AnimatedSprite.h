@@ -15,6 +15,9 @@
 #include "mg\gsm\physics\PhysicalProperties.h"
 #include "mg\gsm\sprite\AnimatedSpriteType.h"
 #include "mg\gui\Viewport.h"
+#include "mg\gsm\physics\AABB.h"
+#include "mg\gsm\ai\pathfinding\GridPathfinder.h"
+#include "mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h"
 
 class AnimatedSprite : public CollidableObject
 {
@@ -46,6 +49,16 @@ protected:
 	// HELPS US KEEP TRACK OF WHEN TO REMOVE IT
 	bool markedForRemoval;
 
+	// BOUNDING VOLUME FOR THE ANIMATED SPRITE
+	AABB *boundingVolume;
+
+
+	// CURRENT PATH OF THE ANIMATED SPRITE
+	list<PathNode> *currentPathToFollow;
+
+	bool strafing;
+	int fireinterval = 0;
+
 public:
 	// INLINED ACCESSOR METHODS
 	int					getAlpha()				{ return alpha;					}
@@ -55,8 +68,34 @@ public:
 	float				getRotationInRadians()	{ return rotationInRadians;		}
 	AnimatedSpriteType*	getSpriteType()			{ return spriteType;			}
 	bool				isMarkedForRemoval() { return markedForRemoval; }
+	AABB*				getBoundingVolume() { return boundingVolume; }
+	list<PathNode>*		getCurrentPathToFollow() { return currentPathToFollow; }
+	list<PathNode>::iterator	getCurrentPathNode() { return currentPathToFollow->begin(); }
+	void				advanceCurrentPathNode() { currentPathToFollow->pop_front(); }
+	void				clearPath() { currentPathToFollow->clear(); }
+	bool				hasReachedDestination() { return currentPathToFollow->empty(); }
+	void				resetCurrentPathNode() { currentPathToFollow->begin(); }
 
 	void setPreviousState(wstring newState) { previousState = newState; }
+
+	void setBoundingVolume() {
+		boundingVolume = new AABB();
+		boundingVolume->setWidth(this->getSpriteType()->getTextureWidth());
+		boundingVolume->setHeight(this->getSpriteType()->getTextureHeight());
+		boundingVolume->setCenterX(pp.getX() + (this->getSpriteType()->getTextureWidth() / 2));
+		boundingVolume->setCenterY(pp.getY() + (this->getSpriteType()->getTextureHeight() / 2));
+	}
+
+	void setCurrentPathToFollow() {
+	this->currentPathToFollow = new list<PathNode>;
+	}
+
+	void setFireinterval(int newfireinterval) { fireinterval = newfireinterval; }
+	int getFireinterval() { return fireinterval; }
+
+	bool isStrafing() { return strafing; }
+	void togglestrafe() { strafing = !strafing; }
+
 
 	// INLINED MUTATOR METHODS
 	void setAlpha(int initAlpha)

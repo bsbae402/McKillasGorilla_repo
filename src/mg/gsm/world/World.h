@@ -1,20 +1,20 @@
-/*	
-	Author: Richard McKenna
-			Stony Brook University
-			Computer Science Department
+/*
+Author: Richard McKenna
+Stony Brook University
+Computer Science Department
 
-	World.h
+World.h
 
-	This class manages the static data for the game level being
-	played. This means all game backgrounds, which are stored and
-	manipulated in WorldLayer objects. A given level can have
-	a game background rendered using multiple layers, some which
-	can be tiled, others that can be sparse, and others that
-	can be isometric.
+This class manages the static data for the game level being
+played. This means all game backgrounds, which are stored and
+manipulated in WorldLayer objects. A given level can have
+a game background rendered using multiple layers, some which
+can be tiled, others that can be sparse, and others that
+can be isometric.
 
-	This class stores these layers and ensures they are rendered
-	in the proper order, low index to high. Layers that need to
-	be drawn first (the back-most layer), should be added first.
+This class stores these layers and ensures they are rendered
+in the proper order, low index to high. Layers that need to
+be drawn first (the back-most layer), should be added first.
 */
 #pragma once
 #include "mg_VS\stdafx.h"
@@ -24,7 +24,7 @@
 
 class Game;
 class SpriteManager;
-
+class TiledLayer;
 class World
 {
 private:
@@ -38,22 +38,26 @@ private:
 	// THESE ARE THE BACKGROUND LAYERS
 	vector<WorldLayer*> *layers;
 
-	//// We assume there is only one collidable layer (and its type is TiledLayer). 
-	//// And we are going to reference it by this following member
+	//We assume there is only one collidable layer (and its type is TiledLayer). 
+	//And we are going to reference it by this following member
 	TiledLayer *collidableLayer;
 
 public:
 	// INLINED ACCESSOR METHODS
-	vector<WorldLayer*>*	getLayers()	{ return layers;				}
+	vector<WorldLayer*>*	getLayers() { return layers; }
 	int						getNumLayers() { return layers->size(); }
-	int						getWorldHeight()	{ return worldHeight;			}
-	int						getWorldWidth()		{ return worldWidth;			}
+	int						getWorldHeight() { return worldHeight; }
+	int						getWorldWidth() { return worldWidth; }
 
 	// INLINED MUTATOR METHODS
 	void setWorldHeight(int initWorldHeight)
-	{ worldHeight = initWorldHeight;		}
+	{
+		worldHeight = initWorldHeight;
+	}
 	void setWorldWidth(int initWorldWidth)
-	{ worldWidth = initWorldWidth;			}
+	{
+		worldWidth = initWorldWidth;
+	}
 
 	// METHODS DEFINED in GameStateManager.cpp
 	World();
@@ -62,18 +66,12 @@ public:
 	void	addWorldRenderItemsToRenderList();
 	int		getCollidableGridColumns();
 	int		getCollidableGridRows();
-	
-	//// arguments are sprites's physical info. return true if the sprite is overlaps a collidable tile. Not using it...
-	bool	overlapsCollidableTiles(int centerX, int centerY, int nodeWidth, int nodeHeight);	
-	
-	//// BONGSUNG- I prefer use this one.
-	bool	isInsideCollidableTile(int targetX, int targetY);
-
+	bool	overlapsCollidableTiles(int centerX, int centerY, int nodeWidth, int nodeHeight);
+	bool	isInsideCollidableTile(int centerX, int centerY);
 	void	unloadWorld();
 	void	update();
-
 	TiledLayer *getCollidableLayer() { return collidableLayer; }
-	void	setCollidableLayer(TiledLayer* initCollidableLayer)
+	void setCollidableLayer(TiledLayer* initCollidableLayer)
 	{
 		collidableLayer = initCollidableLayer;
 	}

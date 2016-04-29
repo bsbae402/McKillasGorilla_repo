@@ -125,7 +125,7 @@ void Physics::update()
 						{
 							Bot *bot = (*botIterator);
 							PhysicalProperties *pp = bot->getPhysicalProperties();
-							pp->update();
+							//pp->update();
 							float left = pp->getX();
 							float top = pp->getY();
 							float right = pp->getX() + 64;
@@ -151,6 +151,7 @@ void Physics::update()
 								{
 									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
+									bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
 
@@ -205,7 +206,7 @@ void Physics::update()
 						{
 							Bot *bot = (*botIterator);
 							PhysicalProperties *pp = bot->getPhysicalProperties();
-							pp->update();
+							//pp->update();
 							float left = pp->getX();
 							float top = pp->getY();
 							float right = pp->getX() + 64;
@@ -233,6 +234,7 @@ void Physics::update()
 								{
 									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
+									bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
 
@@ -288,7 +290,7 @@ void Physics::update()
 						{
 							Bot *bot = (*botIterator);
 							PhysicalProperties *pp = bot->getPhysicalProperties();
-							pp->update();
+							//pp->update();
 							float left = pp->getX();
 							float top = pp->getY();
 							float right = pp->getX() + 64;
@@ -316,6 +318,7 @@ void Physics::update()
 								{
 									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
+									bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
 
@@ -370,7 +373,7 @@ void Physics::update()
 						{
 							Bot *bot = (*botIterator);
 							PhysicalProperties *pp = bot->getPhysicalProperties();
-							pp->update();
+							//pp->update();
 							float left = pp->getX();
 							float top = pp->getY();
 							float right = pp->getX() + 64;
@@ -397,6 +400,7 @@ void Physics::update()
 								{
 									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
+									bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
 									bot->setInjured(false);
 									playerSprite->setIshealing(false);
 
@@ -465,7 +469,7 @@ void Physics::update()
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + bot->getSpriteType()->getTextureWidth();
@@ -482,7 +486,7 @@ void Physics::update()
 					if (bot->getInjured() == false)
 					{
 
-						
+
 
 						if (playerPP->getX() >= pp->getX() && playerPP->getX() <= pp->getX() + 64
 							&& playerPP->getY() <= pp->getY() + 128 && playerPP->getY() >= pp->getY())
@@ -491,6 +495,8 @@ void Physics::update()
 								playerPP->setVelocity(0.0f, 0.0f);
 						}
 					}
+					else
+						bot->setCurrentState(L"DEAD");
 
 					if (bot->getCurrentState().compare(L"DYING") == 0)
 					{
@@ -523,6 +529,7 @@ void Physics::update()
 					PhysicalProperties *pp = los->getPhysicalProperties();
 					pp->update();
 					float left = pp->getX();
+
 					float top = pp->getY();
 					float right = pp->getX() + los->getSpriteType()->getTextureWidth();
 					float bottom = pp->getY() + los->getSpriteType()->getTextureHeight();
@@ -685,6 +692,35 @@ void Physics::update()
 							botIterator++;
 						}
 					}
+					else
+					{
+						PhysicalProperties *playerpp = spriteManager->getPlayer()->getPhysicalProperties();
+
+						//Can only shoot a bot that is not injured
+						//if (bot->getInjured() == false)
+						{
+							if (pp->getX() >= playerpp->getX() - 10 && pp->getX() <= playerpp->getX() + 74
+								&& pp->getY() <= playerpp->getY() + 138 && pp->getY() >= playerpp->getY() - 10)
+							{
+								spriteManager->removeLevelObject(los);
+								used = true;
+
+								//If the safety is on, set bot to injured (Dying is the animation). Otherwise 
+								//it's an automatic game over
+								//if (LevelObjectSprite->getSafetyon())
+								{
+									//bot->setPreviousState(bot->getCurrentState());
+									//bot->setCurrentState(L"DYING");
+									//bot->setInjured(true);
+									if(spriteManager->getPlayer()->isInvincible() == false)
+										spriteManager->getPlayer()->setHealth(spriteManager->getPlayer()->getHealth() - 3);
+								}
+								if(spriteManager->getPlayer()->getHealth() <= 0)
+									game->quitGame();
+								
+							}
+						}
+					}
 
 					if (used)
 					{
@@ -782,7 +818,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + 64;
@@ -796,17 +832,14 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
 							&& playerPP->getY() <= top && playerBottomNextFrame >= top + 64)
 						{
-							if (safety == false)
+							if (punched == false)
 							{
-								//game->quitGame();
-								if (punched == false)
-								{
+								if (safety == false)
 									gsm->setScore(gsm->getScore() - 100);
-									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
-									punched = true;
-								}
-								exit = 1;
+								bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+								punched = true;
 							}
+							exit = 1;
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
@@ -843,7 +876,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + 64;
@@ -857,17 +890,14 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							|| (playerPP->getX() + 64 >= pp->getX() && playerPP->getX() + 64 <= pp->getX() + 64))
 							&& playerPP->getY() + 80 >= bottom && playerPP->getY() + vY <= bottom - 40)
 						{
-							if (safety == false)
+							if (punched == false)
 							{
-								//game->quitGame();
-								if (punched == false)
-								{
+								if (safety == false)
 									gsm->setScore(gsm->getScore() - 100);
-									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
-									punched = true;
-								}
-								exit = 1;
+								bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+								punched = true;
 							}
+							exit = 1;
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
@@ -903,7 +933,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + 64;
@@ -968,7 +998,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 				{
 					Bot *bot = (*botIterator);
 					PhysicalProperties *pp = bot->getPhysicalProperties();
-					pp->update();
+					//pp->update();
 					float left = pp->getX();
 					float top = pp->getY();
 					float right = pp->getX() + 64;
@@ -983,17 +1013,14 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							&& playerPP->getX() <= right - 5 && playerRightNextFrame >= right)
 						{
 							
+							if (punched == false)
 							{
-								//game->quitGame();
-								if (punched == false)
-								{
-									if (safety == false)
-										gsm->setScore(gsm->getScore() - 100);
-									bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
-									punched = true;
-								}
-								exit = 1;
+								if (safety == false)
+									gsm->setScore(gsm->getScore() - 100);
+								bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+								punched = true;
 							}
+							exit = 1;
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{

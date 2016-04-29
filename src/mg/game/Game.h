@@ -3,6 +3,13 @@
 			Stony Brook University
 			Computer Science Department
 
+	Engine Modified By: Team Lawless
+	
+	Team Lawless:
+		Bongsung Bae
+		Stephen Egert
+		Godson Raju
+
 	Game.h
 
 	The class is the central object of the game	application. It's a singleton

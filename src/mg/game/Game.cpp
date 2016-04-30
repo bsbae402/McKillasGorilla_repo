@@ -243,7 +243,7 @@ void Game::runGameLoop()
 		}
 
 		audio->processSoundEffect();
-		//// audio->processMusic();
+		audio->processMusic();
 	}
 
 	// GAME'S OVER SHUTDOWN THE GAME

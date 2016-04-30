@@ -13,7 +13,11 @@ enum SoundEffectTypes
 
 enum MusicTypes
 {
-
+	ENUM_MUSIC_MAIN_THEME,
+	ENUM_MUSIC_COMPLETE,
+	ENUM_MUSIC_GAMEOVER,
+	ENUM_MUSIC_INGAME,
+	ENUM_MUSIC_NONE
 };
 
 class GameAudio
@@ -25,8 +29,14 @@ private:
 	map<SoundEffectTypes, bool> soundEffectRegistrationMap;
 	map<SoundEffectTypes, IXAudio2SourceVoice*> soundEffectMap;
 	map<SoundEffectTypes, XAUDIO2_BUFFER*> audioBufferPrototypeMap;
+
 	// music map
-	
+	map<MusicTypes, bool> musicRegistrationMap;
+	map<MusicTypes, IXAudio2SourceVoice*> musicMap;
+	map<MusicTypes, XAUDIO2_BUFFER*> musicBufferPrototypeMap;
+	////map<MusicTypes, bool> musicSwitchMap;
+	MusicTypes currentMusicPlaying;
+
 	bool moneySoundSignal;
 
 public:
@@ -36,14 +46,17 @@ public:
 	void initialize();
 
 	void registerSoundEffect(SoundEffectTypes seType, LPWSTR wavFilePath);
+	void registerMusic(MusicTypes muType, LPWSTR wavFilePath);
 
 	void processSoundEffect();
 	void processShootSound();
 	void processMoneySound();
 	void processPunchSound();
-	
-	void processMusic();
+	void processHealSound();
 
+	void processMusic();
+	void stopMusic(MusicTypes musicType);
+	void playMusic(MusicTypes musicType);
 
 
 	void recieveMoneySoundSignal() { moneySoundSignal = true; }

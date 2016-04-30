@@ -26,7 +26,8 @@ private:
 	map<SoundEffectTypes, IXAudio2SourceVoice*> soundEffectMap;
 	map<SoundEffectTypes, XAUDIO2_BUFFER*> audioBufferPrototypeMap;
 	// music map
-
+	
+	bool moneySoundSignal;
 
 public:
 	GameAudio();
@@ -34,11 +35,18 @@ public:
 
 	void initialize();
 
-	//void registerSoundEffect(SoundEffectTypes seType, );
-	void registerShootSoundEffect(LPWSTR wavFilePath);
+	void registerSoundEffect(SoundEffectTypes seType, LPWSTR wavFilePath);
 
 	void processSoundEffect();
+	void processShootSound();
+	void processMoneySound();
+	void processPunchSound();
+	
 	void processMusic();
+
+
+
+	void recieveMoneySoundSignal() { moneySoundSignal = true; }
 
 	void shutDown();
 };

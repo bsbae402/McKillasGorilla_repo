@@ -28,7 +28,7 @@ void GameAudio::initialize()
 	//// -- still not sure if I need only one master voice or multiple(one master per one source voice)
 }
 
-void GameAudio::registerShootSoundEffect(LPWSTR wavFilePath)
+void GameAudio::registerSoundEffect(SoundEffectTypes seType, LPWSTR wavFilePath)
 {
 	CWaveFile wav;	/// wav file will be destroyed at the end of this function
 
@@ -45,20 +45,20 @@ void GameAudio::registerShootSoundEffect(LPWSTR wavFilePath)
 
 	bool csvSuccess = SUCCEEDED(xAudio2Engine->CreateSourceVoice(&srcVoice, format,
 		0, XAUDIO2_DEFAULT_FREQ_RATIO, 0, 0, 0));
-	
+
 	XAUDIO2_BUFFER *bufferPrototype = new XAUDIO2_BUFFER();
 	bufferPrototype->pAudioData = wavData;
 	bufferPrototype->Flags = XAUDIO2_END_OF_STREAM;
 	bufferPrototype->AudioBytes = wavSize;
-	
+
 	//// register sound buffer prototype
-	audioBufferPrototypeMap[ENUM_SOUND_EFFECT_SHOOT] = bufferPrototype;
-	
+	audioBufferPrototypeMap[seType] = bufferPrototype;
+
 	//// mark this sourceVoice as registered
-	soundEffectRegistrationMap[ENUM_SOUND_EFFECT_SHOOT] = true;
+	soundEffectRegistrationMap[seType] = true;
 
 	//// store the source voice
-	soundEffectMap[ENUM_SOUND_EFFECT_SHOOT] = srcVoice;
+	soundEffectMap[seType] = srcVoice;
 }
 
 void GameAudio::processSoundEffect()
@@ -70,34 +70,103 @@ void GameAudio::processSoundEffect()
 	if (gameState == GS_GAME_IN_PROGRESS)
 	{
 		//// shoot sound effect
-		if (soundEffectRegistrationMap[ENUM_SOUND_EFFECT_SHOOT] == true)
+		processShootSound();
+
+		//// money sound effect
+		processMoneySound();
+
+		//// punch sound effect
+		processPunchSound();
+	}
+}
+
+void GameAudio::processShootSound()
+{
+	if (soundEffectRegistrationMap[ENUM_SOUND_EFFECT_SHOOT] == true)
+	{
+		Game *game = Game::getSingleton();
+		GameStateManager *gsm = game->getGSM();
+		SpriteManager *spriteMgr = gsm->getSpriteManager();
+		PlayerSprite *player = spriteMgr->getPlayer();
+
+		wstring playerState = player->getCurrentState();
+
+		if (playerState.compare(L"SHOOT_LEFT") == 0 || playerState.compare(L"SHOOT_RIGHT") == 0
+			|| playerState.compare(L"SHOOT_BACK") == 0 || playerState.compare(L"SHOOT_FRONT") == 0)
 		{
-			SpriteManager *spriteMgr = gsm->getSpriteManager();
-			PlayerSprite *player = spriteMgr->getPlayer();
+			IXAudio2SourceVoice *shootSound = soundEffectMap[ENUM_SOUND_EFFECT_SHOOT];
 
-			wstring playerState = player->getCurrentState();
+			XAUDIO2_VOICE_STATE voiceState;
+			shootSound->GetState(&voiceState);
 
-			if (playerState.compare(L"SHOOT_LEFT") == 0 || playerState.compare(L"SHOOT_RIGHT") == 0
-				|| playerState.compare(L"SHOOT_BACK") == 0 || playerState.compare(L"SHOOT_FRONT") == 0)
+			//// [voiceState.BuffersQueued <= 0] means there are nothing in the buffer
+			//// so let's make a new buffer to queue the sound
+			if (voiceState.BuffersQueued <= 0)
 			{
-				IXAudio2SourceVoice *shootSound = soundEffectMap[ENUM_SOUND_EFFECT_SHOOT];
+				XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_SHOOT];
+				bool ssbSuccess = SUCCEEDED(shootSound->SubmitSourceBuffer(proto));
+				shootSound->Start();
+			}
+			//// if there is something in the buffer
+			else
+			{
+				/// do nothing
+			}
+		}
+	}
+}
 
-				XAUDIO2_VOICE_STATE voiceState;
-				shootSound->GetState(&voiceState);
+void GameAudio::processMoneySound()
+{
+	if (soundEffectRegistrationMap[ENUM_SOUND_EFFECT_MONEY] == true)
+	{
+		if (moneySoundSignal == true)
+		{
+			IXAudio2SourceVoice *moneySound = soundEffectMap[ENUM_SOUND_EFFECT_MONEY];
 
-				//// [voiceState.BuffersQueued <= 0] means there are nothing in the buffer
-				//// so let's make a new buffer to queue the sound
-				if (voiceState.BuffersQueued <= 0)
-				{
-					XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_SHOOT];
-					bool ssbSuccess = SUCCEEDED(shootSound->SubmitSourceBuffer(proto));
-					shootSound->Start();
-				}
-				//// if there is something in the buffer
-				else
-				{
-					/// do nothing
-				}
+			XAUDIO2_VOICE_STATE voiceState;
+			moneySound->GetState(&voiceState);
+
+			XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_MONEY];
+			bool ssbSuccess = SUCCEEDED(moneySound->SubmitSourceBuffer(proto));
+			moneySound->Start();
+
+			moneySoundSignal = false;
+		}
+	}
+}
+
+void GameAudio::processPunchSound()
+{
+	if (soundEffectRegistrationMap[ENUM_SOUND_EFFECT_PUNCH] == true)
+	{
+		Game *game = Game::getSingleton();
+		GameStateManager *gsm = game->getGSM();
+		SpriteManager *spriteMgr = gsm->getSpriteManager();
+		PlayerSprite *player = spriteMgr->getPlayer();
+
+		wstring playerState = player->getCurrentState();
+
+		if (playerState.compare(L"PUNCH_LEFT") == 0 || playerState.compare(L"PUNCH_RIGHT") == 0
+			|| playerState.compare(L"PUNCH_BACK") == 0 || playerState.compare(L"PUNCH_FRONT") == 0)
+		{
+			IXAudio2SourceVoice *punchSound = soundEffectMap[ENUM_SOUND_EFFECT_PUNCH];
+
+			XAUDIO2_VOICE_STATE voiceState;
+			punchSound->GetState(&voiceState);
+
+			//// [voiceState.BuffersQueued <= 0] means there are nothing in the buffer
+			//// so let's make a new buffer to queue the sound
+			if (voiceState.BuffersQueued <= 0)
+			{
+				XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_PUNCH];
+				bool ssbSuccess = SUCCEEDED(punchSound->SubmitSourceBuffer(proto));
+				punchSound->Start();
+			}
+			//// if there is something in the buffer
+			else
+			{
+				/// do nothing
 			}
 		}
 	}
@@ -111,6 +180,16 @@ void GameAudio::shutDown()
 		shootSound->DestroyVoice();
 
 		XAUDIO2_BUFFER *buffer = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_SHOOT];
+		delete[] buffer->pAudioData;
+		delete buffer;
+	}
+
+	if (soundEffectRegistrationMap[ENUM_SOUND_EFFECT_MONEY] == true)
+	{
+		IXAudio2SourceVoice* moneySound = soundEffectMap[ENUM_SOUND_EFFECT_MONEY];
+		moneySound->DestroyVoice();
+
+		XAUDIO2_BUFFER *buffer = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_MONEY];
 		delete[] buffer->pAudioData;
 		delete buffer;
 	}

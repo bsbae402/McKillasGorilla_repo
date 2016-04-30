@@ -23,6 +23,7 @@
 #include "mg\gsm\world\TiledLayer.h"
 #include "rebelle\RebelleTextGenerator.h"
 #include "mg\gsm\sprite\LevelObjectSprite.h"
+#include "mg\platforms\DirectX\GameAudio.h"
 
 
 void Physics::startUp()
@@ -544,6 +545,29 @@ void Physics::update()
 					float vX = pp->getVelocityX();
 					float vY = pp->getVelocityY();
 
+					//Remove money and add to money count if a player moves into money sprite
+					if (los->getType().compare(L"money") == 0)
+					{
+						PhysicalProperties *playerpp = spriteManager->getPlayer()->getPhysicalProperties();
+
+						if ((playerpp->getX() >= pp->getX() && playerpp->getX() <= pp->getX() + 64
+							|| playerpp->getX() + 64 >= pp->getX() && playerpp->getX() + 64 <= pp->getX() + 64)
+							&& (playerpp->getY() >= pp->getY() && playerpp->getY() <= pp->getY() + 64
+								|| playerpp->getY() + 128 >= pp->getY() && playerpp->getY() + 128 <= pp->getY() + 64
+								|| playerpp->getY() <= pp->getY() && playerpp->getY() + 128 >= pp->getY() + 64))
+						{
+							GameAudio *audio = game->getAudio();
+							audio->recieveMoneySoundSignal();
+
+							spriteManager->removeLevelObject(los);
+							gsm->setMoney(gsm->getMoney() + 500);
+							used = true;
+							break;
+						}
+						itemIterator++;
+						continue;
+					}
+
 					//Check that a bullet is removed if it hits a wall
 					if (vY > 0)
 					{
@@ -629,24 +653,7 @@ void Physics::update()
 						}
 					}
 
-					//Remove money and add to money count if a player moves into money sprite
-					if (los->getType().compare(L"money") == 0)
-					{
-						PhysicalProperties *playerpp = spriteManager->getPlayer()->getPhysicalProperties();
-
-						if ((playerpp->getX() >= pp->getX() && playerpp->getX() <= pp->getX() + 64
-							|| playerpp->getX() + 64 >= pp->getX() && playerpp->getX() + 64 <= pp->getX() + 64)
-							&& (playerpp->getY() >= pp->getY() && playerpp->getY() <= pp->getY() + 64
-								|| playerpp->getY() + 128 >= pp->getY() && playerpp->getY() + 128 <= pp->getY() + 64
-								|| playerpp->getY() <= pp->getY() && playerpp->getY() + 128 >= pp->getY() + 64))
-						{
-							spriteManager->removeLevelObject(los);
-							gsm->setMoney(gsm->getMoney() + 500);
-							used = true;
-							break;
-						}
-
-					}
+					
 
 					//Check for if a bullet came from the player. Bullets from bots cannot kill a bot
 					if (los->getPlayer())
@@ -726,10 +733,9 @@ void Physics::update()
 					{
 						delete los;
 						break;
-						
 					}
 					itemIterator++;
-				}
+				}	//// <- end of while loop of itemIterator(los)
 
 				used = false;
 			}

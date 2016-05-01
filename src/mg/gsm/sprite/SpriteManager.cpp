@@ -581,13 +581,84 @@ void SpriteManager::checkforplayer(Bot *bot)
 	int bottomRow = collidableLayer->getRowByY(bottom);
 
 	bool dontshoot = false;
+	bool wallbetween = false;
+	if (playerpp->getY() >= pp->getY() - 150 && playerpp->getY() <= pp->getY() + 150)
+	{
+		int bottomRowNextFrame = collidableLayer->getRowByY(pp->getY() + 100);
+
+		for (int columnIndex = pp->getX() / 64; columnIndex >= (playerpp->getX() + 64) / 64; columnIndex--) {
+			Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+
+			if (tile->collidable)
+			{
+
+				wallbetween = true;
+				break;
+			}
+		}
+	}
+
+	if (wallbetween == false)
+	{
+		if (playerpp->getY() >= pp->getY() - 150 && playerpp->getY() <= pp->getY() + 150)
+		{
+			int bottomRowNextFrame = collidableLayer->getRowByY(pp->getY() + 120);
+
+			for (int columnIndex = pp->getX() / 64; columnIndex <= (playerpp->getX() + 64) / 64; columnIndex++) {
+				Tile *tile = collidableLayer->getTile(bottomRowNextFrame, columnIndex);
+				if (tile->collidable)
+				{
+					wallbetween = true;
+					break;
+				}
+			}
+		}
+	}
+
+	if (wallbetween == false)
+	{
+		if (playerpp->getX() >= pp->getX() - 150 && playerpp->getX() <= pp->getX() + 150)
+		{
+			int leftColumnNextFrame = collidableLayer->getColumnByX(pp->getX());
+
+			for (int rowIndex = pp->getY() / 64; rowIndex >= (playerpp->getY() + 130) / 64; rowIndex--) {
+				Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
+
+				if (tile->collidable)
+				{
+					wallbetween = true;
+					break;
+				}
+			}
+		}
+	}
+
+	if (wallbetween == false)
+	{
+		if (playerpp->getX() >= pp->getX() - 150 && playerpp->getX() <= pp->getX() + 150)
+		{
+			int leftColumnNextFrame = collidableLayer->getColumnByX(pp->getX());
+
+
+			for (int rowIndex = pp->getY() / 64; rowIndex <= (playerpp->getY() + 130) / 64; rowIndex++) {
+				Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
+
+				if (tile->collidable)
+				{
+					wallbetween = true;
+					break;
+				}
+
+			}
+		}
+	}
 
 	if (bot->getEnemyDirection() == ENUM_Enemy_DIRECTION_LEFT)
 	{
-		if ((playerpp->getX() >= pp->getX() - 400 && playerpp->getX() <= pp->getX()
+		if ((wallbetween == false && playerpp->getX() >= pp->getX() - 400 && playerpp->getX() <= pp->getX()
 			&& playerpp->getY() >= pp->getY() - 150 && playerpp->getY() <= pp->getY() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getX() >= pp->getX() - 900 && playerpp->getX() <= pp->getX()
-				&& playerpp->getY() >= pp->getY() - 250 && playerpp->getY() <= pp->getY() + 250))
+				&& playerpp->getY() >= pp->getY() - 550 && playerpp->getY() <= pp->getY() + 550))
 		{
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
@@ -636,7 +707,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 				else
 					bot->setFireinterval(bot->getFireinterval() - 1);
 			}
-			else
+			else if (wallbetween == false)
 			{
 				bot->setCurrentState(L"STRAFE_LEFT");
 				float LeftNextFrame = left + vX;
@@ -777,10 +848,10 @@ void SpriteManager::checkforplayer(Bot *bot)
 	}
 	else if (bot->getEnemyDirection() == ENUM_Enemy_DIRECTION_RIGHT)
 	{
-		if ((playerpp->getX() <= pp->getX() + 400 && playerpp->getX() >= pp->getX()
+		if ((wallbetween == false && playerpp->getX() <= pp->getX() + 400 && playerpp->getX() >= pp->getX()
 			&& playerpp->getY() >= pp->getY() - 150 && playerpp->getY() <= pp->getY() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getX() <= pp->getX() + 900 && playerpp->getX() >= pp->getX()
-				&& playerpp->getY() <= pp->getY() - 150 && playerpp->getY() >= pp->getY() + 150))
+				&& playerpp->getY() <= pp->getY() - 550 && playerpp->getY() >= pp->getY() + 550))
 		{
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
@@ -965,10 +1036,10 @@ void SpriteManager::checkforplayer(Bot *bot)
 	}
 	else if (bot->getEnemyDirection() == ENUM_Enemy_DIRECTION_UP)
 	{
-		if ((playerpp->getY() >= pp->getY() - 400 && playerpp->getY() <= pp->getY()
+		if ((wallbetween == false && playerpp->getY() >= pp->getY() - 400 && playerpp->getY() <= pp->getY()
 			&& playerpp->getX() >= pp->getX() - 150 && playerpp->getX() <= pp->getX() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getY() >= pp->getY() - 900 && playerpp->getY() <= pp->getY()
-				&& playerpp->getX() >= pp->getX() - 450 && playerpp->getX() <= pp->getX() + 450))
+				&& playerpp->getX() >= pp->getX() - 550 && playerpp->getX() <= pp->getX() + 550))
 		{
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
@@ -1014,7 +1085,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 				else
 					bot->setFireinterval(bot->getFireinterval() - 1);
 			}
-			else
+			else 
 			{
 				bot->setCurrentState(L"STRAFE_FRONT");
 				float LeftNextFrame = left + vX;
@@ -1024,18 +1095,24 @@ void SpriteManager::checkforplayer(Bot *bot)
 					&& playerpp->getY() < pp->getY() + 64)
 					)
 				{
-					bot->setCurrentState(L"IDLE_RIGHT");
-					bot->setChangeleft(-1);
-					bot->setChangeright(-1);
+					if (wallbetween == false)
+					{
+						bot->setCurrentState(L"IDLE_RIGHT");
+						bot->setChangeleft(-1);
+						bot->setChangeright(-1);
+					}
 				}
 				else if (pp->getY() <= bot->getChangeleft() && bot->getChangeleft() > 0
 					|| (playerpp->getX() + 64 < pp->getX() && playerpp->getY() + 128 > pp->getY() + 64
 					&& playerpp->getY() < pp->getY() + 64)
 					)
 				{
-					bot->setCurrentState(L"IDLE_LEFT");
-					bot->setChangeleft(-1);
-					bot->setChangeright(-1);
+					if (wallbetween == false)
+					{
+						bot->setCurrentState(L"IDLE_LEFT");
+						bot->setChangeleft(-1);
+						bot->setChangeright(-1);
+					}
 				}
 				//else if (playerpp->getY() > pp->getY())
 				//	bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);
@@ -1122,7 +1199,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 
 
 		}
-		else
+		else if (wallbetween == false)
 		{
 			if (pp->getY() <= bot->getChangeright() && bot->getChangeright() > 0
 				|| (playerpp->getX() > pp->getX() + 64 && playerpp->getY() + 128 > pp->getY() + 64
@@ -1148,10 +1225,10 @@ void SpriteManager::checkforplayer(Bot *bot)
 	}
 	else if (bot->getEnemyDirection() == ENUM_PLAYER_DIRECTION_DOWN)
 	{
-		if ((playerpp->getY() <= pp->getY() + 250 && playerpp->getY() >= pp->getY()
+		if ((wallbetween == false && playerpp->getY() <= pp->getY() + 250 && playerpp->getY() >= pp->getY()
 			&& playerpp->getX() >= pp->getX() - 150 && playerpp->getX() <= pp->getX() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getY() <= pp->getY() + 900 && playerpp->getY() >= pp->getY()
-				&& playerpp->getX() >= pp->getX() - 450 && playerpp->getX() <= pp->getX() + 450))
+				&& playerpp->getX() >= pp->getX() - 550 && playerpp->getX() <= pp->getX() + 550))
 		{
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
@@ -1207,17 +1284,23 @@ void SpriteManager::checkforplayer(Bot *bot)
 					|| (playerpp->getX() > pp->getX() + 64 && playerpp->getY() < pp->getY() + 64
 					&& playerpp->getY() > pp->getY()))
 				{
-					bot->setCurrentState(L"IDLE_RIGHT");
-					bot->setChangeleft(-1);
-					bot->setChangeright(-1);
+					if (wallbetween == false)
+					{
+						bot->setCurrentState(L"IDLE_RIGHT");
+						bot->setChangeleft(-1);
+						bot->setChangeright(-1);
+					}
 				}
 				else if (pp->getY() >= bot->getChangeleft() && bot->getChangeleft() > 0
 					|| (playerpp->getX() + 64 < pp->getX() && playerpp->getY() < pp->getY() + 64
 					&& playerpp->getY() > pp->getY()))
 				{
-					bot->setCurrentState(L"IDLE_LEFT");
-					bot->setChangeleft(-1);
-					bot->setChangeright(-1);
+					if (wallbetween == false)
+					{
+						bot->setCurrentState(L"IDLE_LEFT");
+						bot->setChangeleft(-1);
+						bot->setChangeright(-1);
+					}
 				}
 				//else if (playerpp->getY() < pp->getY())
 					//bot->setEnemyDirection(ENUM_Enemy_DIRECTION_UP);
@@ -1310,7 +1393,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 
 
 		}
-		else
+		else if(wallbetween == false)
 		{
 			if (pp->getY() >= bot->getChangeright() && bot->getChangeright() != -1
 				|| (playerpp->getX() > pp->getX() + 64 && playerpp->getY() < pp->getY() + 64

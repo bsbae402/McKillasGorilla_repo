@@ -17,12 +17,12 @@ class Physics
 {
 private:
 // USED FOR TESTING PHYSICS BY TURNING IT ON AND OFF IN VARIOUS WAYS
-	bool activated;
-	bool activatedForSingleUpdate;
+	bool activated = true;
+	bool activatedForSingleUpdate = true;
 
 	//// additional switches for testing
-	bool playerActivated;
-	bool botActivated;
+	bool playerActivated = true;
+	bool botActivated = true;
 	bool strafing;
 	bool punching;
 

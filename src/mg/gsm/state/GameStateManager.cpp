@@ -306,10 +306,7 @@ void GameStateManager::update()
 	}
 	countdownCounter--;
 
-	if (physics.isActivated() || physics.isActivatedForSingleUpdate())
-	{
-		physics.update();
-	}
+	physics.update();
 }
 
 wstring GameStateManager::getKey()

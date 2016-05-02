@@ -205,6 +205,9 @@
       <Filter>src\mg\gsm\sprite</Filter>
     </ClCompile>
     <ClCompile Include="src\mg\gsm\ai\pathfinding\OrthographicGridPathfinder.cpp" />
+    <ClCompile Include="src\mg\platforms\DirectX\GameAudio.cpp" />
+    <ClCompile Include="src\mg\platforms\DirectX\SDKwavefile.cpp" />
+    <ClCompile Include="src\mg\gsm\physics\AABB.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\mg\game\Game.h">
@@ -401,6 +404,12 @@
     </ClInclude>
     <ClInclude Include="src\mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h" />
     <ClInclude Include="src\mg\gsm\ai\pathfinding\GridPathfinder.h" />
+    <ClInclude Include="src\mg\platforms\DirectX\GameAudio.h" />
+    <ClInclude Include="src\mg\platforms\DirectX\SDKwavefile.h" />
+    <ClInclude Include="src\mg\wave.h" />
+    <ClInclude Include="src\mg\gsm\physics\AABB.h" />
+    <ClInclude Include="src\mg\text\Dialogue.h" />
+    <ClInclude Include="src\mg\gsm\sprite\Upgrade.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\mg_VS\ReadMe.txt">

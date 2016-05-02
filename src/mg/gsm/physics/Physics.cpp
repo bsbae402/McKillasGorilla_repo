@@ -40,8 +40,11 @@ void Physics::shutDown()
 
 void Physics::update()
 {
+
 	if (activated || activatedForSingleUpdate)
 	{
+		playerActivated = true;
+
 		Game *game = Game::getSingleton();
 		SpriteManager *spriteManager = game->getGSM()->getSpriteManager();
 		GameStateManager *gsm = game->getGSM();

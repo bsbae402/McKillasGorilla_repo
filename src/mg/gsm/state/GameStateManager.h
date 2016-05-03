@@ -27,6 +27,8 @@
 #include "mg\gsm\world\WorldLayer.h"
 #include "mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h"
 
+#include "mg\gsm\sprite\Upgrade.h"
+
 
 class Game;
 
@@ -71,6 +73,8 @@ private:
 	//PATHFINDING
 	OrthographicGridPathfinder *path;
 
+	list<Upgrade*> upgrades;
+
 
 	int score = 0;
 	int money = 0;
@@ -110,8 +114,8 @@ public:
 	bool isSafetyon() { return safetyon; }
 	void SafetyOn() { safetyon = true; }
 	void SafetyOff() { safetyon = false; }
-	void setMoveviewport(bool newmoveviewport) { moveviewport = newmoveviewport; }
-	bool getMoveviewport() { return moveviewport; }
+	//void setMoveviewport(bool newmoveviewport) { moveviewport = newmoveviewport; }
+	//bool getMoveviewport() { return moveviewport; }
 
 	void setEndlevelx(int newendlevelx) { endlevelx = newendlevelx; }
 	void setEndlevelxwidth(int newendlevelxwidth) { endlevelxwidth = newendlevelxwidth; }
@@ -122,6 +126,10 @@ public:
 	int getEndlevelxwidth() { return endlevelxwidth; }
 	int getEndlevely() { return endlevely; }
 	int getEndlevelywidth() { return endlevelywidth; }
+
+	bool getMoveviewport() { return moveviewport; }
+	void setMoveviewport(bool newmove) { moveviewport = newmove; }
+	void toggleMoveviewport() { moveviewport = !moveviewport; }
 
 	// INLINED MUTATOR METHOD
 	void setGameStateMachine(GameStateMachine *initBotStateManager)

@@ -34,7 +34,12 @@ private:
 	int toggleOffsetY;
 	int normalOffsetY;
 
+	int prevViewportX;
+	int prevViewportY;
+
 public:
+	
+
 	// INLINED ACCESSOR METHODS
 	int getScrollSpeedX()		{ return scrollSpeedX;			}
 	int getScrollSpeedY()		{ return scrollSpeedY;			}
@@ -44,6 +49,9 @@ public:
 	int getViewportHeight()		{ return viewportHeight;		}
 	int getViewportOffsetX()	{ return viewportOffsetX;		}
 	int getViewportOffsetY()	{ return viewportOffsetY;		}
+
+	int getPrevViewportX() { return prevViewportX; }
+	int getPrevViewportY() { return prevViewportY; }
 
 	// INLINED MUTATOR METHODS
 	void setScrollSpeedX(int initScrollSpeedX)
@@ -66,6 +74,15 @@ public:
 	}
 	void setToggleOffsetY(int initToggleOffsetY)
 	{ toggleOffsetY = initToggleOffsetY; }
+
+	void setPrevViewportX(int initViewportX)
+	{
+		prevViewportX = initViewportX;
+	}
+	void setPrevViewportY(int initViewportY)
+	{
+		prevViewportY = initViewportY;
+	}
 
 	// METHODS DEFINED IN Viewport.cpp
 	Viewport();

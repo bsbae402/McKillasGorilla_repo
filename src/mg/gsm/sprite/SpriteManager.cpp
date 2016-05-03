@@ -282,7 +282,9 @@ void SpriteManager::update()
 				//// set player animation state idle according to the direction
 				PlayerDirection pd = player->getPlayerDirection();
 
-				if (!game->getGSM()->getSpriteManager()->getPlayer()->isStrafing())
+				if (!game->getGSM()->getSpriteManager()->getPlayer()->isStrafing()
+					&& (game->getGSM()->getSpriteManager()->getPlayer()->getCurrentState().compare(L"DYING") != 0
+						&& game->getGSM()->getSpriteManager()->getPlayer()->getCurrentState().compare(L"DEAD") != 0))
 				{
 					if (pd == ENUM_PLAYER_DIRECTION_DOWN)
 					{
@@ -463,7 +465,7 @@ void SpriteManager::fireBullet(AnimatedSprite *sprite, bool isplayer, bool safet
 		pp->setVelocity(0, -30);
 	}
 	else if ((!(player->isStrafing()) && player->getPlayerDirection() == ENUM_PLAYER_DIRECTION_LEFT) ||
-		(player->isStrafing() &&
+		(player->isStrafing() && 
 		(player->getPreviousState().compare(L"IDLE_LEFT") == 0
 		|| player->getPreviousState().compare(L"PUNCH_LEFT") == 0
 		|| player->getPreviousState().compare(L"WALK_LEFT") == 0

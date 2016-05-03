@@ -2,6 +2,7 @@
 
 #include "mg\gsm\sprite\AnimatedSprite.h"
 
+
 //// followings are enum of playerSprite's state, not for animation_state
 enum PlayerState
 {

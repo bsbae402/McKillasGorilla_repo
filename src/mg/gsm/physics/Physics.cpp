@@ -447,10 +447,14 @@ void Physics::update()
 
 			if (exit == 0)
 			{
-				//// check if player sprite is going out of the world or not
-				bool playerGoesOutWorld = doesSpriteGoOutWorldThisFrame(playerSprite);
-				if (!playerGoesOutWorld)
-					playerPP->update();
+				if (gsm->getSpriteManager()->getPlayer()->getCurrentState().compare(L"DYING") != 0
+					&& gsm->getSpriteManager()->getPlayer()->getCurrentState().compare(L"DEAD") != 0)
+				{
+					//// check if player sprite is going out of the world or not
+					bool playerGoesOutWorld = doesSpriteGoOutWorldThisFrame(playerSprite);
+					if (!playerGoesOutWorld)
+						playerPP->update();
+				}
 			}
 			
 
@@ -751,14 +755,17 @@ void Physics::update()
 											spriteManager->getPlayer()->setCurrentState(L"DAMAGE_RIGHT");
 										}
 									}
+
+									gsm->setMoveviewport(false);
 								}
 								if (spriteManager->getPlayer()->getHealth() <= 0 &&
 									(spriteManager->getPlayer()->getCurrentState().compare(L"DEAD") != 0 &&
 										spriteManager->getPlayer()->getCurrentState().compare(L"DYING") != 0))
 								{
-									//playerActivated = false;
+									playerActivated = false;
 									gameover = true;
 									spriteManager->getPlayer()->setCurrentState(L"DYING");
+									exit = 1;
 								}
 								
 							}
@@ -1127,6 +1134,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 
 		if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0)
 			punch(playerSprite, true, gsm->isSafetyon());
+
 
 		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0)

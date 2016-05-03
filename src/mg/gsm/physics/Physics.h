@@ -25,9 +25,12 @@ private:
 	bool botActivated = true;
 	bool strafing;
 	bool punching;
+	bool gameover;
 
 	int exit = 0;
 	bool punched;
+
+	int countdown = 100;
 	
 
 public:
@@ -41,7 +44,10 @@ public:
 	bool				isActivatedForSingleUpdate()	{ return activatedForSingleUpdate;	}
 	bool isStrafing() { return strafing; }
 	bool isPunching() { return punching; }
-
+	bool isPlayerActivated() { return playerActivated; }
+	bool setPlayerActivated(bool active) { return playerActivated; }
+	void setGameOver(bool newgameover) { gameover = newgameover; }
+	bool getGameOver() { return gameover; }
 	
 
 	// PUBLIC METHODS DEFINED INSIDE Physics.cpp - YOU ARE WELCOME TO ADD MORE OR CHANGE WHAT YOU LIKE
@@ -49,6 +55,8 @@ public:
 	void activateForSingleUpdate() { activatedForSingleUpdate = true; }
 	void punch(AnimatedSprite *sprite, bool player, bool safety);
 	void CheckPunchShoot(AnimatedSprite *playersprite);
+	void CheckDying(AnimatedSprite *playersprite);
+	void GameOverCountDown();
 
 	// ALL SUBSYTEMS HAVE THESE
 	void startUp();

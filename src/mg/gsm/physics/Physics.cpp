@@ -496,7 +496,9 @@ void Physics::update()
 							&& playerPP->getY() <= pp->getY() + 128 && playerPP->getY() >= pp->getY())
 						{
 							if (bot->getInjured() == false)
+							{
 								playerPP->setVelocity(0.0f, 0.0f);
+							}
 						}
 					}
 					else
@@ -520,6 +522,8 @@ void Physics::update()
 		
 
 			CheckPunchShoot(spriteManager->getPlayer());
+			CheckDying(spriteManager->getPlayer());
+			GameOverCountDown();
 			
 			if (exit == 0)
 			{
@@ -694,7 +698,11 @@ void Physics::update()
 											gsm->setScore(gsm->getScore() - 500);
 									}
 									else
-										game->quitGame();
+									{
+										bot->setCurrentState(L"DYING");
+										bot->setInjured(true);
+										gameover = true;
+									}
 									break;
 								}
 							}
@@ -722,11 +730,36 @@ void Physics::update()
 									//bot->setPreviousState(bot->getCurrentState());
 									//bot->setCurrentState(L"DYING");
 									//bot->setInjured(true);
-									if(spriteManager->getPlayer()->isInvincible() == false)
+									if (spriteManager->getPlayer()->isInvincible() == false && (spriteManager->getPlayer()->getCurrentState().compare(L"DEAD") != 0 &&
+										spriteManager->getPlayer()->getCurrentState().compare(L"DYING") != 0))
+									{
 										spriteManager->getPlayer()->setHealth(spriteManager->getPlayer()->getHealth() - 3);
+										if (spriteManager->getPlayer()->getPlayerDirection() == ENUM_PLAYER_DIRECTION_DOWN)
+										{
+											spriteManager->getPlayer()->setCurrentState(L"DAMAGE_BACK");
+										}
+										else if (spriteManager->getPlayer()->getPlayerDirection() == ENUM_PLAYER_DIRECTION_UP)
+										{
+											spriteManager->getPlayer()->setCurrentState(L"DAMAGE_FRONT");
+										}
+										else if (spriteManager->getPlayer()->getPlayerDirection() == ENUM_PLAYER_DIRECTION_LEFT)
+										{
+											spriteManager->getPlayer()->setCurrentState(L"DAMAGE_LEFT");
+										}
+										else if (spriteManager->getPlayer()->getPlayerDirection() == ENUM_PLAYER_DIRECTION_RIGHT)
+										{
+											spriteManager->getPlayer()->setCurrentState(L"DAMAGE_RIGHT");
+										}
+									}
 								}
-								if(spriteManager->getPlayer()->getHealth() <= 0)
-									game->quitGame();
+								if (spriteManager->getPlayer()->getHealth() <= 0 &&
+									(spriteManager->getPlayer()->getCurrentState().compare(L"DEAD") != 0 &&
+										spriteManager->getPlayer()->getCurrentState().compare(L"DYING") != 0))
+								{
+									//playerActivated = false;
+									gameover = true;
+									spriteManager->getPlayer()->setCurrentState(L"DYING");
+								}
 								
 							}
 						}
@@ -861,7 +894,11 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 									gsm->setScore(gsm->getScore() - 500);
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
-								game->quitGame();
+							{
+								bot->setInjured(true);
+								bot->setCurrentState(L"DYING");
+								gameover = true;
+							}
 							break;
 						}
 					}
@@ -919,7 +956,11 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 									gsm->setScore(gsm->getScore() - 500);
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
-								game->quitGame();
+							{
+								bot->setInjured(true);
+								bot->setCurrentState(L"DYING");
+								gameover = true;
+							}
 							
 							break;
 						}
@@ -979,7 +1020,9 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 							{
-								game->quitGame();
+								bot->setInjured(true);
+								bot->setCurrentState(L"DYING");
+								gameover = true;
 								exit = 1;
 							}
 							
@@ -1043,7 +1086,9 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 							{
-								game->quitGame();
+								bot->setCurrentState(L"DYING");
+								bot->setInjured(true);
+								gameover = true;
 								exit = 1;
 							}
 							break;
@@ -1073,7 +1118,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		&& playerSprite->getCurrentState().compare(L"PUNCH_BACK") != 0)
 		punched = false;
 
-	if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0) {
+	if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0 || playerSprite->getCurrentState().compare(L"DAMAGE_FRONT") == 0) {
 
 		// CHECK TO SEE IF THE DYING ANIMATION IS DONE
 		AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
@@ -1091,7 +1136,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		}
 
 	}
-	else if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0) {
+	else if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0 || playerSprite->getCurrentState().compare(L"DAMAGE_BACK") == 0) {
 
 		// CHECK TO SEE IF THE DYING ANIMATION IS DONE
 		AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
@@ -1109,7 +1154,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		}
 
 	}
-	else if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0) {
+	else if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0 || playerSprite->getCurrentState().compare(L"DAMAGE_LEFT") == 0) {
 
 
 		// CHECK TO SEE IF THE DYING ANIMATION IS DONE
@@ -1130,7 +1175,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		}
 
 	}
-	else if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0) {
+	else if (playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_RIGHT") == 0 || playerSprite->getCurrentState().compare(L"DAMAGE_RIGHT") == 0) {
 
 		// CHECK TO SEE IF THE DYING ANIMATION IS DONE
 		AnimatedSpriteType *spriteType = playerSprite->getSpriteType();
@@ -1147,5 +1192,42 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 			playerSprite->setCurrentState(L"IDLE_RIGHT");
 		}
 
+	}
+}
+
+void Physics::CheckDying(AnimatedSprite *sprite)
+{
+
+	if (sprite->getCurrentState().compare(L"DYING") == 0) {
+
+		Game *game = Game::getSingleton();
+		SpriteManager *spriteManager = game->getGSM()->getSpriteManager();
+		GameStateManager *gsm = game->getGSM();
+
+		// CHECK TO SEE IF THE DYING ANIMATION IS DONE
+		AnimatedSpriteType *spriteType = sprite->getSpriteType();
+		unsigned int frameIndex = (sprite->getFrameIndex() * 2);
+		unsigned int sequenceSize = spriteType->getSequenceSize(sprite->getCurrentState()) + 2;
+
+
+		if (frameIndex > sequenceSize) {
+			
+			sprite->setCurrentState(L"DEAD");
+			gameover = true;
+		}
+
+	}
+}
+
+void Physics::GameOverCountDown()
+{
+	if (gameover == true)
+	{
+		countdown--;
+		if (countdown == false)
+		{
+			Game *game = Game::getSingleton();
+			game->quitGame();
+		}
 	}
 }

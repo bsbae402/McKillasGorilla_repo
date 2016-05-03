@@ -416,7 +416,4 @@
       <Filter>src\mg_VS</Filter>
     </Text>
   </ItemGroup>
-  <ItemGroup>
-    <Media Include="..\..\FOLDER_E\money.wav" />
-  </ItemGroup>
 </Project>

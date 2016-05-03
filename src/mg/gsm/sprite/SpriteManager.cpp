@@ -700,7 +700,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 				if (bot->getFireinterval() <= 0)
 				{
 					fireEnemyBullet(bot, false, false);
-					bot->setFireinterval(10);
+					bot->setFireinterval(30);
 					bot->setChangeup(-1);
 					bot->setChangedown(-1);
 				}
@@ -892,7 +892,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 				if (bot->getFireinterval() <= 0)
 				{
 					fireEnemyBullet(bot, false, false);
-					bot->setFireinterval(10);
+					bot->setFireinterval(30);
 					bot->setChangeup(-1);
 					bot->setChangedown(-1);
 				}
@@ -1078,7 +1078,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 				if (bot->getFireinterval() <= 0)
 				{
 					fireEnemyBullet(bot, false, false);
-					bot->setFireinterval(10);
+					bot->setFireinterval(30);
 					bot->setChangeright(-1);
 					bot->setChangeleft(-1);
 				}
@@ -1223,7 +1223,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 			//pp->setFinalY(pp->getOriginalFinalY());
 		}
 	}
-	else if (bot->getEnemyDirection() == ENUM_PLAYER_DIRECTION_DOWN)
+	else if (bot->getEnemyDirection() == ENUM_Enemy_DIRECTION_DOWN)
 	{
 		if ((wallbetween == false && playerpp->getY() <= pp->getY() + 250 && playerpp->getY() >= pp->getY()
 			&& playerpp->getX() >= pp->getX() - 150 && playerpp->getX() <= pp->getX() + 150)
@@ -1268,7 +1268,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 				if (bot->getFireinterval() <= 0)
 				{
 					fireEnemyBullet(bot, false, false);
-					bot->setFireinterval(10);
+					bot->setFireinterval(30);
 					bot->setChangeright(-1);
 					bot->setChangeleft(-1);
 				}

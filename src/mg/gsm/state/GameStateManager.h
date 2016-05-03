@@ -77,6 +77,7 @@ private:
 	int safety;
 	int countdownCounter = 500;
 	bool safetyon;
+	bool moveviewport = false;
 
 	int endlevelx;
 	int endlevelxwidth;
@@ -109,6 +110,8 @@ public:
 	bool isSafetyon() { return safetyon; }
 	void SafetyOn() { safetyon = true; }
 	void SafetyOff() { safetyon = false; }
+	void setMoveviewport(bool newmoveviewport) { moveviewport = newmoveviewport; }
+	bool getMoveviewport() { return moveviewport; }
 
 	void setEndlevelx(int newendlevelx) { endlevelx = newendlevelx; }
 	void setEndlevelxwidth(int newendlevelxwidth) { endlevelxwidth = newendlevelxwidth; }

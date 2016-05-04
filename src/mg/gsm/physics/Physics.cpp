@@ -738,7 +738,10 @@ void Physics::update()
 									if (spriteManager->getPlayer()->isInvincible() == false && (spriteManager->getPlayer()->getCurrentState().compare(L"DEAD") != 0 &&
 										spriteManager->getPlayer()->getCurrentState().compare(L"DYING") != 0))
 									{
-										spriteManager->getPlayer()->setHealth(spriteManager->getPlayer()->getHealth() - 3);
+										if (spriteManager->getPlayer()->getDefense() >= los->getAttack())
+											spriteManager->getPlayer()->setHealth(spriteManager->getPlayer()->getHealth() - 0);
+										else
+											spriteManager->getPlayer()->setHealth(spriteManager->getPlayer()->getHealth() - los->getAttack() + spriteManager->getPlayer()->getDefense());
 										if (spriteManager->getPlayer()->getPlayerDirection() == ENUM_PLAYER_DIRECTION_DOWN)
 										{
 											spriteManager->getPlayer()->setCurrentState(L"DAMAGE_BACK");
@@ -894,6 +897,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
+								bot->setHealth(0);
 								bot->setPreviousState(bot->getCurrentState());
 								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
@@ -904,6 +908,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 							{
+								bot->setHealth(0);
 								bot->setInjured(true);
 								bot->setCurrentState(L"DYING");
 								gameover = true;
@@ -957,6 +962,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
+								bot->setHealth(0);
 								bot->setPreviousState(bot->getCurrentState());
 								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
@@ -967,6 +973,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 							{
+								bot->setHealth(0);
 								bot->setInjured(true);
 								bot->setCurrentState(L"DYING");
 								gameover = true;
@@ -1021,6 +1028,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
+								bot->setHealth(0);
 								bot->setPreviousState(bot->getCurrentState());
 								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
@@ -1031,6 +1039,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 							{
+								bot->setHealth(0);
 								bot->setInjured(true);
 								bot->setCurrentState(L"DYING");
 								gameover = true;
@@ -1088,6 +1097,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
+								bot->setHealth(0);
 								bot->setPreviousState(bot->getCurrentState());
 								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
@@ -1098,6 +1108,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 							}
 							else if (bot->getHealth() <= 0 && safety == false)
 							{
+								bot->setHealth(0);
 								bot->setCurrentState(L"DYING");
 								bot->setInjured(true);
 								gameover = true;

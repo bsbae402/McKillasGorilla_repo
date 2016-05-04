@@ -14,6 +14,7 @@ private:
 	wstring type;
 	bool isplayer;
 	bool safetyon;
+	int attack;
 	
 public:
 	LevelObjectSprite();
@@ -21,6 +22,8 @@ public:
 
 	wstring getType() { return type; };
 
+	void setAttack(int newattack) { attack = newattack; }
+	int getAttack() { return attack; }
 	void setType(wstring initType)
 	{
 		type = initType;

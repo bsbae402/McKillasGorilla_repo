@@ -356,7 +356,7 @@ void GameStateManager::useUpgrade(wstring type)
 					}
 					else if (type.compare(L"DEFENSE") == 0)
 					{
-						game->getGSM()->getSpriteManager()->getPlayer()->setDefense(game->getGSM()->getSpriteManager()->getPlayer()->getDefense() + 2);
+						game->getGSM()->getSpriteManager()->getPlayer()->setDefense(game->getGSM()->getSpriteManager()->getPlayer()->getDefense() + 1);
 						game->getGSM()->setDefenseupgrades(game->getGSM()->getDefenseupgrades() - 1);
 					}
 					else if (type.compare(L"SPEED") == 0)

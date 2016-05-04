@@ -425,6 +425,8 @@ LevelObjectSprite* SpriteManager::removeLevelObject(LevelObjectSprite *losToRemo
 
 void SpriteManager::fireBullet(AnimatedSprite *sprite, bool isplayer, bool safety)
 {
+	Game *game = Game::getSingleton();
+
 	BulletRecycler *bulletRecycler = this->getBulletRecycler();
 	LevelObjectSprite *bullet = bulletRecycler->retrieveBullet(L"bullet");
 	bullet->setplayer(isplayer);
@@ -433,6 +435,8 @@ void SpriteManager::fireBullet(AnimatedSprite *sprite, bool isplayer, bool safet
 
 	bullet->setSafetyon(safety);
 
+	bullet->setAttack(game->getGSM()->getSpriteManager()->getPlayer()->getAttack());
+	
 	PhysicalProperties *pp = bullet->getPhysicalProperties();
 	PhysicalProperties *spritepp = sprite->getPhysicalProperties();
 
@@ -501,6 +505,8 @@ void SpriteManager::fireEnemyBullet(Bot *sprite, bool isplayer, bool safety)
 	addLevelObject(bullet);
 
 	bullet->setSafetyon(safety);
+
+	bullet->setAttack(sprite->getAttack());
 
 	PhysicalProperties *pp = bullet->getPhysicalProperties();
 	PhysicalProperties *spritepp = sprite->getPhysicalProperties();

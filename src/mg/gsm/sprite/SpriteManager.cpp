@@ -666,7 +666,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 		if ((wallbetween == false && playerpp->getX() >= pp->getX() - 400 && playerpp->getX() <= pp->getX()
 			&& playerpp->getY() >= pp->getY() - 150 && playerpp->getY() <= pp->getY() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getX() >= pp->getX() - 900 && playerpp->getX() <= pp->getX()
-				&& playerpp->getY() >= pp->getY() - 550 && playerpp->getY() <= pp->getY() + 550))
+				&& playerpp->getY() >= pp->getY() - 950 && playerpp->getY() <= pp->getY() + 950))
 		{
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
@@ -831,8 +831,8 @@ void SpriteManager::checkforplayer(Bot *bot)
 		else
 		{
 			if (pp->getX() <= bot->getChangeup()
-				|| (playerpp->getY() + 128 < pp->getY() && playerpp->getX() < pp->getX() + 64
-					&& playerpp->getX() + 64 > pp->getX() + 64)
+				//|| (playerpp->getY() + 128 < pp->getY() && playerpp->getX() < pp->getX() + 64
+					//&& playerpp->getX() + 64 > pp->getX() + 64)
 				)
 			{
 				bot->setCurrentState(L"IDLE_FRONT");
@@ -840,8 +840,8 @@ void SpriteManager::checkforplayer(Bot *bot)
 				bot->setChangedown(-1);
 			}
 			else if (pp->getX() <= bot->getChangedown()
-				|| (playerpp->getY() > pp->getY() + 128 && playerpp->getX() < pp->getX() + 64
-					&& playerpp->getX() + 64 > pp->getX() + 64)
+				//|| (playerpp->getY() > pp->getY() + 128 && playerpp->getX() < pp->getX() + 64
+				//	&& playerpp->getX() + 64 > pp->getX() + 64)
 				)
 			{
 				bot->setCurrentState(L"IDLE_BACK");
@@ -859,7 +859,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 		if ((wallbetween == false && playerpp->getX() <= pp->getX() + 400 && playerpp->getX() >= pp->getX()
 			&& playerpp->getY() >= pp->getY() - 150 && playerpp->getY() <= pp->getY() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getX() <= pp->getX() + 900 && playerpp->getX() >= pp->getX()
-				&& playerpp->getY() <= pp->getY() - 550 && playerpp->getY() >= pp->getY() + 550))
+				&& playerpp->getY() <= pp->getY() - 950 && playerpp->getY() >= pp->getY() + 950))
 		{
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
@@ -932,7 +932,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 				{
 					if (playerpp->getY() + 128 <= pp->getY() + 64)
 					{
-						pp->setVelocity(0, -6);
+						pp->setVelocity(0, -8);
 					}
 					else if (playerpp->getY() >= pp->getY() + 64)
 					{
@@ -1021,16 +1021,18 @@ void SpriteManager::checkforplayer(Bot *bot)
 		else
 		{
 			if (pp->getX() >= bot->getChangeup() && bot->getChangeup() > 0
-				|| playerpp->getY() + 128 < pp->getY() && playerpp->getX() < pp->getX() + 64
-				&& playerpp->getX() + 64 > pp->getX() + 64)
+			//	|| playerpp->getY() + 128 < pp->getY() && playerpp->getX() < pp->getX() + 64
+			//	&& playerpp->getX() + 64 > pp->getX() + 64
+				)
 			{
 				bot->setCurrentState(L"IDLE_FRONT");
 				bot->setChangeup(-1);
 				bot->setChangedown(-1);
 			}
 			else if (pp->getX() >= bot->getChangedown() && bot->getChangedown() > 0
-				|| playerpp->getY() > pp->getY() + 128 && playerpp->getX() < pp->getX() + 64
-				&& playerpp->getX() + 64 > pp->getX() + 64)
+			//	|| playerpp->getY() > pp->getY() + 128 && playerpp->getX() < pp->getX() + 64
+			//	&& playerpp->getX() + 64 > pp->getX() + 64
+				)
 			{
 				bot->setCurrentState(L"IDLE_BACK");
 				bot->setChangeup(-1);
@@ -1047,7 +1049,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 		if ((wallbetween == false && playerpp->getY() >= pp->getY() - 400 && playerpp->getY() <= pp->getY()
 			&& playerpp->getX() >= pp->getX() - 150 && playerpp->getX() <= pp->getX() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getY() >= pp->getY() - 900 && playerpp->getY() <= pp->getY()
-				&& playerpp->getX() >= pp->getX() - 550 && playerpp->getX() <= pp->getX() + 550))
+				&& playerpp->getX() >= pp->getX() - 950 && playerpp->getX() <= pp->getX() + 950))
 		{
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
@@ -1210,16 +1212,18 @@ void SpriteManager::checkforplayer(Bot *bot)
 		else if (wallbetween == false)
 		{
 			if (pp->getY() <= bot->getChangeright() && bot->getChangeright() > 0
-				|| (playerpp->getX() > pp->getX() + 64 && playerpp->getY() + 128 > pp->getY() + 64
-				&& playerpp->getY() < pp->getY() + 64))
+			//	|| (playerpp->getX() > pp->getX() + 64 && playerpp->getY() + 128 > pp->getY() + 64
+			//	&& playerpp->getY() < pp->getY() + 64)
+				)
 			{
 				bot->setCurrentState(L"IDLE_RIGHT");
 				bot->setChangeleft(-1);
 				bot->setChangeright(-1);
 			}
 			else if (pp->getY() <= bot->getChangeleft() && bot->getChangeleft() > 0
-				|| (playerpp->getX() + 64 < pp->getX() && playerpp->getY() + 128 > pp->getY() + 64
-				&& playerpp->getY() < pp->getY() + 64))
+			//	|| (playerpp->getX() + 64 < pp->getX() && playerpp->getY() + 128 > pp->getY() + 64
+			//	&& playerpp->getY() < pp->getY() + 64)
+				)
 			{
 				bot->setCurrentState(L"IDLE_LEFT");
 				bot->setChangeleft(-1);
@@ -1236,7 +1240,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 		if ((wallbetween == false && playerpp->getY() <= pp->getY() + 250 && playerpp->getY() >= pp->getY()
 			&& playerpp->getX() >= pp->getX() - 150 && playerpp->getX() <= pp->getX() + 150)
 			|| (bot->getFoundPlayer() == true && playerpp->getY() <= pp->getY() + 900 && playerpp->getY() >= pp->getY()
-				&& playerpp->getX() >= pp->getX() - 550 && playerpp->getX() <= pp->getX() + 550))
+				&& playerpp->getX() >= pp->getX() - 950 && playerpp->getX() <= pp->getX() + 950))
 		{
 			bot->setFoundPlayer(true);
 			if (bot->getPath() != NULL)
@@ -1404,16 +1408,18 @@ void SpriteManager::checkforplayer(Bot *bot)
 		else if(wallbetween == false)
 		{
 			if (pp->getY() >= bot->getChangeright() && bot->getChangeright() != -1
-				|| (playerpp->getX() > pp->getX() + 64 && playerpp->getY() < pp->getY() + 64
-					&& playerpp->getY() > pp->getY()))
+			//	|| (playerpp->getX() > pp->getX() + 64 && playerpp->getY() < pp->getY() + 64
+			//		&& playerpp->getY() > pp->getY())
+				)
 			{
 				bot->setCurrentState(L"IDLE_RIGHT");
 				bot->setChangeleft(-1);
 				bot->setChangeright(-1);
 			}
 			else if (pp->getY() >= bot->getChangeleft() && bot->getChangeleft() != -1
-				|| (playerpp->getX() + 64 < pp->getX() && playerpp->getY() < pp->getY() + 64
-					&& playerpp->getY() > pp->getY()))
+			//	|| (playerpp->getX() + 64 < pp->getX() && playerpp->getY() < pp->getY() + 64
+			//		&& playerpp->getY() > pp->getY())
+				)
 			{
 				bot->setCurrentState(L"IDLE_LEFT");
 				bot->setChangeleft(-1);

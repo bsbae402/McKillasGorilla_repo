@@ -528,6 +528,7 @@ void Physics::update()
 			CheckPunchShoot(spriteManager->getPlayer());
 			CheckDying(spriteManager->getPlayer());
 			GameOverCountDown();
+			GoToUpgrades();
 			
 			if (exit == 0)
 			{
@@ -889,6 +890,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								punched = true;
 							}
 							exit = 1;
+							CheckPunchShoot(bot);
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
@@ -951,6 +953,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								punched = true;
 							}
 							exit = 1;
+							CheckPunchShoot(bot);
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
@@ -1014,6 +1017,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								punched = true;
 							}
 							exit = 1;
+							CheckPunchShoot(bot);
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
@@ -1080,6 +1084,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								punched = true;
 							}
 							exit = 1;
+							CheckPunchShoot(bot);
 
 							if (bot->getHealth() <= 0 && safety == true)
 							{
@@ -1237,5 +1242,54 @@ void Physics::GameOverCountDown()
 			Game *game = Game::getSingleton();
 			game->quitGame();
 		}
+	}
+}
+
+void Physics::GoToUpgrades()
+{
+	Game *game = Game::getSingleton();
+	SpriteManager *spriteManager = game->getGSM()->getSpriteManager();
+	GameStateManager *gsm = game->getGSM();
+	TextGenerator *generator = game->getText()->getTextGenerator();
+
+	list<Upgrade*>::iterator upgradeIterator = gsm->getUpgradesIterator();
+	list<Upgrade*>::iterator end = gsm->getEndOfUpgradesIterator();
+	while (upgradeIterator != end && !gsm->getUpgrades().empty())
+	{
+		//list<Upgrade*>::iterator upgradeIterators = gsm->getUpgrades().begin();
+	//	gsm->getUpgrades();
+		Upgrade *upgrade = (*upgradeIterator);
+
+		if (upgrade->getActivated() == true)
+		{
+			//upgrade->setWasActivated(true);
+			upgrade->setTime(upgrade->getTime() - 1);
+			if (upgrade->getTime() <= 0)
+			{
+				if (upgrade->getType().compare(L"ATTACK") == 0)
+				{
+					generator->setdebug(L"ATTACK");
+					game->getGSM()->getSpriteManager()->getPlayer()->setAttack(game->getGSM()->getSpriteManager()->getPlayer()->getAttack() - 1);
+				}
+				else if (upgrade->getType().compare(L"DEFENSE") == 0)
+				{
+					generator->setdebug(L"DEFENSE");
+					game->getGSM()->getSpriteManager()->getPlayer()->setDefense(game->getGSM()->getSpriteManager()->getPlayer()->getDefense() - 2);
+
+				}
+				else if (upgrade->getType().compare(L"SPEED") == 0)
+				{
+					generator->setdebug(L"SPEED");
+					game->getGSM()->getSpriteManager()->getPlayer()->setSpeed(game->getGSM()->getSpriteManager()->getPlayer()->getSpeed() - 2);
+
+				}
+
+				gsm->removeUpgrade(upgrade);
+				break;
+			}
+		}
+		
+
+		upgradeIterator++;
 	}
 }

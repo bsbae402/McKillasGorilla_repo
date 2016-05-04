@@ -21,6 +21,8 @@
 #include "mg\text\TextGenerator.h"
 #include "rebelle\RebelleTextGenerator.h"
 
+#include "mg\gsm\sprite\Upgrade.h"
+
 /*
 	GameStateManager - Default Constructor, it starts the app at the
 	splash screen with no level loaded.
@@ -307,6 +309,71 @@ void GameStateManager::update()
 	countdownCounter--;
 
 	physics.update();
+}
+
+void GameStateManager::addUpgrade(wstring type) 
+{ 
+	Upgrade *u = new Upgrade();
+
+	u->setType(type);
+	if (type.compare(L"ATTACK") == 0)
+		setAttackupgrades(getAttackupgrades() + 1);
+	else if (type.compare(L"DEFENSE") == 0)
+		setDefenseupgrades(getDefenseupgrades() + 1);
+	else if (type.compare(L"SPEED") == 0)
+		setSpeedupgrades(getSpeedupgrades() + 1);
+
+	int time = rand() % 10 + 10;
+	time = time * 10;
+	u->setTime(time);
+
+	upgrades.push_back(u); 
+}
+
+void GameStateManager::useUpgrade(wstring type)
+{
+	Game *game = Game::getSingleton();
+
+	TextGenerator *generator = game->getText()->getTextGenerator();
+
+	list<Upgrade*>::iterator upgradeIterator = getUpgradesIterator();
+	list<Upgrade*>::iterator end = getEndOfUpgradesIterator();
+	while (upgradeIterator != end && !getUpgrades().empty())
+	{
+		Upgrade *upgrade = (*upgradeIterator);
+
+		//if (upgrade->getWasActivated() == false)
+		{
+			//if (upgrade->getActivated() == true)
+			{
+				
+				if (upgrade->getType().compare(type) == 0)
+				{
+					if (type.compare(L"ATTACK") == 0)
+					{
+						game->getGSM()->getSpriteManager()->getPlayer()->setAttack(game->getGSM()->getSpriteManager()->getPlayer()->getAttack() + 1);
+						game->getGSM()->setAttackupgrades(game->getGSM()->getAttackupgrades() - 1);
+					}
+					else if (type.compare(L"DEFENSE") == 0)
+					{
+						game->getGSM()->getSpriteManager()->getPlayer()->setDefense(game->getGSM()->getSpriteManager()->getPlayer()->getDefense() + 2);
+						game->getGSM()->setDefenseupgrades(game->getGSM()->getDefenseupgrades() - 1);
+					}
+					else if (type.compare(L"SPEED") == 0)
+					{
+						game->getGSM()->getSpriteManager()->getPlayer()->setSpeed(game->getGSM()->getSpriteManager()->getPlayer()->getSpeed() + 2);
+						game->getGSM()->setSpeedupgrades(game->getGSM()->getSpeedupgrades() - 1);
+					}
+
+					upgrade->setWasActivated(true);
+					upgrade->setActivated(true);
+					break;
+				}
+			}
+		}
+
+		upgradeIterator++;
+	}
 }
 
 wstring GameStateManager::getKey()

@@ -88,6 +88,10 @@ private:
 	int endlevely;
 	int endlevelywidth;
 
+	int attackupgrades;
+	int defenseupgrades;
+	int speedupgrades;
+
 
 public:
 	// INLINED ACCESSOR METHODS
@@ -171,4 +175,19 @@ public:
 	void			update();
 	void			startUp();
 	void			shutDown();
+
+	list<Upgrade*> getUpgrades() { return upgrades; }
+	void addUpgrade(wstring type);
+	void removeUpgrade(Upgrade *u) { upgrades.remove(u); }
+	void useUpgrade(wstring type);
+
+	void setAttackupgrades(int attack) { attackupgrades = attack; }
+	void setDefenseupgrades(int defense) { defenseupgrades = defense; }
+	void setSpeedupgrades(int speed) { speedupgrades = speed; }
+
+	int getAttackupgrades() { return attackupgrades; }
+	int getDefenseupgrades() { return defenseupgrades; }
+	int getSpeedupgrades() { return speedupgrades; }
+	list<Upgrade*>::iterator	getUpgradesIterator() { return upgrades.begin(); }
+	list<Upgrade*>::iterator	getEndOfUpgradesIterator() { return upgrades.end(); }
 };

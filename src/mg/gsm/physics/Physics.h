@@ -57,6 +57,7 @@ public:
 	void CheckPunchShoot(AnimatedSprite *playersprite);
 	void CheckDying(AnimatedSprite *playersprite);
 	void GameOverCountDown();
+	void GoToUpgrades();
 
 	// ALL SUBSYTEMS HAVE THESE
 	void startUp();

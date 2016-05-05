@@ -104,6 +104,12 @@ void GameStateManager::goToUpgradeScreen()
 	currentGameState = GS_UPGRADE_SCREEN;
 }
 
+//// go to level complete
+void GameStateManager::goToLevelComplete()
+{
+	currentGameState = GS_LEVEL_COMPLETE;
+}
+
 /*
 	isAtSplashScreen - Used to test if this application is currently
 	at the splash screen. This will dictate what to render, but also
@@ -158,8 +164,10 @@ bool GameStateManager::isWorldRenderable()
 	return (	(currentGameState == GS_GAME_IN_PROGRESS)
 		||		(currentGameState == GS_PAUSED)
 		||		(currentGameState == GS_GAME_OVER)
-		||		(currentGameState == GS_UPGRADE_SCREEN));
+		||		(currentGameState == GS_UPGRADE_SCREEN)
+		||		(currentGameState == GS_LEVEL_COMPLETE) );
 	//// GS_UPGRADE_SCREEN added --- by Bongsung 23 APR
+	//// GS_LEVEL_COMPLETE added --- by Bongsung 03 MAY
 }
 
 bool GameStateManager::isGameInPauseMenu()

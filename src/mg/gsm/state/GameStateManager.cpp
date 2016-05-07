@@ -106,10 +106,20 @@ void GameStateManager::goToUpgradeScreen()
 	currentGameState = GS_UPGRADE_SCREEN;
 }
 
+void GameStateManager::goToDonateScreen()
+{
+	currentGameState = GS_DONATE_SCREEN;
+}
+
 //// go to level complete
 void GameStateManager::goToLevelComplete()
 {
 	currentGameState = GS_LEVEL_COMPLETE;
+}
+
+//// go to controls menu
+void GameStateManager::goToControlsMenu() {
+	currentGameState = GS_MENU_CONTROLS_MENU;
 }
 
 /*
@@ -156,6 +166,16 @@ bool GameStateManager::isPreGame()
 	return currentGameState == GS_PRE_GAME;
 }
 
+bool GameStateManager::isGameAtUpgradeScreen()
+{
+	return currentGameState == GS_UPGRADE_SCREEN;
+}
+
+bool GameStateManager::isGameAtDonateScreen()
+{
+	return currentGameState == GS_DONATE_SCREEN;
+}
+
 /*
 	isWorldRenderable - Used to test if the game world should be rendered
 	or not. Note that even if the game is paused, you'll likely still render
@@ -167,6 +187,7 @@ bool GameStateManager::isWorldRenderable()
 		||		(currentGameState == GS_PAUSED)
 		||		(currentGameState == GS_GAME_OVER)
 		||		(currentGameState == GS_UPGRADE_SCREEN)
+		||		(currentGameState == GS_DONATE_SCREEN)
 		||		(currentGameState == GS_LEVEL_COMPLETE) );
 	//// GS_UPGRADE_SCREEN added --- by Bongsung 23 APR
 	//// GS_LEVEL_COMPLETE added --- by Bongsung 03 MAY

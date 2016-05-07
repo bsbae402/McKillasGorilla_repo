@@ -115,6 +115,9 @@ void GameAudio::processSoundEffect()
 
 		//// heal sound effect
 		processHealSound();
+
+		//// damage sound effect
+		processDamageSound();
 	}
 }
 
@@ -235,6 +238,43 @@ void GameAudio::processHealSound()
 				XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_HEAL];
 				bool ssbSuccess = SUCCEEDED(healSound->SubmitSourceBuffer(proto));
 				healSound->Start();
+				//// After all, there will be only one buffer node in the queue always ...
+			}
+			//// if there is something in the buffer
+			else
+			{
+				/// do nothing
+			}
+		}
+	}
+}
+
+void GameAudio::processDamageSound()
+{
+	if (soundEffectRegistrationMap[ENUM_SOUND_EFFECT_DAMAGE] == true)
+	{
+		Game *game = Game::getSingleton();
+		GameStateManager *gsm = game->getGSM();
+		SpriteManager *spriteMgr = gsm->getSpriteManager();
+		PlayerSprite *player = spriteMgr->getPlayer();
+
+		wstring playerState = player->getCurrentState();
+
+		if (playerState.compare(L"DAMAGE_BACK") == 0 || playerState.compare(L"DAMAGE_LEFT") == 0
+			|| playerState.compare(L"DAMAGE_RIGHT") == 0 || playerState.compare(L"DAMAGE_FRONT") == 0 )
+		{
+			IXAudio2SourceVoice *damageSound = soundEffectMap[ENUM_SOUND_EFFECT_DAMAGE];
+
+			XAUDIO2_VOICE_STATE voiceState;
+			damageSound->GetState(&voiceState);
+
+			//// [voiceState.BuffersQueued <= 0] means there are nothing in the buffer
+			//// so let's make a new buffer to queue the sound
+			if (voiceState.BuffersQueued <= 0)
+			{
+				XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_DAMAGE];
+				bool ssbSuccess = SUCCEEDED(damageSound->SubmitSourceBuffer(proto));
+				damageSound->Start();
 				//// After all, there will be only one buffer node in the queue always ...
 			}
 			//// if there is something in the buffer

@@ -54,6 +54,7 @@ public:
 	void processMoneySound();
 	void processPunchSound();
 	void processHealSound();
+	void processDamageSound();
 
 	void processMusic();
 	void stopMusic(MusicTypes musicType);

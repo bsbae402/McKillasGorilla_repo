@@ -281,7 +281,7 @@ void GameAudio::processMusic()
 			currentMusicPlaying = ENUM_MUSIC_MAIN_THEME;
 		}
 
-		playMusic(ENUM_MUSIC_MAIN_THEME);
+		playMusicRepeat(ENUM_MUSIC_MAIN_THEME);
 	}
 
 	else if (gameState == GS_LEVEL_COMPLETE)
@@ -290,8 +290,10 @@ void GameAudio::processMusic()
 		{
 			if (currentMusicPlaying != ENUM_MUSIC_NONE)
 				stopMusic(currentMusicPlaying);
+			levelCompleteMusicBuffered = false;		/// this value will checked in the playMusicOnce() function
+			currentMusicPlaying = ENUM_MUSIC_LEVEL_COMPLETE;
 		}		
-		playMusic(ENUM_MUSIC_LEVEL_COMPLETE);
+		playMusicOnce(ENUM_MUSIC_LEVEL_COMPLETE);
 	}
 }
 
@@ -305,7 +307,7 @@ void GameAudio::stopMusic(MusicTypes musicType)
 	}
 }
 
-void GameAudio::playMusic(MusicTypes musicType)
+void GameAudio::playMusicRepeat(MusicTypes musicType)
 {
 	if (musicRegistrationMap[musicType] == true)
 	{
@@ -320,6 +322,30 @@ void GameAudio::playMusic(MusicTypes musicType)
 			bool ssbSuccess = SUCCEEDED(sourceVoice->SubmitSourceBuffer(proto));
 			sourceVoice->Start();
 		}
+	}
+}
+
+void GameAudio::playMusicOnce(MusicTypes musicType)
+{
+	if (musicRegistrationMap[musicType] == true)
+	{
+		IXAudio2SourceVoice *sourceVoice = musicMap[musicType];
+
+		XAUDIO2_VOICE_STATE voiceState;
+		sourceVoice->GetState(&voiceState);
+
+		if (musicType == ENUM_MUSIC_LEVEL_COMPLETE)
+		{
+			if (levelCompleteMusicBuffered == false)
+			{
+				XAUDIO2_BUFFER *proto = musicBufferPrototypeMap[musicType];
+				bool ssbSuccess = SUCCEEDED(sourceVoice->SubmitSourceBuffer(proto));
+				sourceVoice->Start();
+				levelCompleteMusicBuffered = true;
+			}
+		}
+
+		/// here put the game over music
 	}
 }
 

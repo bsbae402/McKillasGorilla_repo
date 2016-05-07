@@ -441,8 +441,9 @@ void Physics::update()
 			if (playerPP->getX() >= gsm->getEndlevelx() && playerPP->getX() <= gsm->getEndlevelxwidth()
 				&& playerPP->getY() >= gsm->getEndlevely() && playerPP->getY() <= gsm->getEndlevelywidth())
 			{
-				game->quitGame();
-				exit = 1;
+				//game->quitGame();
+				//exit = 1;
+				gsm->goToLevelComplete();
 			}
 
 			if (exit == 0)
@@ -808,9 +809,18 @@ bool Physics::doesSpriteGoOutWorldThisFrame(AnimatedSprite * sprite)
 
 	PhysicalProperties *pp = sprite->getPhysicalProperties();
 	float futureLeft = pp->getX() + pp->getVelocityX();
-	float futureTop = pp->getY() + pp->getVelocityY();
-	float futureRight = futureLeft + sprite->getSpriteType()->getTextureWidth();
-	float futureBottom = futureTop + sprite->getSpriteType()->getTextureHeight();
+	//float futureTop = pp->getY() + pp->getVelocityY();
+	//float futureRight = futureLeft + sprite->getSpriteType()->getTextureWidth();
+	//float futureBottom = futureTop + sprite->getSpriteType()->getTextureHeight();
+	/*	HERE ARE WHAT WE ARE USING IN THE PHYSICS UPDATE ...
+				float playerLeft = playerPP->getX();
+				float playerRight = playerLeft + 64;
+				float playerTop = playerPP->getY() + 80;
+				float playerBottom = playerTop + 48;
+	*/
+	float futureTop = pp->getY() + pp->getVelocityY() + 80;
+	float futureRight = futureLeft + 64;
+	float futureBottom = futureTop + 48;
 
 	if (futureLeft < 0)
 		return true;

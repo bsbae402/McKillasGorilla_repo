@@ -38,6 +38,7 @@ private:
 	MusicTypes currentMusicPlaying;
 
 	bool moneySoundSignal;
+	bool levelCompleteMusicBuffered;
 
 public:
 	GameAudio();
@@ -56,7 +57,8 @@ public:
 
 	void processMusic();
 	void stopMusic(MusicTypes musicType);
-	void playMusic(MusicTypes musicType);
+	void playMusicRepeat(MusicTypes musicType);
+	void playMusicOnce(MusicTypes musicType);
 
 
 	void recieveMoneySoundSignal() { moneySoundSignal = true; }

@@ -235,7 +235,45 @@ void GameStateManager::loadLevel(wstring levelName)
 void GameStateManager::loadCurrentLevel()
 {
 	if (currentLevelIndex != NO_LEVEL_LOADED)
+	{
 		loadLevel(currentLevelIndex);
+
+		//// set viewport to the initial player location 
+		Game *game = Game::getSingleton();
+		GameGUI *gui = game->getGUI();
+		Viewport *viewport = gui->getViewport();
+
+		PlayerSprite *player = spriteManager->getPlayer();
+		PhysicalProperties *playerPP = player->getPhysicalProperties();
+		int playerSpriteWidth = player->getSpriteType()->getTextureWidth();
+		int playerSpriteHeight = player->getSpriteType()->getTextureHeight();
+		int playerCenterX = playerPP->getX() + playerSpriteWidth / 2;
+		int playerCenterY = playerPP->getY() + playerSpriteHeight / 2;
+
+		int viewportLeft = playerCenterX - viewport->getViewportWidth() / 2;
+		int viewportTop = playerCenterY - viewport->getViewportHeight() / 2;
+
+		int viewportRight = playerCenterX + viewport->getViewportWidth() / 2;
+		int viewportBottom = playerCenterY + viewport->getViewportHeight() / 2;
+
+		int viewportX = 0;
+		int viewportY = 0;
+
+		World *world = game->getGSM()->getWorld();
+
+		if (viewportLeft < 0)
+			viewportX = 0;
+		if (viewportRight > world->getWorldWidth())
+			viewportX = world->getWorldWidth() - viewport->getViewportWidth();
+		if (viewportTop < 0)
+			viewportY = 0;
+		if (viewportBottom > world->getWorldHeight())
+			viewportY = world->getWorldHeight() - viewport->getViewportHeight();
+
+		/// now, set the viewport to the new level's initial location
+		viewport->setViewportX(viewportX);
+		viewport->setViewportY(viewportY);
+	}
 }
 
 void GameStateManager::loadNextLevel()

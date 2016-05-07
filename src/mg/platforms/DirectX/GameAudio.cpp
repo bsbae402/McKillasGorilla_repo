@@ -431,6 +431,16 @@ void GameAudio::shutDown()
 		delete[] buffer->pAudioData;
 		delete buffer;
 	}
+
+	if (soundEffectRegistrationMap[ENUM_SOUND_EFFECT_DAMAGE] == true)
+	{
+		IXAudio2SourceVoice* damageSound = soundEffectMap[ENUM_SOUND_EFFECT_DAMAGE];
+		damageSound->DestroyVoice();
+
+		XAUDIO2_BUFFER *buffer = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_DAMAGE];
+		delete[] buffer->pAudioData;
+		delete buffer;
+	}
 	//// --- destory sound effects complete
 
 	//// --- destroy musics

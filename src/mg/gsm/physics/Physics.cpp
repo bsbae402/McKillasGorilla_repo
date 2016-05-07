@@ -320,9 +320,6 @@ void Physics::update()
 								//Heal the bot (Set to dying for testing)
 								if (playerSprite->getIshealing() == true && bot->getInjured() == true)
 								{
-									GameAudio * audio = game->getAudio();
-									audio->recieveHealSoundSignal();
-
 									bot->setPreviousState(bot->getCurrentState());
 									bot->setCurrentState(L"IDLE_BACK");
 									bot->setEnemyDirection(ENUM_Enemy_DIRECTION_DOWN);

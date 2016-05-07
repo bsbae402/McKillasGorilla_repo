@@ -38,8 +38,6 @@ private:
 	MusicTypes currentMusicPlaying;
 
 	bool moneySoundSignal;
-	bool healSoundSignal;
-
 	bool levelCompleteMusicBuffered;
 
 public:
@@ -65,7 +63,6 @@ public:
 
 
 	void recieveMoneySoundSignal() { moneySoundSignal = true; }
-	void recieveHealSoundSignal() { healSoundSignal = true; }
 
 	void shutDown();
 };

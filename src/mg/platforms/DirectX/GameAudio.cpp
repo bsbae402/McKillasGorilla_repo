@@ -8,6 +8,8 @@
 
 GameAudio::GameAudio()
 {
+	moneySoundSignal = false;
+	healSoundSignal = false;
 }
 
 
@@ -222,9 +224,10 @@ void GameAudio::processHealSound()
 		SpriteManager *spriteMgr = gsm->getSpriteManager();
 		PlayerSprite *player = spriteMgr->getPlayer();
 
-		bool isHealing = player->getIshealing();
+		//bool isHealing = player->getIshealing();
 
-		if (isHealing == true)
+		//if (isHealing == true)
+		if(healSoundSignal == true)
 		{
 			IXAudio2SourceVoice *healSound = soundEffectMap[ENUM_SOUND_EFFECT_HEAL];
 
@@ -245,6 +248,8 @@ void GameAudio::processHealSound()
 			{
 				/// do nothing
 			}
+
+			healSoundSignal = false;
 		}
 	}
 }

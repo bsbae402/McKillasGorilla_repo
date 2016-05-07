@@ -160,6 +160,8 @@ public:
 	void			goToIngamePauseMenu();
 	//// -- go to upgrade screen
 	void			goToUpgradeScreen();
+	//// -- go to level complete (when player reached the end of the level)
+	void			goToLevelComplete();
 
 	// METHODS DEFINED in GameStateManager.cpp
 	GameStateManager();
@@ -190,4 +192,5 @@ public:
 	int getSpeedupgrades() { return speedupgrades; }
 	list<Upgrade*>::iterator	getUpgradesIterator() { return upgrades.begin(); }
 	list<Upgrade*>::iterator	getEndOfUpgradesIterator() { return upgrades.end(); }
+
 };

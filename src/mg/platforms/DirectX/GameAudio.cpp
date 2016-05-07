@@ -283,6 +283,16 @@ void GameAudio::processMusic()
 
 		playMusic(ENUM_MUSIC_MAIN_THEME);
 	}
+
+	else if (gameState == GS_LEVEL_COMPLETE)
+	{
+		if (currentMusicPlaying != ENUM_MUSIC_LEVEL_COMPLETE)
+		{
+			if (currentMusicPlaying != ENUM_MUSIC_NONE)
+				stopMusic(currentMusicPlaying);
+		}		
+		playMusic(ENUM_MUSIC_LEVEL_COMPLETE);
+	}
 }
 
 void GameAudio::stopMusic(MusicTypes musicType)
@@ -290,8 +300,6 @@ void GameAudio::stopMusic(MusicTypes musicType)
 	if (musicRegistrationMap[musicType] == true)
 	{
 		IXAudio2SourceVoice *sourceVoice = musicMap[musicType];
-		
-		//sourceVoice->Stop();	<- not sure we need this. Check this after the following flushing doesn't work
 		sourceVoice->Stop();
 		sourceVoice->FlushSourceBuffers();
 	}
@@ -370,12 +378,12 @@ void GameAudio::shutDown()
 		delete buffer;
 	}
 
-	if (musicRegistrationMap[ENUM_MUSIC_COMPLETE] == true)
+	if (musicRegistrationMap[ENUM_MUSIC_LEVEL_COMPLETE] == true)
 	{
-		IXAudio2SourceVoice* completeMusic = musicMap[ENUM_MUSIC_COMPLETE];
+		IXAudio2SourceVoice* completeMusic = musicMap[ENUM_MUSIC_LEVEL_COMPLETE];
 		completeMusic->DestroyVoice();
 
-		XAUDIO2_BUFFER *buffer = musicBufferPrototypeMap[ENUM_MUSIC_COMPLETE];
+		XAUDIO2_BUFFER *buffer = musicBufferPrototypeMap[ENUM_MUSIC_LEVEL_COMPLETE];
 		delete[] buffer->pAudioData;
 		delete buffer;
 	}

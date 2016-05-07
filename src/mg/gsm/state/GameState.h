@@ -68,4 +68,7 @@ enum GameState
 
 	//// -- upgrade screen state
 	GS_UPGRADE_SCREEN,
+
+	//// -- player complete the level
+	GS_LEVEL_COMPLETE
 };

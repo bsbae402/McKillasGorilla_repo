@@ -155,6 +155,7 @@ public:
 	void			goToGame();
 	void			goToLoadLevel();
 	void			goToMainMenu();
+	void			goToControlsMenu();
 	void			goToPreGame();
 	//// -- go to ingame menu
 	void			goToIngamePauseMenu();

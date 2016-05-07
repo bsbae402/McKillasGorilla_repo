@@ -112,6 +112,11 @@ void GameStateManager::goToLevelComplete()
 	currentGameState = GS_LEVEL_COMPLETE;
 }
 
+//// go to controls menu
+void GameStateManager::goToControlsMenu() {
+	currentGameState = GS_MENU_CONTROLS_MENU;
+}
+
 /*
 	isAtSplashScreen - Used to test if this application is currently
 	at the splash screen. This will dictate what to render, but also

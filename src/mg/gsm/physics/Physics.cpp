@@ -525,6 +525,11 @@ void Physics::update()
 				}
 			}
 		
+			if (spriteManager->getPlayer()->getCurrentState().compare(L"PUNCH_LEFT") != 0
+				&& spriteManager->getPlayer()->getCurrentState().compare(L"PUNCH_RIGHT") != 0
+				&& spriteManager->getPlayer()->getCurrentState().compare(L"PUNCH_FRONT") != 0
+				&& spriteManager->getPlayer()->getCurrentState().compare(L"PUNCH_BACK") != 0)
+				punched = false;
 
 			CheckPunchShoot(spriteManager->getPlayer());
 			CheckDying(spriteManager->getPlayer());
@@ -620,6 +625,7 @@ void Physics::update()
 									used = true;
 									break;
 								}
+
 							}
 							pp->setVelocity(0.0f, vY);
 						}
@@ -632,8 +638,9 @@ void Physics::update()
 							int rightColumnNextFrame = collidableLayer->getColumnByX(RightNextFrame);
 
 							for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
-								Tile *tile = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
-								if (tile->collidable)
+								Tile *tile = collidableLayer->getTile(rowIndex+1, rightColumnNextFrame);
+								Tile *tile2 = collidableLayer->getTile(rowIndex, rightColumnNextFrame);
+								if (tile->collidable && tile2->collidable)
 								{
 									spriteManager->removeLevelObject(los);
 									vX = 0.0f;
@@ -652,15 +659,17 @@ void Physics::update()
 							int leftColumnNextFrame = collidableLayer->getColumnByX(LeftNextFrame);
 
 							for (int rowIndex = topRow; rowIndex <= bottomRow; rowIndex++) {
-								Tile *tile = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
-								if (tile->collidable)
+								Tile *tile = collidableLayer->getTile(rowIndex+1, leftColumnNextFrame);
+								Tile *tile2 = collidableLayer->getTile(rowIndex, leftColumnNextFrame);
+
+								if (tile->collidable && tile2->collidable)
 								{
 									spriteManager->removeLevelObject(los);
 									vX = 0.0f;
 									used = true;
 									break;
 								}
-								
+
 							}
 							pp->setVelocity(vX, 0.0f);
 						}
@@ -743,6 +752,7 @@ void Physics::update()
 											spriteManager->getPlayer()->setHealth(spriteManager->getPlayer()->getHealth() - 0);
 										else
 											spriteManager->getPlayer()->setHealth(spriteManager->getPlayer()->getHealth() - los->getAttack() + spriteManager->getPlayer()->getDefense());
+										
 										if (spriteManager->getPlayer()->getPlayerDirection() == ENUM_PLAYER_DIRECTION_DOWN)
 										{
 											spriteManager->getPlayer()->setCurrentState(L"DAMAGE_BACK");
@@ -1031,6 +1041,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								if(safety == false)
 									gsm->setScore(gsm->getScore() - 100);
 								bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+								bot->setCurrentState(L"DAMAGE_RIGHT");
 								punched = true;
 							}
 							exit = 1;
@@ -1100,6 +1111,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								if (safety == false)
 									gsm->setScore(gsm->getScore() - 100);
 								bot->setHealth(bot->getHealth() - playerSprite->getAttack() + bot->getDefense());
+								bot->setCurrentState(L"DAMAGE_LEFT");
 								punched = true;
 							}
 							exit = 1;
@@ -1145,11 +1157,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 	GameStateManager *gsm = game->getGSM();
 
 
-	if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") != 0
-		&& playerSprite->getCurrentState().compare(L"PUNCH_RIGHT") != 0
-		&& playerSprite->getCurrentState().compare(L"PUNCH_FRONT") != 0
-		&& playerSprite->getCurrentState().compare(L"PUNCH_BACK") != 0)
-		punched = false;
+	
 
 	if (playerSprite->getCurrentState().compare(L"PUNCH_FRONT") == 0 || playerSprite->getCurrentState().compare(L"SHOOT_FRONT") == 0 || playerSprite->getCurrentState().compare(L"DAMAGE_FRONT") == 0) {
 
@@ -1180,6 +1188,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 		if (playerSprite->getCurrentState().compare(L"PUNCH_BACK") == 0)
 			punch(playerSprite, true, gsm->isSafetyon());
 
+
 		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_BACK") == 0)
 				gsm->getSpriteManager()->fireBullet(playerSprite, true, gsm->isSafetyon());
@@ -1198,8 +1207,7 @@ void Physics::CheckPunchShoot(AnimatedSprite *playerSprite)
 
 		if (playerSprite->getCurrentState().compare(L"PUNCH_LEFT") == 0)
 			punch(playerSprite, true, gsm->isSafetyon());
-		else
-			punched = false;
+
 
 		if (frameIndex >= sequenceSize) {
 			if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") == 0)

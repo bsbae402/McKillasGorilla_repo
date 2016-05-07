@@ -78,6 +78,7 @@ private:
 
 	int score = 0;
 	int money = 0;
+	int donatemoney = 0;
 	int safety;
 	int countdownCounter = 500;
 	bool safetyon;
@@ -109,9 +110,11 @@ public:
 
 	int getScore() { return score; }
 	int getMoney() { return money; }
+	int getDonateMoney() { return donatemoney; }
 	int getSafety() { return safety; }
 	void setScore(int newscore) { score = newscore; }
 	void setMoney(int newmoney) { money = newmoney; }
+	void setDonateMoney(int newdonatemoney) { donatemoney = newdonatemoney; }
 	void setSafety(int newsafety) { safety = newsafety; }
 	wstring getKey();
 	int getIntKey();
@@ -150,6 +153,8 @@ public:
 	bool			isWorldRenderable();
 	////// -- true if game is in pause menu
 	bool			isGameInPauseMenu();
+	bool			isGameAtUpgradeScreen();
+	bool			isGameAtDonateScreen();
 
 	// METHODS FOR TRANSITIONING TO OTHER GAME STATES
 	void			goToGame();
@@ -160,6 +165,7 @@ public:
 	void			goToIngamePauseMenu();
 	//// -- go to upgrade screen
 	void			goToUpgradeScreen();
+	void			goToDonateScreen();
 	//// -- go to level complete (when player reached the end of the level)
 	void			goToLevelComplete();
 

@@ -1270,6 +1270,13 @@ void Physics::GameOverCountDown()
 		{
 			Game *game = Game::getSingleton();
 			game->quitGame();
+			//// without following "gameover = false", 
+			//// [exit game by player dying -> restart] will make player sprite cannot move 
+			//// in accordance with keyboard input
+			gameover = false;
+			//// also, we need to reset countdown because when we start game again
+			//// the countdown is still 0 when game starts, and goes to minus
+			countdown = 100;	/// reset the countdown
 		}
 	}
 }

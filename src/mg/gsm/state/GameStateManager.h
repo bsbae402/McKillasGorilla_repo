@@ -169,6 +169,8 @@ public:
 	void			goToDonateScreen();
 	//// -- go to level complete (when player reached the end of the level)
 	void			goToLevelComplete();
+	//// -- go to credits screen
+	void			goToCreditsScreen();
 
 	// METHODS DEFINED in GameStateManager.cpp
 	GameStateManager();

@@ -117,6 +117,12 @@ void GameStateManager::goToLevelComplete()
 	currentGameState = GS_LEVEL_COMPLETE;
 }
 
+//// GO TO credits screen
+void GameStateManager::goToCreditsScreen()
+{
+	currentGameState = GS_CREDITS_SCREEN;
+}
+
 //// go to controls menu
 void GameStateManager::goToControlsMenu() {
 	currentGameState = GS_MENU_CONTROLS_MENU;

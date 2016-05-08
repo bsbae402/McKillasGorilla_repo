@@ -71,5 +71,8 @@ enum GameState
 	GS_DONATE_SCREEN,
 
 	//// -- player complete the level
-	GS_LEVEL_COMPLETE
+	GS_LEVEL_COMPLETE,
+
+	//// -- game end credit
+	GS_CREDITS_SCREEN
 };

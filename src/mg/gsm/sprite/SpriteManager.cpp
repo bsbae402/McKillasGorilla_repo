@@ -23,6 +23,8 @@
 #include "mg\gsm\sprite\LevelObjectSprite.h"
 #include "mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h"
 
+#include "mg\platforms\DirectX\GameAudio.h"
+
 /*
 	addSpriteToRenderList - This method checks to see if the sprite
 	parameter is inside the viewport. If it is, a RenderItem is generated
@@ -426,6 +428,10 @@ LevelObjectSprite* SpriteManager::removeLevelObject(LevelObjectSprite *losToRemo
 void SpriteManager::fireBullet(AnimatedSprite *sprite, bool isplayer, bool safety)
 {
 	Game *game = Game::getSingleton();
+	
+	// send shooting sound activate signal to audio engine
+	GameAudio *audio = game->getAudio();
+	audio->recieveShootSoundSignal();
 
 	BulletRecycler *bulletRecycler = this->getBulletRecycler();
 	LevelObjectSprite *bullet = bulletRecycler->retrieveBullet(L"bullet");
@@ -498,6 +504,12 @@ void SpriteManager::fireBullet(AnimatedSprite *sprite, bool isplayer, bool safet
 
 void SpriteManager::fireEnemyBullet(Bot *sprite, bool isplayer, bool safety)
 {
+	// send shoot sound signal to audio engine
+	Game *game = Game::getSingleton();
+	GameAudio *audio = game->getAudio();
+	audio->recieveShootSoundSignal();
+	// shoot sound signal complete
+
 	BulletRecycler *bulletRecycler = this->getBulletRecycler();
 	LevelObjectSprite *bullet = bulletRecycler->retrieveBullet(L"bullet");
 	bullet->setplayer(isplayer);

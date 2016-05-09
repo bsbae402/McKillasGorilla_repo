@@ -34,10 +34,11 @@ private:
 	map<MusicTypes, bool> musicRegistrationMap;
 	map<MusicTypes, IXAudio2SourceVoice*> musicMap;
 	map<MusicTypes, XAUDIO2_BUFFER*> musicBufferPrototypeMap;
-	////map<MusicTypes, bool> musicSwitchMap;
 	MusicTypes currentMusicPlaying;
 
 	bool moneySoundSignal;
+	bool shootSoundSignal;
+
 	bool levelCompleteMusicBuffered;
 	bool gameOverMusicBuffered;
 
@@ -64,6 +65,7 @@ public:
 
 
 	void recieveMoneySoundSignal() { moneySoundSignal = true; }
+	void recieveShootSoundSignal() { shootSoundSignal = true; }
 
 	void shutDown();
 };

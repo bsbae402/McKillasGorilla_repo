@@ -128,32 +128,85 @@ void GameAudio::processShootSound()
 		Game *game = Game::getSingleton();
 		GameStateManager *gsm = game->getGSM();
 		SpriteManager *spriteMgr = gsm->getSpriteManager();
-		PlayerSprite *player = spriteMgr->getPlayer();
+		/*if (moneySoundSignal == true)
+		{
+			IXAudio2SourceVoice *moneySound = soundEffectMap[ENUM_SOUND_EFFECT_MONEY];
 
-		wstring playerState = player->getCurrentState();
+			XAUDIO2_VOICE_STATE voiceState;
+			moneySound->GetState(&voiceState);
 
-		if (playerState.compare(L"SHOOT_LEFT") == 0 || playerState.compare(L"SHOOT_RIGHT") == 0
-			|| playerState.compare(L"SHOOT_BACK") == 0 || playerState.compare(L"SHOOT_FRONT") == 0)
+			XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_MONEY];
+			bool ssbSuccess = SUCCEEDED(moneySound->SubmitSourceBuffer(proto));
+			moneySound->Start();
+
+			moneySoundSignal = false;
+		}
+		*/
+		if (shootSoundSignal == true)
 		{
 			IXAudio2SourceVoice *shootSound = soundEffectMap[ENUM_SOUND_EFFECT_SHOOT];
 
 			XAUDIO2_VOICE_STATE voiceState;
 			shootSound->GetState(&voiceState);
 
-			//// [voiceState.BuffersQueued <= 0] means there are nothing in the buffer
-			//// so let's make a new buffer to queue the sound
-			if (voiceState.BuffersQueued <= 0)
-			{
-				XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_SHOOT];
-				bool ssbSuccess = SUCCEEDED(shootSound->SubmitSourceBuffer(proto));
-				shootSound->Start();
-			}
-			//// if there is something in the buffer
-			else
-			{
-				/// do nothing
-			}
+			XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_SHOOT];
+			bool ssbSuccess = SUCCEEDED(shootSound->SubmitSourceBuffer(proto));
+			shootSound->Start();
+
+			shootSoundSignal = false;
 		}
+
+		/*
+		list<Bot*>::iterator botIt = spriteMgr->getBotsIterator();
+		list<Bot*>::iterator endBotIt = spriteMgr->getEndOfBotsIterator();
+		while (botIt != endBotIt)
+		{
+		Bot *bot = (*botIt);
+		wstring botCurState = bot->getCurrentState();
+		if (botCurState.compare(L"SHOOT_LEFT") == 0 || botCurState.compare(L"SHOOT_RIGHT") == 0
+		|| botCurState.compare(L"SHOOT_BACK") == 0 || botCurState.compare(L"SHOOT_FRONT") == 0)
+		{
+		IXAudio2SourceVoice *shootSound = soundEffectMap[ENUM_SOUND_EFFECT_SHOOT];
+
+		XAUDIO2_VOICE_STATE voiceState;
+		shootSound->GetState(&voiceState);
+
+		if (voiceState.BuffersQueued <= 0)
+		{
+		XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_SHOOT];
+		bool ssbSuccess = SUCCEEDED(shootSound->SubmitSourceBuffer(proto));
+		shootSound->Start();
+		}
+		}
+		botIt++;
+		}
+
+		PlayerSprite *player = spriteMgr->getPlayer();
+		wstring playerState = player->getCurrentState();
+		if (playerState.compare(L"SHOOT_LEFT") == 0 || playerState.compare(L"SHOOT_RIGHT") == 0
+		|| playerState.compare(L"SHOOT_BACK") == 0 || playerState.compare(L"SHOOT_FRONT") == 0)
+		{
+		IXAudio2SourceVoice *shootSound = soundEffectMap[ENUM_SOUND_EFFECT_SHOOT];
+
+		XAUDIO2_VOICE_STATE voiceState;
+		shootSound->GetState(&voiceState);
+
+		//// [voiceState.BuffersQueued <= 0] means there are nothing in the buffer
+		//// so let's make a new buffer to queue the sound
+		if (voiceState.BuffersQueued <= 0)
+		{
+		XAUDIO2_BUFFER *proto = audioBufferPrototypeMap[ENUM_SOUND_EFFECT_SHOOT];
+		bool ssbSuccess = SUCCEEDED(shootSound->SubmitSourceBuffer(proto));
+		shootSound->Start();
+		}
+		//// if there is something in the buffer
+		else
+		{
+		/// do nothing
+		}
+		}
+		*/
+		
 	}
 }
 

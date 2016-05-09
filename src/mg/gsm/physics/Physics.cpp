@@ -717,6 +717,7 @@ void Physics::update()
 										bot->setCurrentState(L"DYING");
 										bot->setInjured(true);
 										gameover = true;
+										gsm->setLose(true);
 									}
 									break;
 								}
@@ -932,6 +933,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								bot->setInjured(true);
 								bot->setCurrentState(L"DYING");
 								gameover = true;
+								gsm->setLose(true);
 							}
 							break;
 						}
@@ -997,6 +999,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								bot->setInjured(true);
 								bot->setCurrentState(L"DYING");
 								gameover = true;
+								gsm->setLose(true);
 							}
 							
 							break;
@@ -1064,6 +1067,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								bot->setInjured(true);
 								bot->setCurrentState(L"DYING");
 								gameover = true;
+								gsm->setLose(true);
 								exit = 1;
 							}
 							
@@ -1135,6 +1139,7 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 								bot->setInjured(true);
 								gameover = true;
 								exit = 1;
+								gsm->setLose(true);
 							}
 							break;
 						}

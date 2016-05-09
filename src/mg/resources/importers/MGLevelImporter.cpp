@@ -428,7 +428,7 @@ bool MGLevelImporter::load(wstring levelFileDir, wstring levelFile)
 
 			//// - set physical property -> actually level objects normally don't have any velocity
 			PhysicalProperties *pp = los->getPhysicalProperties();
-			//pp->setPosition(initX, initY);
+			pp->setPosition(initX, initY);
 			//pp->setVelocity(0, 0);
 
 			//// the initial sprite (animation) state for the level object is only "BEING"

@@ -39,6 +39,7 @@ private:
 
 	bool moneySoundSignal;
 	bool levelCompleteMusicBuffered;
+	bool gameOverMusicBuffered;
 
 public:
 	GameAudio();

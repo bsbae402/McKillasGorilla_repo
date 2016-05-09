@@ -38,6 +38,12 @@ bool TMXMapImporter::load(wstring mapDir, wstring mapFile)
 		delete layerInfoToDelete;
 	}
 	layerInfos.clear();
+
+	//// we also need to reset this largest dimension indicators
+	//// so that next time we load all maps, we don't have any problems
+	largestLayerHeight = 0;
+	largestLayerWidth = 0;
+
 	return true;
 }
 

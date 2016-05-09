@@ -294,15 +294,31 @@ void GameAudio::processMusic()
 
 	if (gameState == GS_GAME_IN_PROGRESS)
 	{
-		if (currentMusicPlaying != ENUM_MUSIC_INGAME)
+		/// check if the game is over (player is dying or player shooted enemy w/o safety)
+		if (gsm->getLose() == true)
 		{
-			if(currentMusicPlaying != ENUM_MUSIC_NONE)
-				stopMusic(currentMusicPlaying);
-
-			currentMusicPlaying = ENUM_MUSIC_INGAME;
+			if (currentMusicPlaying != ENUM_MUSIC_GAMEOVER)
+			{
+				if (currentMusicPlaying != ENUM_MUSIC_NONE)
+					stopMusic(currentMusicPlaying);
+				currentMusicPlaying = ENUM_MUSIC_GAMEOVER;
+				gameOverMusicBuffered = false;	/// this value will checked in the playMusicOnce() function
+			}
+			playMusicOnce(ENUM_MUSIC_GAMEOVER);
 		}
 
-		//// not yet have file to play
+		//// game is in progress without game over
+		else 
+		{
+			if (currentMusicPlaying != ENUM_MUSIC_INGAME)
+			{
+				if (currentMusicPlaying != ENUM_MUSIC_NONE)
+					stopMusic(currentMusicPlaying);
+
+				currentMusicPlaying = ENUM_MUSIC_INGAME;
+			}
+			//// not yet have file to play
+		}
 	}
 
 	else if (gameState == GS_MAIN_MENU || gameState == GS_SPLASH_SCREEN)
@@ -320,7 +336,6 @@ void GameAudio::processMusic()
 
 			currentMusicPlaying = ENUM_MUSIC_MAIN_THEME;
 		}
-
 		playMusicRepeat(ENUM_MUSIC_MAIN_THEME);
 	}
 
@@ -334,6 +349,17 @@ void GameAudio::processMusic()
 			currentMusicPlaying = ENUM_MUSIC_LEVEL_COMPLETE;
 		}		
 		playMusicOnce(ENUM_MUSIC_LEVEL_COMPLETE);
+	}
+
+	else if (gameState == GS_GAME_OVER)
+	{
+		if (currentMusicPlaying != ENUM_MUSIC_GAMEOVER)
+		{
+			if (currentMusicPlaying != ENUM_MUSIC_NONE)
+				stopMusic(currentMusicPlaying);
+			currentMusicPlaying = ENUM_MUSIC_GAMEOVER;
+		}
+		playMusicOnce(ENUM_MUSIC_GAMEOVER);
 	}
 }
 
@@ -386,6 +412,16 @@ void GameAudio::playMusicOnce(MusicTypes musicType)
 		}
 
 		/// here put the game over music
+		else if (musicType == ENUM_MUSIC_GAMEOVER)
+		{
+			if (gameOverMusicBuffered == false)
+			{
+				XAUDIO2_BUFFER *proto = musicBufferPrototypeMap[musicType];
+				bool ssbSuccess = SUCCEEDED(sourceVoice->SubmitSourceBuffer(proto));
+				sourceVoice->Start();
+				gameOverMusicBuffered = true;
+			}
+		}
 	}
 }
 

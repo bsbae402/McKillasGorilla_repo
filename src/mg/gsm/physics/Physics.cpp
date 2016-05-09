@@ -781,8 +781,8 @@ void Physics::update()
 									gameover = true;
 									spriteManager->getPlayer()->setCurrentState(L"DYING");
 									exit = 1;
+									gsm->setLose(true);
 								}
-								
 							}
 						}
 					}
@@ -1269,7 +1269,11 @@ void Physics::GameOverCountDown()
 		if (countdown == false)
 		{
 			Game *game = Game::getSingleton();
-			game->quitGame();
+
+			GameStateManager *gsm = game->getGSM();
+			gsm->goToGameOverScreen();
+
+			//game->quitGame();
 			//// without following "gameover = false", 
 			//// [exit game by player dying -> restart] will make player sprite cannot move 
 			//// in accordance with keyboard input
@@ -1277,6 +1281,9 @@ void Physics::GameOverCountDown()
 			//// also, we need to reset countdown because when we start game again
 			//// the countdown is still 0 when game starts, and goes to minus
 			countdown = 100;	/// reset the countdown
+
+			gsm->setLose(false);	/// this will make sure that the
+			//// game is not initially lose when new game starts
 		}
 	}
 }

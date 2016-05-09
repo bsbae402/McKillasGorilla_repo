@@ -37,6 +37,8 @@ static const int NO_LEVEL_LOADED = -1;
 class GameStateManager
 {
 private:
+	bool lose;
+
 	// THE CURRENT GAME STATE
 	GameState currentGameState;
 
@@ -95,6 +97,9 @@ private:
 
 
 public:
+	void setLose(bool newlose) { lose = newlose; }
+	bool getLose() { return lose; }
+
 	// INLINED ACCESSOR METHODS
 	GameState			getCurrentGameState()	{ return currentGameState;				}
 	unsigned int		getCurrentLevelIndex()	{ return currentLevelIndex;				}
@@ -171,6 +176,8 @@ public:
 	void			goToLevelComplete();
 	//// -- go to credits screen
 	void			goToCreditsScreen();
+	//// -- go to game over state
+	void			goToGameOverScreen();
 
 	// METHODS DEFINED in GameStateManager.cpp
 	GameStateManager();

@@ -87,6 +87,9 @@ void GameStateManager::goToMainMenu()
 	currentGameState = GS_MAIN_MENU;
 	currentLevelIndex = NO_LEVEL_LOADED;
 	this->unloadCurrentLevel();
+
+	this->score = 0;
+	this->money = 0;
 }
 
 void GameStateManager::goToPreGame()
@@ -121,6 +124,11 @@ void GameStateManager::goToLevelComplete()
 void GameStateManager::goToCreditsScreen()
 {
 	currentGameState = GS_CREDITS_SCREEN;
+}
+
+void GameStateManager::goToGameOverScreen()
+{
+	currentGameState = GS_GAME_OVER;
 }
 
 //// go to controls menu

@@ -44,6 +44,23 @@ void GameStateManager::startUp()
 	spriteManager = new SpriteManager();
 	currentGameState = GS_SPLASH_SCREEN;
 	currentLevelIndex = NO_LEVEL_LOADED;
+
+	this->setDialoguestart(true);
+	/*this->dialoguestart.push_back(LEVEL1START1);
+	this->dialoguestart.push_back(LEVEL1START2);
+	this->dialoguestart.push_back(LEVEL1START3);
+	this->dialoguestart.push_back(LEVEL1START4);
+	this->dialoguestart.push_back(LEVEL1START5);
+	this->dialoguestart.push_back(LEVEL1START6);
+	this->dialoguestart.push_back(LEVEL1START7);
+	this->dialoguestart.push_back(LEVEL1START8);
+	this->dialoguestart.push_back(LEVEL1START9);
+	this->dialoguestart.push_back(LEVEL1START10);
+	this->dialoguestart.push_back(LEVEL1START11);
+	this->dialoguestart.push_back(LEVEL1START12);
+	this->dialoguestart.push_back(LEVEL1START13);
+	this->dialoguestart.push_back(LEVEL1START14);
+	this->dialoguestart.push_back(LEVEL1START15);*/
 }
 
 /*
@@ -388,6 +405,223 @@ void GameStateManager::update()
 		countdownCounter = 500;
 	}
 	countdownCounter--;
+
+	if (this->getDialoguestart() == true)
+	{
+		//this->getPhysics()->togglePlayerPhysics();
+
+		switch (this->getDialoguestartindex())
+		{
+
+		case(0):
+			this->setDialoguetext(LEVEL1START1);
+			break;
+		case(1):
+			this->setDialoguetext(LEVEL1START2);
+			break;
+		case(2):
+			this->setDialoguetext(LEVEL1START3);
+			break;
+		case(3):
+			this->setDialoguetext(LEVEL1START4);
+			break;
+		case(4):
+			this->setDialoguetext(LEVEL1START5);
+			break;
+		case(5):
+			this->setDialoguetext(LEVEL1START6);
+			break;
+		case(6):
+			this->setDialoguetext(LEVEL1START7);
+			break;
+		case(7):
+			this->setDialoguetext(LEVEL1START8);
+			break;
+		case(8):
+			this->setDialoguetext(LEVEL1START9);
+			break;
+		case(9):
+			this->setDialoguetext(LEVEL1START10);
+			break;
+		case(10):
+			this->setDialoguetext(LEVEL1START11);
+			break;
+		case(11):
+			this->setDialoguetext(LEVEL1START12);
+			break;
+		case(12):
+			this->setDialoguetext(LEVEL1START13);
+			break;
+		case(13):
+			this->setDialoguetext(LEVEL1START14);
+			break;
+		case(14):
+			this->setDialoguetext(LEVEL1START15);
+			break;
+		default:
+			this->setDialoguetext(L"");
+			this->setDialoguestart(false);
+			//this->getPhysics()->togglePlayerPhysics();
+			break;
+		}
+	}
+	else if (this->getDialogueenemy() == true)
+	{
+		//this->getPhysics()->togglePlayerPhysics();
+
+		switch (this->getDialogueenemyindex())
+		{
+
+		case(0):
+			this->setDialoguetext(LEVEL1FOUNDENEMY1);
+			break;
+		case(1):
+			this->setDialoguetext(LEVEL1FOUNDENEMY2);
+			break;
+		case(2):
+			this->setDialoguetext(LEVEL1FOUNDENEMY3);
+			break;
+		case(3):
+			this->setDialoguetext(LEVEL1FOUNDENEMY4);
+			break;
+		case(4):
+			this->setDialoguetext(LEVEL1FOUNDENEMY5);
+			break;
+		case(5):
+			this->setDialoguetext(LEVEL1FOUNDENEMY6);
+			break;
+		case(6):
+			this->setDialoguetext(LEVEL1FOUNDENEMY7);
+			break;
+		case(7):
+			this->setDialoguetext(LEVEL1FOUNDENEMY8);
+			break;
+		case(8):
+			this->setDialoguetext(LEVEL1FOUNDENEMY9);
+			break;
+		case(9):
+			this->setDialoguetext(LEVEL1FOUNDENEMY10);
+			break;
+		case(10):
+			this->setDialoguetext(LEVEL1FOUNDENEMY11);
+			break;
+		case(11):
+			this->setDialoguetext(LEVEL1FOUNDENEMY12);
+			break;
+		case(12):
+			this->setDialoguetext(LEVEL1FOUNDENEMY13);
+			break;
+		case(13):
+			this->setDialoguetext(LEVEL1FOUNDENEMY14);
+			break;
+		case(14):
+			this->setDialoguetext(LEVEL1FOUNDENEMY15);
+			break;
+		default:
+			this->setDialoguetext(L"");
+			this->setDialogueenemy(false);
+			//this->getPhysics()->togglePlayerPhysics();
+			break;
+		}
+	}
+	else if (this->getDialoguemoney() == true)
+	{
+		//this->getPhysics()->togglePlayerPhysics();
+
+		switch (this->getDialoguemoneyindex())
+		{
+
+		case(0):
+			this->setDialoguetext(LEVEL1MONEY1);
+			break;
+		case(1):
+			this->setDialoguetext(LEVEL1MONEY2);
+			break;
+		case(2):
+			this->setDialoguetext(LEVEL1MONEY3);
+			break;
+		case(3):
+			this->setDialoguetext(LEVEL1MONEY4);
+			break;
+		case(4):
+			this->setDialoguetext(LEVEL1MONEY5);
+			break;
+		case(5):
+			this->setDialoguetext(LEVEL1MONEY6);
+			break;
+		case(6):
+			this->setDialoguetext(LEVEL1MONEY7);
+			break;
+		case(7):
+			this->setDialoguetext(LEVEL1MONEY8);
+			break;
+		case(8):
+			this->setDialoguetext(LEVEL1MONEY9);
+			break;
+		case(9):
+			this->setDialoguetext(LEVEL1MONEY10);
+			break;
+		case(10):
+			this->setDialoguetext(LEVEL1MONEY11);
+			break;
+		case(11):
+			this->setDialoguetext(LEVEL1MONEY12);
+			break;
+		case(12):
+			this->setDialoguetext(LEVEL1MONEY13);
+			break;
+		case(13):
+			this->setDialoguetext(LEVEL1MONEY14);
+			break;
+		default:
+			this->setDialoguetext(L"");
+			this->setDialoguemoney(false);
+			//this->getPhysics()->togglePlayerPhysics();
+			break;
+		}
+	}
+	else if (this->getDialogueheal() == true)
+	{
+		//this->getPhysics()->togglePlayerPhysics();
+
+		switch (this->getDialoguehealindex())
+		{
+
+		case(0):
+			this->setDialoguetext(LEVEL1HEAL1);
+			break;
+		case(1):
+			this->setDialoguetext(LEVEL1HEAL2);
+			break;
+		case(2):
+			this->setDialoguetext(LEVEL1HEAL3);
+			break;
+		case(3):
+			this->setDialoguetext(LEVEL1HEAL4);
+			break;
+		case(4):
+			this->setDialoguetext(LEVEL1HEAL5);
+			break;
+		case(5):
+			this->setDialoguetext(LEVEL1HEAL6);
+			break;
+		case(6):
+			this->setDialoguetext(LEVEL1HEAL7);
+			break;
+		case(7):
+			this->setDialoguetext(LEVEL1HEAL8);
+			break;
+		case(8):
+			this->setDialoguetext(LEVEL1HEAL9);
+			break;
+		default:
+			this->setDialoguetext(L"");
+			this->setDialogueheal(false);
+			//this->getPhysics()->togglePlayerPhysics();
+			break;
+		}
+	}
+
 
 	physics.update();
 }

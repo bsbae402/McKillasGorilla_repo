@@ -28,6 +28,7 @@
 #include "mg\gsm\ai\pathfinding\OrthographicGridPathfinder.h"
 
 #include "mg\gsm\sprite\Upgrade.h"
+#include "mg\text\Dialogue.h"
 
 
 class Game;
@@ -38,6 +39,15 @@ class GameStateManager
 {
 private:
 	bool lose;
+	bool dialoguestart;
+	bool dialogueenemy;
+	bool dialoguemoney;
+	bool dialogueheal;
+
+	int dialoguestartindex;
+	int dialogueenemyindex;
+	int dialoguemoneyindex;
+	int dialoguehealindex;
 
 	// THE CURRENT GAME STATE
 	GameState currentGameState;
@@ -56,6 +66,8 @@ private:
 	vector<wstring> levelNames;
 	vector<wstring> levelDirs;
 	vector<wstring> levelFiles;
+	wstring dialoguetext;
+	
 
 	// FOR MANAGING STATIC GAME WORLD DATA, i.e. BACKGROUND IMAGES,
 	// TILES, PLATFORMS, etc. BASICALLY THINGS THAT ARE NOT ANIMATED
@@ -76,6 +88,7 @@ private:
 	OrthographicGridPathfinder *path;
 
 	list<Upgrade*> upgrades;
+	
 
 
 	int score = 0;
@@ -100,6 +113,18 @@ public:
 	void setLose(bool newlose) { lose = newlose; }
 	bool getLose() { return lose; }
 
+	void setDialoguestart(bool newdialogue) { dialoguestart = newdialogue; }
+	bool getDialoguestart() { return dialoguestart; }
+
+	void setDialogueenemy(bool newdialogue) { dialogueenemy = newdialogue; }
+	bool getDialogueenemy() { return dialogueenemy; }
+
+	void setDialoguemoney(bool newdialogue) { dialoguemoney = newdialogue; }
+	bool getDialoguemoney() { return dialoguemoney; }
+
+	void setDialogueheal(bool newdialogue) { dialogueheal = newdialogue; }
+	bool getDialogueheal() { return dialogueheal; }
+
 	// INLINED ACCESSOR METHODS
 	GameState			getCurrentGameState()	{ return currentGameState;				}
 	unsigned int		getCurrentLevelIndex()	{ return currentLevelIndex;				}
@@ -112,6 +137,20 @@ public:
 	OrthographicGridPathfinder* getPath() { return path; }
 	void setPath(OrthographicGridPathfinder *initPath) { path = initPath; }
 
+	int getDialoguestartindex() { return dialoguestartindex; }
+	void setDialoguestartindex(int index) { dialoguestartindex = index; }
+
+	int getDialogueenemyindex() { return dialogueenemyindex; }
+	void setDialogueenemyindex(int index) { dialogueenemyindex = index; }
+
+	int getDialoguemoneyindex() { return dialoguemoneyindex; }
+	void setDialoguemoneyindex(int index) { dialoguemoneyindex = index; }
+
+	int getDialoguehealindex() { return dialoguehealindex; }
+	void setDialoguehealindex(int index) { dialoguehealindex = index; }
+
+	wstring getDialoguetext() { return dialoguetext; }
+	void setDialoguetext(wstring text) { dialoguetext = text; }
 
 	int getScore() { return score; }
 	int getMoney() { return money; }

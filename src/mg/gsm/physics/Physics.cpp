@@ -386,7 +386,7 @@ void Physics::update()
 							//Check that the player does not move through bots that are not injured
 							if (bot->getInjured() == false && ((playerPP->getY() + 20 >= pp->getY() && playerPP->getY() + 20 <= pp->getY() + 128)
 								|| (playerPP->getY() + 128 >= pp->getY() && playerPP->getY() + 128 <= pp->getY() + 128))
-								&& playerPP->getX() <= right - 5 && playerRightNextFrame >= right)
+								&& playerPP->getX() + 64 <= left - 5 && playerRightNextFrame >= left - 5)
 							{
 								vX = 0.0f;
 

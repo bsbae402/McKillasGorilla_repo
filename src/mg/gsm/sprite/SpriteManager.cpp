@@ -754,11 +754,11 @@ void SpriteManager::checkforplayer(Bot *bot)
 				}
 				else if (dontshoot == false && bot->getChangedown() <= 0 && bot->getChangeup() <= 0)
 				{
-					if (playerpp->getY() + 128 <= pp->getY() + 64)
+					if (playerpp->getY() <= pp->getY() + 64)
 					{
 						pp->setVelocity(0, -6);
 					}
-					else if (playerpp->getY() >= pp->getY() + 64)
+					else if (playerpp->getY() >= pp->getY())
 					{
 						pp->setVelocity(0, 6);
 					}
@@ -946,7 +946,7 @@ void SpriteManager::checkforplayer(Bot *bot)
 					{
 						pp->setVelocity(0, -8);
 					}
-					else if (playerpp->getY() >= pp->getY() + 64)
+					else if (playerpp->getY() >= pp->getY())
 					{
 						pp->setVelocity(0, 8);
 					}

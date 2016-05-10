@@ -405,7 +405,7 @@ void GameStateManager::addUpgrade(wstring type)
 		setSpeedupgrades(getSpeedupgrades() + 1);
 
 	int time = rand() % 10 + 10;
-	time = time * 10;
+	time = time * 40;
 	u->setTime(time);
 
 	upgrades.push_back(u); 
@@ -414,6 +414,7 @@ void GameStateManager::addUpgrade(wstring type)
 void GameStateManager::useUpgrade(wstring type)
 {
 	Game *game = Game::getSingleton();
+	PlayerSprite *player = spriteManager->getPlayer();
 
 	TextGenerator *generator = game->getText()->getTextGenerator();
 
@@ -432,18 +433,27 @@ void GameStateManager::useUpgrade(wstring type)
 				{
 					if (type.compare(L"ATTACK") == 0)
 					{
-						game->getGSM()->getSpriteManager()->getPlayer()->setAttack(game->getGSM()->getSpriteManager()->getPlayer()->getAttack() + 1);
-						game->getGSM()->setAttackupgrades(game->getGSM()->getAttackupgrades() - 1);
+						if (attackupgrades > 0)
+						{
+							player->setAttack(player->getAttack() + 1);
+							setAttackupgrades(getAttackupgrades() - 1);
+						}
 					}
 					else if (type.compare(L"DEFENSE") == 0)
 					{
-						game->getGSM()->getSpriteManager()->getPlayer()->setDefense(game->getGSM()->getSpriteManager()->getPlayer()->getDefense() + 1);
-						game->getGSM()->setDefenseupgrades(game->getGSM()->getDefenseupgrades() - 1);
+						if (defenseupgrades > 0)
+						{
+							player->setDefense(player->getDefense() + 1);
+							setDefenseupgrades(getDefenseupgrades() - 1);
+						}
 					}
 					else if (type.compare(L"SPEED") == 0)
 					{
-						game->getGSM()->getSpriteManager()->getPlayer()->setSpeed(game->getGSM()->getSpriteManager()->getPlayer()->getSpeed() + 2);
-						game->getGSM()->setSpeedupgrades(game->getGSM()->getSpeedupgrades() - 1);
+						if (speedupgrades > 0)
+						{
+							player->setSpeed(player->getSpeed() + 1);
+							setSpeedupgrades(getSpeedupgrades() - 1);
+						}
 					}
 
 					upgrade->setWasActivated(true);

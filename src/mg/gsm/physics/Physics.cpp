@@ -94,7 +94,7 @@ void Physics::update()
 				int topRow = collidableLayer->getRowByY(playerTop);
 				int bottomRow = collidableLayer->getRowByY(playerBottom);
 
-				if (playerPP->getY() > 550 && gsm->getDialogueenemyindex() <= 14)
+				if (playerPP->getY() > 500 && gsm->getDialogueenemyindex() <= 14)
 				{
 					activated = false;
 					gsm->setDialogueenemy(true);

@@ -96,8 +96,9 @@ private:
 	int donatemoney = 0;
 	int safety;
 	int countdownCounter = 500;
-	int dialoguecounter = 60000;
-	int innerdialoguecounter = 1000;
+	int dialoguecounter = 8000;
+	int innerdialoguecounter = 200;
+	int innerindex = 0;
 	bool safetyon;
 	bool moveviewport = false;
 

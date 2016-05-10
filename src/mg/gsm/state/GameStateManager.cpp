@@ -625,6 +625,133 @@ void GameStateManager::update()
 		}
 	}
 
+	if (this->getDialogueenemyindex() > 14 && this->getDialoguemoneyindex() > 14 && this->getDialoguehealindex() > 8)
+	{
+		if (dialoguecounter == 7400 && innerindex < 2)
+		{
+			innerdialoguecounter--;
+			if (innerdialoguecounter == 0)
+			{
+				innerindex++;
+				innerdialoguecounter = 200;
+			}
+
+			if (innerindex == 0)
+				this->setDialoguetext(MISCA1);
+			else if (innerindex == 1)
+				this->setDialoguetext(MISCA2);
+
+		}
+		else if (dialoguecounter == 6800 && innerindex < 3)
+		{
+			innerdialoguecounter--;
+			if (innerdialoguecounter == 0)
+			{
+				innerindex++;
+				innerdialoguecounter = 200;
+			}
+
+			if (innerindex == 2)
+				this->setDialoguetext(MISCB1);
+
+		}
+		else if (dialoguecounter == 6200 && innerindex < 5)
+		{
+			innerdialoguecounter--;
+			if (innerdialoguecounter == 0)
+			{
+				innerindex++;
+				innerdialoguecounter = 200;
+			}
+
+			if (innerindex == 3)
+				this->setDialoguetext(MISCC1);
+			else if (innerindex == 4)
+				this->setDialoguetext(MISCC2);
+		}
+		else if (dialoguecounter == 5600 && innerindex < 8)
+		{
+			innerdialoguecounter--;
+			if (innerdialoguecounter == 0)
+			{
+				innerindex++;
+				innerdialoguecounter = 200;
+			}
+
+			if (innerindex == 5)
+				this->setDialoguetext(MISCD1);
+			else if (innerindex == 6)
+				this->setDialoguetext(MISCD2);
+			else if (innerindex == 7)
+				this->setDialoguetext(MISCD3);
+		}
+		else if (dialoguecounter == 5000 && innerindex < 12)
+		{
+			innerdialoguecounter--;
+			if (innerdialoguecounter == 0)
+			{
+				innerindex++;
+				innerdialoguecounter = 200;
+			}
+
+			if (innerindex == 8)
+				this->setDialoguetext(MISCE1);
+			else if (innerindex == 9)
+				this->setDialoguetext(MISCE2);
+			else if (innerindex == 10)
+				this->setDialoguetext(MISCE3);
+			else if (innerindex == 11)
+				this->setDialoguetext(MISCE4);
+		}
+		else if (dialoguecounter == 4400 && innerindex < 14)
+		{
+			innerdialoguecounter--;
+			if (innerdialoguecounter == 0)
+			{
+				innerindex++;
+				innerdialoguecounter = 200;
+			}
+
+			if (innerindex == 12)
+				this->setDialoguetext(MISCF1);
+			else if (innerindex == 13)
+				this->setDialoguetext(MISCF2);
+		}
+		else if (dialoguecounter == 3800 && innerindex < 15)
+		{
+			innerdialoguecounter--;
+			if (innerdialoguecounter == 0)
+			{
+				innerindex++;
+				innerdialoguecounter = 200;
+			}
+
+			if (innerindex == 14)
+				this->setDialoguetext(MISCG1);
+		}
+		else if (dialoguecounter == 3200 && innerindex < 16)
+		{
+			innerdialoguecounter--;
+			if (innerdialoguecounter == 0)
+			{
+				innerindex++;
+				innerdialoguecounter = 200;
+			}
+
+			if (innerindex == 15)
+				this->setDialoguetext(MISCH1);
+		}
+		else if (dialoguecounter == 2600)
+		{
+			dialoguecounter = 8000;
+		}
+		else
+		{
+			this->setDialoguetext(L"");
+			dialoguecounter--;
+		}
+	}
+
 
 	physics.update();
 }

@@ -97,7 +97,7 @@ private:
 	int safety;
 	int countdownCounter = 500;
 	int dialoguecounter = 8000;
-	int innerdialoguecounter = 200;
+	int innerdialoguecounter = 300;
 	int innerindex = 0;
 	bool safetyon;
 	bool moveviewport = false;

@@ -633,7 +633,7 @@ void GameStateManager::update()
 			if (innerdialoguecounter == 0)
 			{
 				innerindex++;
-				innerdialoguecounter = 200;
+				innerdialoguecounter = 300;
 			}
 
 			if (innerindex == 0)
@@ -648,7 +648,7 @@ void GameStateManager::update()
 			if (innerdialoguecounter == 0)
 			{
 				innerindex++;
-				innerdialoguecounter = 200;
+				innerdialoguecounter = 300;
 			}
 
 			if (innerindex == 2)
@@ -661,7 +661,7 @@ void GameStateManager::update()
 			if (innerdialoguecounter == 0)
 			{
 				innerindex++;
-				innerdialoguecounter = 200;
+				innerdialoguecounter = 300;
 			}
 
 			if (innerindex == 3)
@@ -675,7 +675,7 @@ void GameStateManager::update()
 			if (innerdialoguecounter == 0)
 			{
 				innerindex++;
-				innerdialoguecounter = 200;
+				innerdialoguecounter = 300;
 			}
 
 			if (innerindex == 5)
@@ -691,7 +691,7 @@ void GameStateManager::update()
 			if (innerdialoguecounter == 0)
 			{
 				innerindex++;
-				innerdialoguecounter = 200;
+				innerdialoguecounter = 300;
 			}
 
 			if (innerindex == 8)
@@ -709,7 +709,7 @@ void GameStateManager::update()
 			if (innerdialoguecounter == 0)
 			{
 				innerindex++;
-				innerdialoguecounter = 200;
+				innerdialoguecounter = 300;
 			}
 
 			if (innerindex == 12)
@@ -723,7 +723,7 @@ void GameStateManager::update()
 			if (innerdialoguecounter == 0)
 			{
 				innerindex++;
-				innerdialoguecounter = 200;
+				innerdialoguecounter = 300;
 			}
 
 			if (innerindex == 14)
@@ -735,7 +735,7 @@ void GameStateManager::update()
 			if (innerdialoguecounter == 0)
 			{
 				innerindex++;
-				innerdialoguecounter = 200;
+				innerdialoguecounter = 300;
 			}
 
 			if (innerindex == 15)

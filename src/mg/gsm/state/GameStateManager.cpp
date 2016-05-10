@@ -520,7 +520,7 @@ void GameStateManager::update()
 		default:
 			this->setDialoguetext(L"");
 			this->setDialogueenemy(false);
-			//this->getPhysics()->togglePlayerPhysics();
+			this->getPhysics()->togglePhysics();
 			break;
 		}
 	}
@@ -573,10 +573,13 @@ void GameStateManager::update()
 		case(13):
 			this->setDialoguetext(LEVEL1MONEY14);
 			break;
+		case(14):
+			this->setDialoguetext(LEVEL1MONEY15);
+			break;
 		default:
 			this->setDialoguetext(L"");
 			this->setDialoguemoney(false);
-			//this->getPhysics()->togglePlayerPhysics();
+			this->getPhysics()->togglePhysics();
 			break;
 		}
 	}
@@ -617,7 +620,7 @@ void GameStateManager::update()
 		default:
 			this->setDialoguetext(L"");
 			this->setDialogueheal(false);
-			//this->getPhysics()->togglePlayerPhysics();
+			this->getPhysics()->togglePhysics();
 			break;
 		}
 	}

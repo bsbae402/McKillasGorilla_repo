@@ -94,9 +94,11 @@ void Physics::update()
 				int topRow = collidableLayer->getRowByY(playerTop);
 				int bottomRow = collidableLayer->getRowByY(playerBottom);
 
-				if (playerPP->getY() > 400 && gsm->getDialogueenemyindex() <= 14)
+				if (playerPP->getY() > 550 && gsm->getDialogueenemyindex() <= 14)
 				{
+					activated = false;
 					gsm->setDialogueenemy(true);
+					
 				}
 
 				playerPP->setVelocity(0.0f, 0.0f);
@@ -523,7 +525,10 @@ void Physics::update()
 							)
 						{
 							if (gsm->getDialoguehealindex() <= 8)
+							{
 								gsm->setDialogueheal(true);
+								togglePhysics();
+							}
 						}
 					}
 
@@ -599,8 +604,11 @@ void Physics::update()
 							gsm->setMoney(gsm->getMoney() + 500);
 							used = true;
 
-							if(gsm->getDialoguemoneyindex() <= 12)
+							if (gsm->getDialoguemoneyindex() <= 15)
+							{
 								gsm->setDialoguemoney(true);
+								activated = false;
+							}
 							break;
 						}
 						itemIterator++;

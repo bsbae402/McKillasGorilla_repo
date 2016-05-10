@@ -96,6 +96,8 @@ private:
 	int donatemoney = 0;
 	int safety;
 	int countdownCounter = 500;
+	int dialoguecounter = 60000;
+	int innerdialoguecounter = 1000;
 	bool safetyon;
 	bool moveviewport = false;
 
@@ -104,9 +106,9 @@ private:
 	int endlevely;
 	int endlevelywidth;
 
-	int attackupgrades;
-	int defenseupgrades;
-	int speedupgrades;
+	int attackupgrades = 0;
+	int defenseupgrades = 0;
+	int speedupgrades = 0;
 
 
 public:

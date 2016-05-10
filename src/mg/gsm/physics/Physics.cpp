@@ -94,6 +94,13 @@ void Physics::update()
 				int topRow = collidableLayer->getRowByY(playerTop);
 				int bottomRow = collidableLayer->getRowByY(playerBottom);
 
+				if (playerPP->getY() > 550 && gsm->getDialogueenemyindex() <= 14)
+				{
+					activated = false;
+					gsm->setDialogueenemy(true);
+					
+				}
+
 				playerPP->setVelocity(0.0f, 0.0f);
 
 				if (playerSprite->getCurrentState().compare(L"SHOOT_LEFT") != 0
@@ -507,7 +514,23 @@ void Physics::update()
 						}
 					}
 					else
+					{
 						bot->setCurrentState(L"DEAD");
+
+						if (
+							(playerPP->getX() >= pp->getX() + 250 && playerPP->getX() <= pp->getX() + 350 && playerPP->getY() <= pp->getY() + 128 && playerPP->getY() >= pp->getY() - 128)
+							|| (playerPP->getX() <= pp->getX() - 250 && playerPP->getX() >= pp->getX() - 350 && playerPP->getY() <= pp->getY() + 128 && playerPP->getY() >= pp->getY() - 128)
+							|| (playerPP->getY() >= pp->getY() + 250 && playerPP->getY() <= pp->getY() + 350 && playerPP->getX() <= pp->getX() + 128 && playerPP->getX() >= pp->getX() - 128)
+							|| (playerPP->getY() <= pp->getY() - 250 && playerPP->getY() >= pp->getY() - 350 && playerPP->getX() <= pp->getX() + 128 && playerPP->getX() >= pp->getX() - 128)
+							)
+						{
+							if (gsm->getDialoguehealindex() <= 8)
+							{
+								gsm->setDialogueheal(true);
+								togglePhysics();
+							}
+						}
+					}
 
 					if (bot->getCurrentState().compare(L"DYING") == 0)
 					{
@@ -580,6 +603,12 @@ void Physics::update()
 							spriteManager->removeLevelObject(los);
 							gsm->setMoney(gsm->getMoney() + 500);
 							used = true;
+
+							if (gsm->getDialoguemoneyindex() <= 15)
+							{
+								gsm->setDialoguemoney(true);
+								activated = false;
+							}
 							break;
 						}
 						itemIterator++;
@@ -878,6 +907,8 @@ void Physics::punch(AnimatedSprite *sprite, bool player, bool safety)
 			int rightColumn = collidableLayer->getColumnByX(playerRight);
 			int topRow = collidableLayer->getRowByY(playerTop);
 			int bottomRow = collidableLayer->getRowByY(playerBottom);
+
+			
 
 			playerPP->setVelocity(0.0f, 0.0f);
 
